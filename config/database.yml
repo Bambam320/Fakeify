@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: spotify_app_production
-  username: spotify_app
-  password: <%= ENV["SPOTIFY_APP_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
