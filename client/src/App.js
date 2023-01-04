@@ -1,28 +1,50 @@
-// client/src/components/App.js
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Test from './Test'
-import PageCount from './PageCount'
+import React, { useEffect, useState } from "react";
+import Login from "./components/Login";
+import Home from './components/Home';
+import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { SpotifyContext } from "./SpotifyContext";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState({});
 
-  useEffect(() => {
-    fetch("/hello")
-      .then((r) => r.json())
-      .then((data) => setCount(data.count));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/me").then((response) => {
+  //     if (response.ok) {
+  //       response.json().then((user) => {
+  //         setIsAuthenticated(true);
+  //         setUser(user);
+  //       });
+  //     }
+  //   });
+  // }, []);
+
+  console.log("usefr", user)
+  console.log("auth", isAuthenticated)
+
+  // Reroute user to <Login /> Component if not authenticated
+  if (!isAuthenticated) return (
+    <SpotifyContext.Provider value={{ setUser, setIsAuthenticated }} >
+      <Login />;
+    </SpotifyContext.Provider>
+  )
 
   return (
-    <BrowserRouter>
-      <div className="App">
+    <Router>
+      <SpotifyContext.Provider
+        value={{ isAuthenticated, setIsAuthenticated, user, setUser }}
+      >
+        <Navbar />
         <Routes>
-          <Route path="/testing" element = { <Test /> } />
-          <Route path="/" element = { <PageCount count = {count} /> } />
+            <Route index element={<Home />} />
+        
+
+
         </Routes>
-      </div>
-    </BrowserRouter>
+      </SpotifyContext.Provider>
+    </Router>
   );
-}
+};
 
 export default App;
