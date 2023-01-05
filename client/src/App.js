@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Login from "./components/Login";
 import Home from './components/Home';
-import Navbar from "./components/Navbar";
+import Player from './Player'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SpotifyContext } from "./SpotifyContext";
 
-function App() {
+const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({});
+
+console.log("isauthenticated from app", isAuthenticated)
 
   // useEffect(() => {
   //   fetch("/me").then((response) => {
@@ -20,30 +22,24 @@ function App() {
   //   });
   // }, []);
 
-  console.log("usefr", user)
-  console.log("auth", isAuthenticated)
+console.log("user", user)
+console.log("auth", isAuthenticated)
 
-  // Reroute user to <Login /> Component if not authenticated
-  if (!isAuthenticated) return (
-    <SpotifyContext.Provider value={{ setUser, setIsAuthenticated }} >
-      <Login />;
-    </SpotifyContext.Provider>
-  )
+  if (!isAuthenticated) return (<Login /> );
 
   return (
     <Router>
-      <SpotifyContext.Provider
-        value={{ isAuthenticated, setIsAuthenticated, user, setUser }}
-      >
-        <Navbar />
+        <SpotifyContext.Provider
+          value={{ isAuthenticated, setIsAuthenticated, user, setUser }}
+        >
         <Routes>
-            <Route index element={<Home />} />
-        
+          <Route path="/" element={<Player />}/>
+          <Route path='/login' element={ <Login/> } />
 
 
         </Routes>
-      </SpotifyContext.Provider>
-    </Router>
+    </SpotifyContext.Provider>
+      </Router>
   );
 };
 
