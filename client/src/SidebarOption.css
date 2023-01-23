@@ -5,6 +5,17 @@
   transition: 200ms color ease-in;
   display: flex;
   align-items: center;
+  text-decoration: none;
+}
+.sidebarPlaylists{
+  color:grey;
+  height: 30px;
+  cursor: pointer;
+  transition: 200ms color ease-in;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-top: 30px;
 }
 .sidebarOption:hover{
   color:white
@@ -21,7 +32,7 @@
 .sidebar_title{
   margin-left: 10px;
   padding: 5px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .sidebarOption > p{
   margin-top: 10px;

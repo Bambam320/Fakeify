@@ -1,69 +1,60 @@
 class SpotifyApiController < ApplicationController
 
-  REDIRECT_URI = 'http://localhost:3000/callback'
-
-  def connect
-      client_id = Rails.application.credentials.spotify[:client_id]
-      response_type = 'code'
-      scope = 'streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state'
-      url = "https://accounts.spotify.com/authorize?client_id=#{client_id}&redirect_uri=#{REDIRECT_URI}&scope=#{scope}&response_type=#{response_type}"
-      render json: { url: url }, status: :ok
-  end
-
-  def get_user_token
-      render json: { token: current_user.access_token }, status: :ok
-  end
-
-  def callback
-      current_user = User.first
-      code = params[:code]
-      response = SpotifyApi::Client.get_user_access_token(code: code, redirect_uri: REDIRECT_URI)
-      access_token = response['access_token']
-      expires_at = Time.current + response['expires_in'].seconds
-      refresh_token = response['refresh_token']
-
-      current_user.update(access_token: access_token, expires_at: expires_at, refresh_token: refresh_token)
-      redirect_to "http://localhost:4000/success"
-  end
-
-  def search 
-      results = SpotifyApi::Client.search_track(params[:track_name])
-      
-      first_track = results.dig('tracks', 'items', 0)
-      
-      audio_analysis_for_first_track = SpotifyApi::Client.audio_analysis(first_track.dig('id'))
-      
-      first_track['audio_analysis'] = audio_analysis_for_first_track.dig('track')
-
-      get_artist_for_first_track = SpotifyApi::Client.get_artist(first_track.dig('artists', 0, 'id'))
-
-      first_track['genres'] = get_artist_for_first_track.dig('genres')
-
-      render json: first_track, status: :ok
-  end
-
-  def audio_analysis 
-      results = SpotifyApi::Client.audio_analysis(params[:id])
+    before_action :update_token
+    skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse]
+  
+    def search_for_tracks
+      songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
+      render json: songs, status: :ok
+    end
+  
+    def browse
+      results = {}
+      results[:artists] = RSpotify::Artist.search("#{params[:term]}", limit: 10)
+      results[:tracks] = RSpotify::Track.search("#{params[:term]}", limit: 10)
+      results[:albums] = RSpotify::Album.search("#{params[:term]}", limit: 10)
+      results[:playlists] = RSpotify::Playlist.search("#{params[:term]}", limit: 10)
       render json: results, status: :ok
-  end
-
-  def recommendations
-      results = SpotifyApi::Client.get_recommendations(params[:id], params[:tempo], params[:key], params[:mode]).dig('tracks')
-
-      ids = results.map do |track| 
-          track.dig('id') 
+    end
+  
+    def callback
+      spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
+      current_user = User.find(session[:user_id])
+      current_user.update!(
+        spotify_token: spotify_user.credentials.token,
+        spotify_refresh_token: spotify_user.credentials.refresh_token,
+        spotify_token_lifetime: spotify_user.credentials.expires_at,
+        spotify_display_name: spotify_user.display_name,
+        spotify_email: spotify_user.email,
+        spotify_id: spotify_user.id,
+        spotify_img: spotify_user.images.length > 0 ? spotify_user.images[0] : '',
+        birthdate: spotify_user.birthdate,
+        region: spotify_user.country,
+      )
+      redirect_to "http://localhost:4000/profile"
+    end
+  
+    private
+  
+    def update_token
+      currentUser = User.find(session[:user_id])
+      if (Time.at(currentUser.spotify_token_lifetime).to_datetime.to_f - Time.now.to_f).negative?() {
+        body = {
+          grant_type: "refresh_token",
+          refresh_token: currentUser.spotify_refresh_token,
+          client_id: Rails.application.credentials.spotify.client_id,
+          client_secret: Rails.application.credentials.spotify.client_secret
+        }
+        spotify_response = RestClient.post('https://accounts.spotify.com/api/token', body)
+        spotify_auth_params = JSON.parse(spotify_reponse)
+        currentUser.update!(
+          spotify_token: spotify_auth_params.access_token,
+          spotify_token_lifetime: currentUser.spotify_token_lifetime + spotify_auth_params.expires_in
+        )
+      } 
       end
-
-      audio_features_for_results = SpotifyApi::Client.audio_features(ids.join(",")).dig('audio_features')
-
-      results.each do |track| 
-          track['audio_features'] = audio_features_for_results.find do |features|
-              features.dig('id') == track.dig('id')
-          end
-      end
-
-      render json: results, status: :ok
+    end
+  
   end
-end
-
-
+  
+  

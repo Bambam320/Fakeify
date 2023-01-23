@@ -3,11 +3,12 @@ class CreateAlbums < ActiveRecord::Migration[7.0]
     create_table :albums do |t|
       t.integer :artist_id
       t.string :name
-      t.string :artist
       t.text :release_date
-      t.integer :song_count
-      t.string :cover
-      t.string :genre
+      t.string :spotify_artist_id
+      t.string :artist_name
+      t.integer :total_tracks
+      t.string :image_url
+      t.string :spotify_id
       t.timestamps
     end
   end

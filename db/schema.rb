@@ -17,11 +17,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_31_050624) do
   create_table "albums", force: :cascade do |t|
     t.integer "artist_id"
     t.string "name"
-    t.string "artist"
     t.text "release_date"
-    t.integer "song_count"
-    t.string "cover"
-    t.string "genre"
+    t.string "spotify_artist_id"
+    t.string "artist_name"
+    t.integer "total_tracks"
+    t.string "image_url"
+    t.string "spotify_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,7 +30,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_31_050624) do
   create_table "artists", force: :cascade do |t|
     t.string "name"
     t.string "genres"
-    t.string "hometown"
+    t.string "image_url"
+    t.string "spotify_id"
+    t.integer "followers"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -39,8 +42,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_31_050624) do
     t.string "name"
     t.string "image"
     t.string "description"
-    t.integer "song_count"
-    t.boolean "favorite"
+    t.text "spotify_id"
+    t.string "type_of_playlist"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -52,8 +55,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_31_050624) do
     t.string "featured_artist"
     t.text "release_date"
     t.string "name"
-    t.text "duration"
     t.string "genre"
+    t.string "spotify_playlist_id"
+    t.string "spotify_album_id"
+    t.string "spotify_artist_id"
+    t.string "preview_url"
+    t.string "cover_art"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -64,6 +71,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_31_050624) do
     t.string "password_digest"
     t.text "birthdate"
     t.string "region"
+    t.string "avatar_url"
+    t.string "spotify_token"
+    t.string "spotify_refresh_token"
+    t.string "spotify_display_name"
+    t.string "spotify_email"
+    t.string "spotify_id"
+    t.string "spotify_img"
+    t.integer "spotify_token_lifetime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

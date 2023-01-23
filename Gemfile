@@ -27,8 +27,17 @@ gem "bcrypt", "~> 3.1.7"
 # Use the pry gem to pp in the console. 
 gem 'pry'
 
+#enter the console programmatically
+gem 'byebug'
+
 # Use serializers for the model
 gem 'active_model_serializers'
+
+# spotify and oauth wrapper library for ruby
+gem 'rspotify'
+
+#resolve net protocal issue linked to gem dependencies
+gem "net-http"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]

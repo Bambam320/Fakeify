@@ -1,14 +1,15 @@
 .sidebar{
   border: 1px solid black;
-  height: 100vh;
+  min-height: 75em;
+  height: 100%;
   flex: 20%;
   color:white;
-  min-width: 230px;
+  width: 230px;
   background-color:#040404;
   padding-left: 10px;
   padding-right: 10px;
-
-  
+  /* resize: horizontal;
+  overflow: auto; */
 }
 
 .logo{
@@ -16,4 +17,12 @@
   margin-right:auto;
   height:70px;
   padding:10px;
+}
+
+.textField{
+  margin-left:auto;
+  margin-right: auto;
+  display: block;
+  
+  
 }
