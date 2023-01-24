@@ -21,6 +21,7 @@ import Navbar from "./components/Navbar";
 import Profile from "./components/Profile";
 import Search from "./components/Search";
 import Playlist from "./Playlist";
+import Helmetcode from "./components/Helmetcode";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,9 +43,10 @@ const App = () => {
     });
   }, []);
 
-console.log("main search from app", mainSearch)
+  console.log("main search from app", mainSearch)
 
-  // 
+  // display login/signup if no user is logged in
+  ////////////////// Add this to protected routes in the future so that helmet will work without the component route error
   if (!isAuthenticated)
     return (
       <SpotifyContext.Provider value={{ setIsAuthenticated, setLocalUser }}>
@@ -55,27 +57,28 @@ console.log("main search from app", mainSearch)
   return (
     <Router>
       <SpotifyContext.Provider
-        value={{ 
-          isAuthenticated, 
-          setIsAuthenticated, 
-          localUser, 
-          setLocalUser, 
-          currentPlaylist, 
+        value={{
+          isAuthenticated,
+          setIsAuthenticated,
+          localUser,
+          setLocalUser,
+          currentPlaylist,
           setCurrentPlaylist,
           currentTrack,
           setCurrentTrack,
-          currentQueue, 
+          currentQueue,
           setCurrentQueue,
           mainSearch,
           setMainSearch
         }}
       >
+        <Helmetcode />
         <Grid container>
           <Grid item >
-          <Navbar />
+            <Navbar />
           </Grid>
-          <Grid item sx={{flexGrow: 1}}>
-            <Header /> 
+          <Grid item sx={{ flexGrow: 1 }}>
+            <Header />
             <Routes>
               <Route index element={<Home />} />
               <Route path="/home" element={<Home />} />
@@ -85,7 +88,7 @@ console.log("main search from app", mainSearch)
               {/* <Route path='/*' element={<></>} /> */}
               {/* <Route path='/collection/' element={<CollectionHeader />} >
                 <Route path='playlists' element={<Playlists />} />
-              </Route> */}              
+              </Route> */}
             </Routes>
           </Grid>
         </Grid>

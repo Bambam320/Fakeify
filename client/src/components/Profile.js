@@ -186,23 +186,19 @@ function Profile() {
   return (
     <>
 
-    <Grid container className="body">
-      <div className="body__info">
-
-        <Grid container >
-
-        <Grid item xs={4}>
+      <Grid container className='body'>
+        <Grid item xs={4} sx={{}}>
           <img className="profile_image_class" src={localUser.avatar_url} alt={localUser.username} />
         </Grid>
         <Grid item xs={8} className="body__infoText" >
-          <p>{localUser.username}</p>
-          <p>{localUser.birthdate}</p>
-          <p>{localUser.region}</p>
-          <p>{localUser.email}</p>
+          <p>{`Username: ${localUser.username}`}</p>
+          <p>{`Birthdate: ${localUser.birthdate}`}</p>
+          <p>{`Region: ${localUser.region}`}</p>
+          <p>{`Email: ${localUser.email}`}</p>
         </Grid>
-        </Grid>
+      </Grid>
 
-        <Grid Container>
+        <Grid Container className='body'>
 
         {localUser.spotify_token ? 
           <>
@@ -220,146 +216,8 @@ function Profile() {
         :
         <p>Login with Spotify using the link in the navigation bar!</p>
         }
-
-
         </Grid>
-
-
-        {/* dialog for update menu */}
-        <div>
-          {/* <Dialog
-            open={open}
-            onClose={handleClose}
-            sx={{ backgroundColor: 'transparent' }}
-          >
-            <DialogTitle
-              sx={{ backgroundColor: '#3b3637', color: 'white' }}
-            >Edit and update the details</DialogTitle>
-            <DialogContent
-              sx={{ backgroundColor: '#3b3637' }}
-            >
-              <DialogContentText
-                sx={{ color: 'white' }}
-              >
-                Change the information below and click save to update your playlist!
-              </DialogContentText>
-              <TextField
-                sx={{ input: { color: 'white' } }}
-                margin="dense"
-                name="name"
-                fullWidth
-                variant="standard"
-                onChange={handleDialogUpdate}
-                value={form.name}
-                InputProps={{
-                  endAdornment: (
-                    <div >
-                      <InputAdornment>
-                        <IconButton onClick={() => { handleFormNameClear('name') }}>
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                  )
-                }}
-              />
-              <TextField
-                sx={{ input: { color: 'white' } }}
-                margin="dense"
-                name="description"
-                fullWidth
-                variant="standard"
-                onChange={handleDialogUpdate}
-                value={form.description}
-                InputProps={{
-                  endAdornment: (
-                    <div >
-                      <InputAdornment>
-                        <IconButton onClick={() => { handleFormNameClear('description') }}>
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                  )
-                }}
-              />
-              <TextField
-                sx={{ input: { color: 'white' } }}
-                margin="dense"
-                name="image"
-                fullWidth
-                variant="standard"
-                onChange={handleDialogUpdate}
-                value={form.image}
-                InputProps={{
-                  endAdornment: (
-                    <div >
-                      <InputAdornment>
-                        <IconButton onClick={() => { handleFormNameClear('image') }}>
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                  )
-                }}
-              />
-            </DialogContent>
-            <DialogActions
-              sx={{ backgroundColor: '#3b3637' }}
-            >
-              <Button onClick={handleClose}
-                sx={{ color: 'white' }}
-              >Cancel</Button>
-              <Button onClick={handleSave}
-                sx={{ color: 'white' }}
-              >Save</Button>
-            </DialogActions>
-          </Dialog> */}
-        </div>
-      </div>
-    </Grid>
-
-    {/* delete icon and menu */}
-    <Grid container>
-      <Grid item>
-        <div>
-          {/* <IconButton
-            aria-label="more"
-            id="long-button"
-            aria-controls={openDeletePlaylist ? 'long-menu' : undefined}
-            aria-expanded={openDeletePlaylist ? 'true' : undefined}
-            aria-haspopup="true"
-            onClick={handleOpenDeleteMenu}
-          >
-            <MoreHorizIcon
-              sx={{
-                marginLeft: '30px',
-                height: '40px',
-                marginTop: '-50px',
-                color: 'white',
-              }}
-            />
-          </IconButton>
-          <Menu
-            id="long-menu"
-            MenuListProps={{
-              'aria-labelledby': 'long-button',
-            }}
-            anchorEl={anchorEl}
-            open={openDeletePlaylist}
-            onClose={handleCloseDeleteMenu}
-          >
-            <MenuItem onClick={handleDeletePlaylist}>
-              Delete Playlist
-            </MenuItem>
-          </Menu> */}
-        </div>
-
-
-      </Grid>
-
-    </Grid>
-  </>
+        </>
   )
 }
 

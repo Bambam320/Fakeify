@@ -1,5 +1,6 @@
 // imports functional tools
 import React, { useState, useContext } from "react";
+import * as moment from 'moment'
 
 // imports components and styles
 import { SpotifyContext } from "../SpotifyContext";
@@ -32,8 +33,13 @@ function Login() {
 
   //updates the form held in state for login or signup
   function handleChange(e) {
-    console.log("eeeeeeeeeeeeeeeeee", e)
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  //handles the birthdate update
+  function handleTimeChange (e) {
+    let birthdate = e._d.toDateString()
+    setForm({...form, ['birthdate']: birthdate })
   }
 
   // changes toggle to use sign up form
@@ -76,7 +82,6 @@ function Login() {
       setForm(defaultFormValues);
     });
   }
-
 
   return (
     <div className='form'>
@@ -167,21 +172,22 @@ function Login() {
                 label="Birthdate"
                 inputFormat="MM/DD/YYYY"
                 name='birthdate'
-                // value={form.birthdate}
-                onChange={(newValue) => console.log(newValue.toString())}
-                // figure out how to convert to string and store in form
-                // then provide to back end and convert to correct value to display
-                renderInput={(params) => <TextField {...params} /> }
+                value={moment(form.birthdate)}
+                onChange={(e) => handleTimeChange(e)}
+                inputProps={{
+                  style: {
+                    height: "0",
+                    fontSize: '19px',
+                    alignItems: 'center',
+                    paddingTop: '20px',
+                  },
+                }}
+                renderInput={(params) => <TextField
+                  {...params} 
+                  sx={{backgroundColor: 'white', marginBottom: '25px', borderRadius: '4px',}}
+                /> }
               />
             </LocalizationProvider>
-            <input
-              className=''
-              name='birthdate'
-              type='text'
-              placeholder='Birthdate'
-              value={form.birthdate}
-              onChange={handleChange}
-            />
             <input
               className=''
               name='region'
@@ -206,7 +212,7 @@ function Login() {
             </button>
             <div className='errordiv'>
               {errors.map((error) => {
-                return <span key={error} className='error'>{error}</span>;
+                return <p key={error} className='error'>{error}</p>;
               })}
             </div>
           </form>
