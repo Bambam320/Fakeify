@@ -74,10 +74,7 @@ function Login() {
           setLocalUser(user)
         });
       } else {
-        res.json().then((err) => {
-          // console.log("err from login", err)
-          setErrors(err.errors)
-        });
+        res.json().then((err) => setErrors(err.errors));
       }
       setForm(defaultFormValues);
     });
@@ -118,8 +115,8 @@ function Login() {
               Dont have an account? SIGNUP
             </button>
             <div className='errordiv'>
-              {errors.map((error) => {
-                return <span key={error} className='error'>{error}</span>;
+            {errors.map((error) => {
+                return <p key={error} className='error'>{error}</p>;
               })}
             </div>
           </form>
