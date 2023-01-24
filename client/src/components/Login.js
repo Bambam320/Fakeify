@@ -7,6 +7,7 @@ import "./Login.css";
 
 //imports material ui components
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import TextField from '@mui/material/TextField';
 
@@ -160,7 +161,7 @@ function Login() {
               value={form.avatar_url}
               onChange={handleChange}
             />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
               <DesktopDatePicker
                 label="Date desktop"
                 inputFormat="MM/DD/YYYY"
