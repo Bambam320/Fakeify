@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import {Helmet} from "react-helmet";
 
   // sets the style of the background image
   const backgroundStyle = {
@@ -15,6 +16,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
        <div style={ backgroundStyle }>
+       <Helmet>
+                <meta charSet="utf-8" />
+                <title>Spotify Clone</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+                <meta name="description" content="Helmet application" />
+            </Helmet>
       <App />
       </div>
   </React.StrictMode>

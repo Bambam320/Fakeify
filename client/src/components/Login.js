@@ -56,7 +56,7 @@ function Login() {
           setLocalUser(user)
         });
       } else {
-        res.json().then((err) => setErrors(err.error));
+        res.json().then((err) => setErrors(err.errors));
       }
       setForm(defaultFormValues);
     });
