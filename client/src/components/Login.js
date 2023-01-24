@@ -1,9 +1,14 @@
+// imports functional tools
 import React, { useState, useContext } from "react";
 
+// imports components and styles
 import { SpotifyContext } from "../SpotifyContext";
-
-//imports styles
 import "./Login.css";
+
+//imports material ui components
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import TextField from '@mui/material/TextField';
 
 function Login() {
 
@@ -16,6 +21,9 @@ function Login() {
     password: "",
     password_confirmation: "",
     avatar_url: "",
+    region: "",
+    email: "",
+    birthdate: "",
   };
   const [form, setForm] = useState(defaultFormValues);
   const [formType, setFormType] = useState("login");
@@ -30,12 +38,14 @@ function Login() {
   function handleSignUpFormClick(e) {
     e.preventDefault();
     setFormType("users");
+    setErrors([]);
   }
 
   // changes toggle to use login form
   function handleLoginFormClick(e) {
     e.preventDefault();
     setFormType("login");
+    setErrors([]);
   }
 
   // submits the login or signup form
@@ -56,7 +66,10 @@ function Login() {
           setLocalUser(user)
         });
       } else {
-        res.json().then((err) => setErrors(err.errors));
+        res.json().then((err) => {
+          // console.log("err from login", err)
+          setErrors(err.errors)
+        });
       }
       setForm(defaultFormValues);
     });
@@ -97,6 +110,11 @@ function Login() {
             <button onClick={handleSignUpFormClick}>
               Dont have an account? SIGNUP
             </button>
+            <div className='errordiv'>
+              {errors.map((error) => {
+                return <span key={error} className='error'>{error}</span>;
+              })}
+            </div>
           </form>
         </div>
 
@@ -106,7 +124,7 @@ function Login() {
         <div className="login" >
           <h1 className='login__logo'>🎶Fakeify&reg;</h1>
           <form onSubmit={handleSubmit}>
-          <h1>Sign up for some sweet tunes!</h1>
+            <h1>Sign up for some sweet tunes!</h1>
             <input
               className=''
               name='username'
@@ -142,17 +160,50 @@ function Login() {
               value={form.avatar_url}
               onChange={handleChange}
             />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
+                label="Date desktop"
+                inputFormat="MM/DD/YYYY"
+                value={value}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <input
+              className=''
+              name='birthdate'
+              type='text'
+              placeholder='Birthdate'
+              value={form.birthdate}
+              onChange={handleChange}
+            />
+            <input
+              className=''
+              name='region'
+              type='text'
+              placeholder='Region'
+              value={form.region}
+              onChange={handleChange}
+            />
+            <input
+              className=''
+              name='email'
+              type='text'
+              placeholder='Email address'
+              value={form.email}
+              onChange={handleChange}
+            />
             <button className='signup-button' onClick={handleSubmit}>
               SIGN UP TO FAKEIFY
             </button>
             <button onClick={handleLoginFormClick}>
               Back to Login.
             </button>
-            <div>
-            {errors.map((error) => {
-              return <span key={error} className='error'>{error}</span>;
-            })}
-          </div>
+            <div className='errordiv'>
+              {errors.map((error) => {
+                return <span key={error} className='error'>{error}</span>;
+              })}
+            </div>
           </form>
         </div>
       )}

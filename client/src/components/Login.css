@@ -49,3 +49,17 @@
 input {
   font-size: 20px;
 }
+
+.errordiv {
+  justify-self: center;
+  margin-top: 30px;
+  margin-bottom: -35px;
+}
+
+.error {
+  color: red;
+  background: pink;
+  border: 1px solid red;
+  border-radius: 4px;
+  padding: 8px;
+}
