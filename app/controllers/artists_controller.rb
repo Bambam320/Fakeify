@@ -1,51 +1,51 @@
-class AlbumsController < ApplicationController
-  before_action :set_album, only: %i[ show update destroy ]
+class ArtistsController < ApplicationController
+  before_action :set_artist, only: %i[ show update destroy ]
 
-  # GET /albums
+  # GET /artists
   def index
-    @albums = Album.all
+    @artists = Artist.all
 
-    render json: @albums
+    render json: @artists
   end
 
-  # GET /albums/1
+  # GET /artists/1
   def show
-    render json: @album
+    render json: @artist
   end
 
-  # POST /albums
+  # POST /artists
   def create
-    @album = Album.new(album_params)
+    @artist = Artist.new(artist_params)
 
-    if @album.save
-      render json: @album, status: :created, location: @album
+    if @artist.save
+      render json: @artist, status: :created, location: @artist
     else
-      render json: @album.errors, status: :unprocessable_entity
+      render json: @artist.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /albums/1
+  # PATCH/PUT /artists/1
   def update
-    if @album.update(album_params)
-      render json: @album
+    if @artist.update(artist_params)
+      render json: @artist
     else
-      render json: @album.errors, status: :unprocessable_entity
+      render json: @artist.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /albums/1
+  # DELETE /artists/1
   def destroy
-    @album.destroy
+    @artist.destroy
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_album
-      @album = Album.find(params[:id])
+    def set_artist
+      @artist = Artist.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
-    def album_params
-      params.fetch(:album, {})
+    def artist_params
+      params.fetch(:artist, {})
     end
 end
