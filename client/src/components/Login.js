@@ -32,6 +32,7 @@ function Login() {
 
   //updates the form held in state for login or signup
   function handleChange(e) {
+    console.log("eeeeeeeeeeeeeeeeee", e)
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
@@ -163,11 +164,14 @@ function Login() {
             />
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DesktopDatePicker
-                label="Date desktop"
+                label="Birthdate"
                 inputFormat="MM/DD/YYYY"
-                value={value}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
+                name='birthdate'
+                // value={form.birthdate}
+                onChange={(newValue) => console.log(newValue.toString())}
+                // figure out how to convert to string and store in form
+                // then provide to back end and convert to correct value to display
+                renderInput={(params) => <TextField {...params} /> }
               />
             </LocalizationProvider>
             <input
