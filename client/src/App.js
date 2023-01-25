@@ -93,7 +93,7 @@ const App = () => {
             </Routes>
           </Grid>
         </Grid>
-        <Footer />
+        {currentTrack ? <Footer /> : <></>}
       </SpotifyContext.Provider>
     </Router>
   );

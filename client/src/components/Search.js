@@ -31,10 +31,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
 import Link from "@mui/material/Link"
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
 
 function Search() {
   // sets hooks
-  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack } = useContext(SpotifyContext);
+  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack, localUser } = useContext(SpotifyContext);
   const navigate = useNavigate();
   const [results, setResults] = useState({
     artists: [],
@@ -43,7 +46,9 @@ function Search() {
     playlists: [],
   });
   const [errors, setErrors] = useState([]);
+  const [addToPlaylist, setAddToPlaylist] = useState(false);
 
+  //Loads search results when rendered or when the main search field has a new value entered
   useEffect(() => {
     if (mainSearch.length > 0) {
       fetch(`/spotify_api/browse?term=${mainSearch}`).then((response) => {
@@ -59,19 +64,17 @@ function Search() {
     }
   }, [mainSearch])
 
-  function setToPlayer(e, track) {
+  //send the song and list of songs as queue to the front end
+  function sendToPlayer(e, track) {
     e.preventDefault()
     setCurrentTrack(track)
     setCurrentQueue(results.tracks)
   }
 
-  console.log("results", results)
-
   let playlistResults = results.playlists.map((playlist) => {
     return (
       <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
-           <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
-
+        <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
         <div style={{marginLeft: '-20px'}}>
           <CardMedia
             component="img"
@@ -115,7 +118,32 @@ function Search() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={(e) => setToPlayer(e, track)}>Play</Button>
+            <Button size="small" onClick={(e) => sendToPlayer(e, track)}>Play</Button>
+            <Button size="small" onClick={setAddToPlaylist(true)}>Add To My Playlist</Button>
+            {addToPlaylist ?
+              <FormControl variant="outlined" style={{ minWidth: 600 }}>
+              <InputLabel id="playlist-select">Select A Playlist</InputLabel>
+              <Select
+                disabled={select}
+                labelId="playlist-select"
+                id="playlist-select"
+                value={chosenSpell.id}
+                onChange={handleSpellSelect}
+                label="chosenSpell"
+              >
+                <MenuItem value={chosenSpell.id} onClick={handleSpellDeselect}> Select A Playlist </MenuItem>
+                {localUser.playlists.map((playlist) => {
+                  let id = playlist.id
+                  return (
+                    <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
+                  )
+                })}
+              </Select>
+              <Button size="small" onClick={handleAddSongToPlaylist}>Add Song</Button>
+            </FormControl>
+            :
+              <></>
+            }
           </CardActions>
           </div>
       </Grid>
