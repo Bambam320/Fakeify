@@ -18,7 +18,7 @@ function SongRow({ track, handleAddTrack }) {
 
 
   return (
-    <Grid container className="songRow" width="1200px">
+    <Grid container className="songRow" width="750px">
 
         <Grid item xs={1}>
         <img src={track.album.images[0].url} alt={track.album.name} className="songRow__album" />
