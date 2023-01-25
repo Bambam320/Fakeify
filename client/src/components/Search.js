@@ -29,6 +29,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import CardActionArea from "@mui/material/CardActionArea";
+import Link from "@mui/material/Link"
 
 function Search() {
   // sets hooks
@@ -68,13 +70,15 @@ function Search() {
   let playlistResults = results.playlists.map((playlist) => {
     return (
       <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
+           <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
+
         <div style={{marginLeft: '-20px'}}>
           <CardMedia
             component="img"
             alt="green iguana"
             height="140"
             image={playlist.images[0].url}
-          />
+            />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {playlist.name}
@@ -84,6 +88,7 @@ function Search() {
             </Typography>
           </CardContent>
             </div>
+            </CardActionArea>
       </Grid>
     )
   });

@@ -46,6 +46,7 @@ function Header() {
     console.log("submit firing", search)
     e.preventDefault()
     setMainSearch(search)
+    setSearch('')
     navigate("/search")
   }
 
@@ -61,8 +62,6 @@ function Header() {
         setAnchorEl(null)
       })
   }
-
-
   
   // styling for the users menu
   const StyledMenu = styled((props) => (

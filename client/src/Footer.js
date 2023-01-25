@@ -106,22 +106,29 @@ function Footer() {
         }
       </div>
       <div className='footer__center'>
+
         {shuffle ? 
           <ShuffleOnIcon className='footer__green' onClick={() => handleShuffle()}/> 
         : 
           <ShuffleIcon className='footer__green' onClick={() => handleShuffle()}/>
         }
+
         <SkipPreviousIcon className='footer__icon' onClick={prevSong}/>
+
         {playState ? 
           <PauseCircleOutlineIcon fontSize='large' className='footer__icon' onClick={handlePlayPause} />
         :
-          <PlayCircleOutlineIcon fontSize='large' className='footer__icon' onClick={handlePlayPause}/>}
+          <PlayCircleOutlineIcon fontSize='large' className='footer__icon' onClick={handlePlayPause} />
+        }
+
         <SkipNextIcon className='footer__icon' onClick={nextSong}/>
+
         {repeat ?
           <RepeatOnIcon className='footer__green' onClick={() => handleRepeat()} />
         :
           <RepeatIcon className='footer__green' onClick={() => handleRepeat()} /> 
         }
+
       </div>
       <div className='footer__right'>
         <Grid container spacing={2}>
