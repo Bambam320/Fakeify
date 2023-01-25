@@ -4,6 +4,7 @@ class SpotifyApiController < ApplicationController
     skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse]
   
     def search_for_tracks
+      byebug
       songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
       render json: songs, status: :ok
     end
@@ -20,7 +21,7 @@ class SpotifyApiController < ApplicationController
     def callback
       spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
       current_user = User.find(session[:user_id])
-      current_user.update!(
+      current_user.update_columns(
         spotify_token: spotify_user.credentials.token,
         spotify_refresh_token: spotify_user.credentials.refresh_token,
         spotify_token_lifetime: spotify_user.credentials.expires_at,
@@ -28,7 +29,6 @@ class SpotifyApiController < ApplicationController
         spotify_email: spotify_user.email,
         spotify_id: spotify_user.id,
         spotify_img: spotify_user.images.length > 0 ? spotify_user.images[0] : '',
-        spotify_birthdate: spotify_user.birthdate,
         spotify_region: spotify_user.country,
       )
       redirect_to "http://localhost:4000/profile"

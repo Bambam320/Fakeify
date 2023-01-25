@@ -1,5 +1,5 @@
 // imports functional tools
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import * as moment from 'moment'
 
 // imports components and styles
@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 function Login() {
 
   //assigns context
-  const { setLocalUser, setIsAuthenticated } = useContext(SpotifyContext);
+  const { setLocalUser, setIsAuthenticated, autoLoginError } = useContext(SpotifyContext);
 
   //assign state and default values
   const defaultFormValues = {
@@ -30,6 +30,11 @@ function Login() {
   const [form, setForm] = useState(defaultFormValues);
   const [formType, setFormType] = useState("login");
   const [errors, setErrors] = useState([]);
+
+  //grabs any errors from App.js and lists on the login page
+  useEffect(() => {
+    setTimeout(() => setErrors(autoLoginError), 5000)
+  }, [autoLoginError])
 
   //updates the form held in state for login or signup
   function handleChange(e) {

@@ -1,0 +1,21 @@
+
+[1mFrom:[0m /home/bambam/development/code/capstone/spotify-app/spotify-app/app/controllers/sessions_controller.rb:34 SessionsController#destroy:
+
+    [1;34m31[0m: [32mdef[0m [1;34mdestroy[0m
+    [1;34m32[0m:   user = [1;34;4mUser[0m.find(session[[33m:user_id[0m])
+    [1;34m33[0m:   byebug
+ => [1;34m34[0m:   user.update!(
+    [1;34m35[0m:     [35mspotify_token[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m36[0m:     [35mspotify_refresh_token[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m37[0m:     [35mspotify_token_lifetime[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m38[0m:     [35mspotify_display_name[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m39[0m:     [35mspotify_email[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m40[0m:     [35mspotify_id[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m41[0m:     [35mspotify_img[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m42[0m:     [35mspotify_region[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m43[0m:     [35mspotify_birthdate[0m: [31m[1;31m'[0m[31m[1;31m'[0m[31m[0m,
+    [1;34m44[0m:   )
+    [1;34m45[0m:   session[[33m:user_id[0m] = [1;36mnil[0m
+    [1;34m46[0m:   head [33m:no_content[0m
+    [1;34m47[0m: [32mend[0m
+

@@ -23,6 +23,8 @@ class SessionsController < ApplicationController
     if session[:user_id]
       user = User.find(session[:user_id])
       render json: user, include: ['playlists', 'playlists.songs'], status: :ok
+    else
+      render json: {errors: ["Please login to use cookies"]}, status: :unauthorized
     end
   end
 
@@ -30,14 +32,17 @@ class SessionsController < ApplicationController
   # sessions#logout
   def destroy
     user = User.find(session[:user_id])
-    user.update!(
+    #using update_columns to avoid validations as this stores private token 
+    #information from spotify and not the user
+    user.update_columns(
       spotify_token: '',
       spotify_refresh_token: '',
       spotify_token_lifetime: '',
       spotify_display_name: '',
       spotify_email: '',
       spotify_id: '',
-      spotify_img: ''
+      spotify_img: '',
+      spotify_region: '',
     )
     session[:user_id] = nil
     head :no_content

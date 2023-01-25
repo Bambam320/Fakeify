@@ -1,0 +1,5 @@
+class RemoveSpotifyBirthdateFromUsers < ActiveRecord::Migration[7.0]
+  def change
+    remove_column :users, :spotify_birthdate
+  end
+end

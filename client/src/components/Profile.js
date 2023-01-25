@@ -198,7 +198,7 @@ function Profile() {
         </Grid>
       </Grid>
 
-        <Grid Container className='body'>
+        <Grid container className='body'>
 
         {localUser.spotify_token ? 
           <>

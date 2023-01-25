@@ -30,26 +30,27 @@ const App = () => {
   const [currentTrack, setCurrentTrack] = useState();
   const [currentQueue, setCurrentQueue] = useState([]);
   const [mainSearch, setMainSearch] = useState('');
+  const [autoLoginError, setAutoLoginError] = useState([]);
 
   // checks the browser session for a logged in user and automatically logs them in
   useEffect(() => {
-    fetch("/me").then((response) => {
+    (async () => {
+      const response = await fetch("/me");
+      const data = await response.json();
       if (response.ok) {
-        response.json().then((user) => {
-          setIsAuthenticated(true);
-          setLocalUser(user);
-        });
-      }
-    });
+        setIsAuthenticated(true);
+        setLocalUser(data);
+      } else {
+        setAutoLoginError(data.errors)
+      };
+    })();
   }, []);
-
-  console.log("main search from app", mainSearch)
 
   // display login/signup if no user is logged in
   ////////////////// Add this to protected routes in the future so that helmet will work without the component route error
   if (!isAuthenticated)
     return (
-      <SpotifyContext.Provider value={{ setIsAuthenticated, setLocalUser }}>
+      <SpotifyContext.Provider value={{ setIsAuthenticated, setLocalUser, autoLoginError }}>
         <Login />
       </SpotifyContext.Provider>
     );
@@ -69,7 +70,7 @@ const App = () => {
           currentQueue,
           setCurrentQueue,
           mainSearch,
-          setMainSearch
+          setMainSearch,
         }}
       >
         <Helmetcode />
