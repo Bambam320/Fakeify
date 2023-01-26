@@ -4,25 +4,12 @@ import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
 // imports styles and components
+import SongResultPlayListForm from './SongResultPlayListForm';
 
 //imports material ui
-import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import PersonIcon from '@mui/icons-material/Person';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -37,7 +24,7 @@ import Select from '@mui/material/Select'
 
 function Search() {
   // sets hooks
-  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack, localUser } = useContext(SpotifyContext);
+  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
   const navigate = useNavigate();
   const [results, setResults] = useState({
     artists: [],
@@ -46,7 +33,8 @@ function Search() {
     playlists: [],
   });
   const [errors, setErrors] = useState([]);
-  const [addToPlaylist, setAddToPlaylist] = useState(false);
+
+
 
   //Loads search results when rendered or when the main search field has a new value entered
   useEffect(() => {
@@ -71,35 +59,37 @@ function Search() {
     setCurrentQueue(results.tracks)
   }
 
+  // lists the playlist search results as 10 cards max
   let playlistResults = results.playlists.map((playlist) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
+      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
-        <div style={{marginLeft: '-20px'}}>
-          <CardMedia
-            component="img"
-            alt="green iguana"
-            height="140"
-            image={playlist.images[0].url}
+          <div style={{ marginLeft: '-20px' }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              height="140"
+              image={playlist.images[0].url}
             />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {playlist.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {`Owned by: ${playlist.owner.display_name}`}
-            </Typography>
-          </CardContent>
-            </div>
-            </CardActionArea>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {playlist.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`Owned by: ${playlist.owner.display_name}`}
+              </Typography>
+            </CardContent>
+          </div>
+        </CardActionArea>
       </Grid>
     )
   });
 
+  // lists the song search results as 10 cards max
   let songResults = results.tracks.map((track) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
-        <div style={{marginLeft: '-20px'}}>
+      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+        <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"
             alt="green iguana"
@@ -119,42 +109,18 @@ function Search() {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={(e) => sendToPlayer(e, track)}>Play</Button>
-            <Button size="small" onClick={setAddToPlaylist(true)}>Add To My Playlist</Button>
-            {addToPlaylist ?
-              <FormControl variant="outlined" style={{ minWidth: 600 }}>
-              <InputLabel id="playlist-select">Select A Playlist</InputLabel>
-              <Select
-                disabled={select}
-                labelId="playlist-select"
-                id="playlist-select"
-                value={chosenSpell.id}
-                onChange={handleSpellSelect}
-                label="chosenSpell"
-              >
-                <MenuItem value={chosenSpell.id} onClick={handleSpellDeselect}> Select A Playlist </MenuItem>
-                {localUser.playlists.map((playlist) => {
-                  let id = playlist.id
-                  return (
-                    <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
-                  )
-                })}
-              </Select>
-              <Button size="small" onClick={handleAddSongToPlaylist}>Add Song</Button>
-            </FormControl>
-            :
-              <></>
-            }
+            <SongResultPlayListForm track={track} />
           </CardActions>
-          </div>
+        </div>
       </Grid>
     )
   });
-  
-  
+
+  // lists the album search results as 10 cards max
   let albumResults = results.albums.map((album) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
-        <div style={{marginLeft: '-20px'}}>
+      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+        <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"
             alt="green iguana"
@@ -172,17 +138,17 @@ function Search() {
               {`Released on: ${album.release_date}`}
             </Typography>
           </CardContent>
-          </div>
+        </div>
       </Grid>
     )
   });
 
-  
+  // lists the artist search results as 10 cards max
   let artistResults = results.artists.map((artist) => {
     console.log("artistf from search", artist)
     return (
-      <Grid item component={Card} xs={2.2} sx={{margin: '5px'}}>
-        <div style={{marginLeft: '-20px'}}>
+      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+        <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"
             height="140"
@@ -193,41 +159,67 @@ function Search() {
               {`Name: ${artist.name}`}
             </Typography>
           </CardContent>
-          </div>
+        </div>
       </Grid>
     )
   });
 
   return (
     <div>
-      <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-        Playlists
-      </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }} >
-        {playlistResults}
-      </Grid>
-      <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
-      <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-        Songs
-      </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
-        {songResults}
-      </Grid>
-      <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
-      <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-        Albums
-      </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
-        {albumResults}
-      </Grid>
-      <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
-      <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-        Artists
-      </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px'}}>
-        {artistResults}
-      </Grid>
-      <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
+      {results.playlists.length > 0 ?
+        <>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
+            Playlists
+          </Typography>
+          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }} >
+            {playlistResults}
+          </Grid>
+          <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
+        </>
+        :
+        <></>
+      }
+
+      {results.tracks.length > 0 ?
+        <>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
+            Songs
+          </Typography>
+          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
+            {songResults}
+          </Grid>
+          <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
+        </>
+        :
+        <></>
+      }
+
+      {results.albums.length > 0 ?
+        <>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
+            Albums
+          </Typography>
+          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
+            {albumResults}
+          </Grid>
+          <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
+        </>
+        :
+        <></>
+      }
+      {results.albums.length > 0 ?
+        <>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
+            Artists
+          </Typography>
+          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
+            {artistResults}
+          </Grid>
+          <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
+        </>
+        :
+        <></>
+      }
       {/* {errors.map((error) => {
           return (
             <span key={error} className='error'>
