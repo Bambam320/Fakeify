@@ -82,9 +82,9 @@ function SongResultPlayListForm({ track }) {
 
   return (
     <>
-                <Button size="small" onClick={() => handleDisplayAddToPlaylistSelect()}>Add to playlist...</Button>
+      <Button size="small" onClick={() => handleDisplayAddToPlaylistSelect()}>Add to playlist...</Button>
       {addToPlaylist ?
-        <FormControl variant="outlined" style={{ minWidth: 600 }} >
+        <FormControl variant="outlined" >
           <InputLabel id="playlist-select">Select A Playlist</InputLabel>
           <Select
             labelId="playlist-select"

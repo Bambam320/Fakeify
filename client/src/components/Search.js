@@ -1,5 +1,5 @@
 //functional imports
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
@@ -33,8 +33,6 @@ function Search() {
     playlists: [],
   });
   const [errors, setErrors] = useState([]);
-
-
 
   //Loads search results when rendered or when the main search field has a new value entered
   useEffect(() => {
@@ -109,6 +107,8 @@ function Search() {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={(e) => sendToPlayer(e, track)}>Play</Button>
+          </CardActions>
+          <CardActions>
             <SongResultPlayListForm track={track} />
           </CardActions>
         </div>
@@ -145,7 +145,6 @@ function Search() {
 
   // lists the artist search results as 10 cards max
   let artistResults = results.artists.map((artist) => {
-    console.log("artistf from search", artist)
     return (
       <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <div style={{ marginLeft: '-20px' }}>
@@ -166,6 +165,11 @@ function Search() {
 
   return (
     <div>
+      {results.playlists.length === 0 ? 
+        <h2 style={{color: 'white', marginLeft: '100px'}}>Submit a search in the bar above! It may take up to a few seconds to return results.</h2> 
+        : 
+        <></>
+      }
       {results.playlists.length > 0 ?
         <>
           <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>

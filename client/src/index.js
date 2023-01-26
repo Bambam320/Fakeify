@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { HelmetProvider } from 'react-helmet-async';
 
 // sets the style of the background image
 const backgroundStyle = {
@@ -16,7 +17,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <div style={backgroundStyle}>
-      <App />
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
     </div>
   </React.StrictMode>
 );

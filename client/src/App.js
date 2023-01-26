@@ -4,11 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SpotifyContext } from "./SpotifyContext";
 
 // importing components from nodes
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import { HelmetProvider } from "react-helmet-async";
 import Grid from '@mui/material/Grid';
-
 
 // importing components and css
 import "./App";
@@ -51,7 +48,10 @@ const App = () => {
   if (!isAuthenticated)
     return (
       <SpotifyContext.Provider value={{ setIsAuthenticated, setLocalUser, autoLoginError }}>
-        <Login />
+        <HelmetProvider>
+          <Helmetcode />
+          <Login />
+        </HelmetProvider>
       </SpotifyContext.Provider>
     );
 
