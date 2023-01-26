@@ -20,9 +20,10 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 
 function SongResultPlayListForm({ track }) {
-  const { localUser, setLocalUser } = useContext(SpotifyContext);
+  const { localUser, setLocalUser, currentPlaylist, setCurrentPlaylist } = useContext(SpotifyContext);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
   const [addToPlaylist, setAddToPlaylist] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   //sets the playlist that the local user wants to add a song to
   function handleLocalPlaylistSelect(e) {
@@ -41,10 +42,8 @@ function SongResultPlayListForm({ track }) {
   }
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
-  function handleAddSongToPlaylist(track, e) {
-    console.log("e", e)
+  function handleAddSongToPlaylist() {
     console.log("track", track)
-    e.preventDefault()
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
     fetch(`/songs`, {
       method: "POST",
@@ -65,8 +64,11 @@ function SongResultPlayListForm({ track }) {
     }).then((res) => {
       if (res.ok) {
         res.json().then((newSong) => {
+          console.log("newsong", newSong)
           let updatedPlaylists = localUser.playlists.map((pl) => {
-            if (selectedPlaylist.id === pl.id.toString()) {
+            console.log("selectedplaylist", selectedPlaylist)
+            console.log("pl", pl)
+            if (selectedPlaylist.id === pl.id) {
               pl.songs.push(newSong)
               return pl
             } else {
@@ -75,17 +77,24 @@ function SongResultPlayListForm({ track }) {
           })
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
         });
+      } else {
+        res.json().then((err) => setErrors(err.errors));
       }
     })
   }
 
+  console.log("localuser", localUser)
 
   return (
     <>
+    <CardActions>
       <Button size="small" onClick={() => handleDisplayAddToPlaylistSelect()}>Add to playlist...</Button>
+    </CardActions>
+    <CardActionArea sx={{marginLeft: '10px'}}>
+
       {addToPlaylist ?
-        <FormControl variant="outlined" >
-          <InputLabel id="playlist-select">Select A Playlist</InputLabel>
+        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
+          <InputLabel id="playlist-select">Select Playlist</InputLabel>
           <Select
             labelId="playlist-select"
             id="playlist-select"
@@ -101,11 +110,25 @@ function SongResultPlayListForm({ track }) {
               )
             })}
           </Select>
-          <Button size="small" onClick={handleAddSongToPlaylist}>Add Song</Button>
         </FormControl >
         :
         <></>
       }
+      </CardActionArea>
+      {addToPlaylist ?
+        <Button 
+          size="small" 
+          onClick={handleAddSongToPlaylist}
+          sx={{marginLeft: '10px', marginBottom: '10px'}}
+        >Add Song</Button>
+      :
+        <></>
+      }
+      <div className='errordiv'>
+        {errors.map((error) => {
+          return <p key={error} className='error'>{error}</p>;
+        })}
+      </div>
     </>
   )
 }

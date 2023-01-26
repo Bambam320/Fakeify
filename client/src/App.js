@@ -19,6 +19,7 @@ import Profile from "./components/Profile";
 import Search from "./components/Search";
 import Playlist from "./Playlist";
 import Helmetcode from "./components/Helmetcode";
+import Collection from "./Collection";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -86,10 +87,9 @@ const App = () => {
               <Route path='/search' element={<Search />} />
               <Route path="/playlists/:id" element={<Playlist />} />
               <Route path="/profile" element={<Profile />} />
-              {/* <Route path='/*' element={<></>} /> */}
-              {/* <Route path='/collection/' element={<CollectionHeader />} >
-                <Route path='playlists' element={<Playlists />} />
-              </Route> */}
+              <Route path='/collection/' element={<Collection />} >
+                {/* <Route path='playlists' element={<Playlists />} /> */}
+              </Route>
             </Routes>
           </Grid>
         </Grid>
