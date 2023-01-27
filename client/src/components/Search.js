@@ -58,6 +58,7 @@ function Search() {
   }
 
   // lists the playlist search results as 10 cards max
+  // add songs to be played from playlist
   let playlistResults = results.playlists.map((playlist) => {
     console.log(playlist)
     return (
@@ -120,6 +121,7 @@ function Search() {
   });
 
   // lists the album search results as 10 cards max
+  // add songs from album to be played
   let albumResults = results.albums.map((album) => {
     return (
       <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
@@ -147,6 +149,7 @@ function Search() {
   });
 
   // lists the artist search results as 10 cards max
+  // add albums and their songs for previews
   let artistResults = results.artists.map((artist) => {
     return (
       <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
