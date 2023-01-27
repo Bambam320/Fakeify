@@ -1,7 +1,7 @@
 class SpotifyApiController < ApplicationController
 
     before_action :update_token
-    skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse]
+    skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse, :featured_songs]
   
     def search_for_tracks
       songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
@@ -17,6 +17,25 @@ class SpotifyApiController < ApplicationController
       render json: results, status: :ok
     end
   
+    def featured_songs
+      session[:current_featured_playlist] = session[:current_featured_playlist] || 0
+      featuredPlaylistLength = RSpotify::Playlist.browse_featured.length
+      if session[:current_featured_playlist] > 0 && session[:current_featured_playlist] < featuredPlaylistLength -1
+        session[:current_featured_playlist] + 1
+        featuredPlaylist = RSpotify::Playlist.browse_featured[session[:current_featured_playlist]]
+        unfilteredSongs = featuredPlaylist.tracks
+        songs = unfilteredSongs.filter { |song| song.preview_url.length > 0 }
+        render json: songs, status: :ok
+      elsif session[:current_featured_playlist] == 0
+        featuredPlaylist = RSpotify::Playlist.browse_featured[session[:current_featured_playlist]]
+        unfilteredSongs = featuredPlaylist.tracks
+        songs = unfilteredSongs.filter { |song| song.preview_url.length > 0 }
+        render json: songs, status: :ok
+      else
+        render json: { errors: ["An error occured, please try again."] }, status: :not_found
+      end
+    end
+
     def callback
       spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
       current_user = User.find(session[:user_id])
