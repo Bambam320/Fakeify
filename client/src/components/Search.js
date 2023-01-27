@@ -217,7 +217,7 @@ function Search() {
         :
         <></>
       }
-      {results.albums.length > 0 ?
+      {results.artists.length > 0 ?
         <>
           <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
             Artists
