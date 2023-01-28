@@ -1,7 +1,7 @@
 //functional imports
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { SpotifyContext } from "../SpotifyContext";
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //css and component imports
 import '../SongRow.css'
@@ -27,29 +27,38 @@ import Box from '@mui/material/Box';
 function Home() {
   const [featuredSongs, setFeaturedSongs] = useState([]);
   const { setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
-  const [errors, setErrors] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
   const [track, setTrack] = useState();
   const [requestRefresh, setRequestRefresh] = useState(false);
-
+  const [errors, setErrors] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const domRef = useRef(null);
+  
   //bring in featured songs from the spotify_api
   useEffect(() => {
-  }, [requestRefresh])
-
-  function check () {
-    fetch(`/spotify_api/show_featured`)
-      .then((res) => {
-        if (res.ok) {
-          res.json().then((songs) => {
-            setFeaturedSongs(songs)
-          })
-        }
-      })
+    console.log("useeffect is firing")
+    const retrieveRecommendedSongs = async () => {
+      try {
+        setLoader(true);
+        const data = await axios
+          .get(`/spotify_api/show_featured`)
+          .then((res) => {
+            setFeaturedSongs(res.data);
+          });
+          setLoader(false);
+      } catch (err) {
+        console.log("error", err)
+      }
     }
-
-
-
-
+    retrieveRecommendedSongs()
+  }, [requestRefresh])
+  
+  
+    useEffect(() => {
+      setTimeout(() => {
+        domRef.current.click();
+      }, 1000); 
+    }, []);
 
   //sets the playlist that the local user wants to add a song to
   function handleLocalPlaylistSelect(e) {
@@ -113,23 +122,28 @@ function Home() {
     setCurrentTrack(track)
   }
 
+  add song artists to songs sent from search results in playlist and from search and from Home
+  get songs to play on the first playlist render in Home
+  add playlist name to the top of the songs in Home
+  figure out why playlists are not being cycled through
+
   return (
-    <>
+    <div >
       <Grid container>
-        <Box sx={{ width: '100%', maxWidth: 600}}>
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px'}}>
-            Hover over the song to listen. 
+        <Box sx={{ width: '100%', maxWidth: 600 }} ref={domRef}>
+          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px' }}>
+            Hover over the song to listen.
           </Typography>
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px'}}>
+          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }}>
             Click to add to the selected playlist.
           </Typography>
-          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px'}}>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }}>
             Enjoy the featured recommendations:
           </Typography>
         </Box>
-        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }}
+        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-85px' }}
           sx={{
-            "& .MuiInputLabel-root": {color: 'white'},
+            "& .MuiInputLabel-root": { color: 'white' },
             "& .MuiOutlinedInput-root.Mui-focused": {
               "& > fieldset": {
                 borderColor: "white",
@@ -145,7 +159,7 @@ function Home() {
             value={selectedPlaylist.id}
             onChange={handleLocalPlaylistSelect}
             label="selectedPlaylist"
-            sx={{backgroundColor: '#a7a7a8'}}
+            sx={{ backgroundColor: '#a7a7a8' }}
           >
             <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
             {localUser.playlists.map((playlist) => {
@@ -156,10 +170,10 @@ function Home() {
             })}
           </Select>
         </FormControl >
-        <Button 
+        <Button
           onClick={() => {
-            check()
-            setRequestRefresh(!requestRefresh)}}
+            setRequestRefresh(!requestRefresh)
+          }}
           className='sidebarOption'
           sx={{
             color: 'grey',
@@ -169,34 +183,37 @@ function Home() {
             marginTop: '10px',
             fontSize: '16px',
           }}
-        > 
-          <RefreshIcon sx={{marginRight: '5px'}} />
+        >
+          <RefreshIcon sx={{ marginRight: '5px' }} />
           <h4> Refresh recommended playlist </h4>
         </Button>
       </Grid>
-      <Grid container spacing={4} width='1000px' sx={{marginLeft: '35px', marginTop: '35px', marginBottom: '30px'}}>
-          { featuredSongs.map((song) => {
+      {loader ?
+        <img src="/Infinity.gif" alt="infinity loader" style={{marginLeft: '250px'}}></img>
+        :
+        <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '30px' }}>
+          {featuredSongs.map((song) => {
             return (
               <Grid item >
                 <div  >
-
-                <Card 
-                  onClick={(e) => console.log(e)} 
-                  onMouseEnter={(e) => sendToPlayer(e, song)}
-                >
-                  <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="140"
-                    image={song.album.images[0].url}
+                  <Card
+                    onClick={(e) => console.log(e)}
+                    onMouseEnter={(e) => sendToPlayer(e, song)}
+                  >
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height="140"
+                      image={song.album.images[0].url}
                     />
                   </Card>
-                    </div>
+                </div>
               </Grid>
             )
           })}
-      </Grid>
-    </>
+        </Grid>
+      }
+    </div>
   )
 }
 

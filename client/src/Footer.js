@@ -88,7 +88,10 @@ function Footer() {
 
   return (
     <div className='footer'>
-      <audio src={currentTrack.preview_url} ref={audioElem} onTimeUpdate={trackTime}/>
+      <audio 
+        src={currentTrack.preview_url} 
+        ref={audioElem} 
+        onTimeUpdate={trackTime} />
       <div className='footer__left'>
         {currentTrack ?
           <>
