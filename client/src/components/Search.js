@@ -50,7 +50,7 @@ function Search() {
     }
   }, [mainSearch])
 
-  //send the song and list of songs as queue to the front end
+  //send the song and list of songs as queue to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
     setCurrentTrack(track)

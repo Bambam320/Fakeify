@@ -106,6 +106,13 @@ function Home() {
 
   console.log("featuredSongs", featuredSongs)
 
+
+  //send the song to the player
+  function sendToPlayer(e, track) {
+    e.preventDefault()
+    setCurrentTrack(track)
+  }
+
   return (
     <>
       <Grid container>
@@ -167,16 +174,24 @@ function Home() {
           <h4> Refresh recommended playlist </h4>
         </Button>
       </Grid>
-      <Grid container >
+      <Grid container spacing={4} width='1000px' sx={{marginLeft: '35px', marginTop: '35px', marginBottom: '30px'}}>
           { featuredSongs.map((song) => {
             return (
-              <Grid item component={Card}>
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                height="140"
-                // image={song.images}
-              />
+              <Grid item >
+                <div  >
+
+                <Card 
+                  onClick={(e) => console.log(e)} 
+                  onMouseEnter={(e) => sendToPlayer(e, song)}
+                >
+                  <CardMedia
+                    component="img"
+                    alt="green iguana"
+                    height="140"
+                    image={song.album.images[0].url}
+                    />
+                  </Card>
+                    </div>
               </Grid>
             )
           })}
