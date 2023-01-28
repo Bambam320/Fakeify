@@ -1,7 +1,7 @@
 
-# Veterinary application
+# Spotify Clone
 
-This is a single-page application that allows a doctor or a patient to login. The doctor can create, update and delete appointments, view their patients that have appointments and view other doctors in the clinic. The pet can also login and view their appointments, they can also update and delete their appointments. The app features auto-login and seamless handling of all types of users from the same forms.
+This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
   
 ## Table of Contents
 
@@ -9,6 +9,8 @@ This is a single-page application that allows a doctor or a patient to login. Th
 - [Features](#Features)
 
 - [Installation](#installation)
+
+- [Development](#development)
 
 - [Usage](#usage)
 
@@ -22,7 +24,7 @@ This is a single-page application that allows a doctor or a patient to login. Th
 
   
 
-## Features
+<!-- ## Features
 
 
 1. The signup form can handle two types of users, a doctor or animal. The user is then automatically logged in, the user can log out then log in again. The usernames are unique so there is no need to choose the type of role being logged into. The user can automatically stay logged as long as the browser stays open.
@@ -56,11 +58,16 @@ rails s
 
 Enjoy!
 
-Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-project)
+Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-project) -->
 
-  
+## Development
 
-## Usage
+***Login***
+
+![](wire_frames/Home/home_page_wire_frame.png)
+
+
+<!-- ## Usage
 
 The SPA's functions are described below with imagery and code to best demonstrate their use.
 
@@ -273,4 +280,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
   
 
 ![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project)
-
+ -->
