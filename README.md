@@ -72,7 +72,7 @@ Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-pr
 ![](wire_frames/Profile/profile_wire_frames.png)
 
 ***My Playlist Page***
-![](wire_frames/Local Playlists/playlists_page_wire_frame.png)
+![](wire_frames/LocalPlaylists/playlists_page_wire_frame.png)
 
 ***Audio Player Page***
 ![](wire_frames/Footer/footer_player_wire_frame.drawio.png)
