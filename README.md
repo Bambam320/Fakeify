@@ -65,7 +65,23 @@ Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-pr
 ***Home Page***
 ![](wire_frames/Home/home_page_wire_frame.png)
 
+***Search Page***
+![](wire_frames/Search/search_page_wire_frame.png)
 
+***Profile Page***
+![](wire_frames/Profile/profile_wire_frames.png)
+
+***My Playlist Page***
+![](wire_frames/Local Playlists/playlists_page_wire_frame.png)
+
+***Audio Player Page***
+![](wire_frames/Footer/footer_player_wire_frame.drawio.png)
+
+***Local Users Artists, Songs, Playlists, Albums Page***\
+![](wire_frames/Collection/artists/collection_artists_page_wire_frame.png)
+![](wire_frames/Collection/songs/collection_songs_page_wire_frame.png)
+![](wire_frames/Collection/playlists/collection_playlists_page_wire_frame.png)
+![](wire_frames/Collection/albums/collection_albums_page_wire_frame.png)
 <!-- ## Usage
 
 The SPA's functions are described below with imagery and code to best demonstrate their use.
