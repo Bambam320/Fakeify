@@ -62,8 +62,7 @@ Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-pr
 
 ## Development
 
-***Login***
-
+***Home Page***
 ![](wire_frames/Home/home_page_wire_frame.png)
 
 
