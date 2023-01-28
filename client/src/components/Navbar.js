@@ -19,8 +19,6 @@ import "../Sidebar.css";
 import "../SidebarOption.css";
 import Header from '../Header';
 import Playlist from '../Playlist';
-import SidebarOption from "../SidebarOption";
-
 
 function Navbar() {
   //sets state, context and navigate hooks

@@ -29,7 +29,8 @@ class SpotifyApiController < ApplicationController
       elsif session[:current_featured_playlist] == 0
         featuredPlaylist = RSpotify::Playlist.browse_featured[session[:current_featured_playlist]]
         unfilteredSongs = featuredPlaylist.tracks
-        songs = unfilteredSongs.filter { |song| song.preview_url.length > 0 }
+        songs = unfilteredSongs.filter { |song| !song.preview_url.nil? }
+        session[:current_featured_playlist] + 1
         render json: songs, status: :ok
       else
         render json: { errors: ["An error occured, please try again."] }, status: :not_found

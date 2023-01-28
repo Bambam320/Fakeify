@@ -4,7 +4,6 @@ import { SpotifyContext } from "./SpotifyContext";
 
 //css and component imports
 import './SongRow.css'
-import './SidebarOption'
 
 //material ui imports
 import Button from '@mui/material/Button';

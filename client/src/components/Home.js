@@ -3,9 +3,13 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
+//css and component imports
+import '../SongRow.css'
+
 //imports material ui
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -14,11 +18,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
-import Link from "@mui/material/Link"
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import Box from '@mui'
+import Link from "@mui/material/Link";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import Box from '@mui/material/Box';
 
 function Home() {
   const [featuredSongs, setFeaturedSongs] = useState([]);
@@ -26,9 +30,13 @@ function Home() {
   const [errors, setErrors] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
   const [track, setTrack] = useState();
+  const [requestRefresh, setRequestRefresh] = useState(false);
 
   //bring in featured songs from the spotify_api
   useEffect(() => {
+  }, [requestRefresh])
+
+  function check () {
     fetch(`/spotify_api/show_featured`)
       .then((res) => {
         if (res.ok) {
@@ -37,7 +45,11 @@ function Home() {
           })
         }
       })
-  }, [])
+    }
+
+
+
+
 
   //sets the playlist that the local user wants to add a song to
   function handleLocalPlaylistSelect(e) {
@@ -97,15 +109,28 @@ function Home() {
   return (
     <>
       <Grid container>
-        <Box sx={{ display: 'flex', alignItems: 'center'}}>
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-            Hover over the song to listen. Click to add to the selected playlist.
+        <Box sx={{ width: '100%', maxWidth: 600}}>
+          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px'}}>
+            Hover over the song to listen. 
           </Typography>
-          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
+          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px'}}>
+            Click to add to the selected playlist.
+          </Typography>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px'}}>
             Enjoy the featured recommendations:
           </Typography>
         </Box>
-        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
+        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }}
+          sx={{
+            "& .MuiInputLabel-root": {color: 'white'},
+            "& .MuiOutlinedInput-root.Mui-focused": {
+              "& > fieldset": {
+                borderColor: "white",
+                color: "orange"
+              }
+            }
+          }}
+        >
           <InputLabel id="playlist-select">Select Playlist</InputLabel>
           <Select
             labelId="playlist-select"
@@ -113,6 +138,7 @@ function Home() {
             value={selectedPlaylist.id}
             onChange={handleLocalPlaylistSelect}
             label="selectedPlaylist"
+            sx={{backgroundColor: '#a7a7a8'}}
           >
             <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
             {localUser.playlists.map((playlist) => {
@@ -123,6 +149,23 @@ function Home() {
             })}
           </Select>
         </FormControl >
+        <Button 
+          onClick={() => {
+            check()
+            setRequestRefresh(!requestRefresh)}}
+          className='sidebarOption'
+          sx={{
+            color: 'grey',
+            textTransform: 'none',
+            height: '30px',
+            marginLeft: '50px',
+            marginTop: '10px',
+            fontSize: '16px',
+          }}
+        > 
+          <RefreshIcon sx={{marginRight: '5px'}} />
+          <h4> Refresh recommended playlist </h4>
+        </Button>
       </Grid>
       <Grid container >
           { featuredSongs.map((song) => {
