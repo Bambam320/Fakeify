@@ -24,10 +24,9 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 
-  // add song artists to songs sent from search results in playlist and from search and from Home
-  // get songs to play on the first playlist render in Home
-  // add playlist name to the top of the songs in Home
-  // figure out why playlists are not being cycled through
+// show success on add song
+// show detailed song info on hover
+//display errors correctly
 
 function Home() {
   const [featuredSongs, setFeaturedSongs] = useState([]);
@@ -38,7 +37,11 @@ function Home() {
   const [errors, setErrors] = useState([]);
   const [loader, setLoader] = useState(false);
   const domRef = useRef(null);
-  
+  const [playlistInfo, setPlaylistInfo] = useState({
+    name: '',
+    description: ''
+  });
+
   //bring in featured songs from the spotify_api
   useEffect(() => {
     console.log("useeffect is firing")
@@ -48,9 +51,11 @@ function Home() {
         const data = await axios
           .get(`/spotify_api/show_featured`)
           .then((res) => {
-            setFeaturedSongs(res.data);
+            console.log("res", res)
+            setFeaturedSongs(res.data.songs);
+            setPlaylistInfo(res.data.playlist_info)
           });
-          setLoader(false);
+        setLoader(false);
       } catch (err) {
         console.log("error", err)
       }
@@ -70,8 +75,9 @@ function Home() {
   }
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
-  function handleAddSongToPlaylist() {
+  function handleAddSongToPlaylist(track) {
     console.log("track", track)
+    console.log("selectedplaylist", selectedPlaylist)
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
     fetch(`/songs`, {
       method: "POST",
@@ -111,9 +117,6 @@ function Home() {
     })
   }
 
-  console.log("featuredSongs", featuredSongs)
-
-
   //send the song to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
@@ -121,25 +124,25 @@ function Home() {
     setCurrentTrack(track)
   }
 
-
-
   return (
     <div >
       <Grid container>
-        <Box sx={{ width: '100%', maxWidth: 600 }} >
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px' }}>
-            Hover over the song to listen.
+        <Box sx={{ width: '100%', maxWidth: 350 }} >
+          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px', marginBottom: '25px' }}>
+            Hover to listen. Click to add.
           </Typography>
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }}>
-            Click on the song to add to the selected playlist.
-          </Typography>
-          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
-            Enjoy the featured recommendations:
+          <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
+            Choose a Playlist first:
           </Typography>
         </Box>
-        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-85px' }}
+        <FormControl variant="outlined" style={{ minWidth: 150 }}
           sx={{
             "& .MuiInputLabel-root": { color: 'white' },
+
+            '&.Mui-focused .MuiInputLabel-root': {
+              color: 'white',
+            },
+
             "& .MuiOutlinedInput-root.Mui-focused": {
               "& > fieldset": {
                 borderColor: "white",
@@ -150,7 +153,7 @@ function Home() {
         >
           <InputLabel id="playlist-select">Select Playlist</InputLabel>
           <Select
-          
+
             labelId="playlist-select"
             id="playlist-select"
             value={selectedPlaylist.id}
@@ -185,8 +188,18 @@ function Home() {
           <h4> Recommend A Playlist </h4>
         </Button>
       </Grid>
+      <Grid container>
+        <Box sx={{ width: '100%', maxWidth: 600 }} >
+          <Typography variant="h4" component="div" sx={{ color: 'white', marginLeft: '25px', marginTop: '25px' }}>
+            {playlistInfo.name}
+          </Typography>
+          <Typography variant="h5" component="div" sx={{ color: 'purple', marginLeft: '25px' }}>
+            {playlistInfo.description}
+          </Typography>
+        </Box>
+      </Grid>
       {loader ?
-        <img src="/Infinity.gif" alt="infinity loader" style={{marginLeft: '250px'}}></img>
+        <img src="/Infinity.gif" alt="infinity loader" style={{ marginLeft: '250px' }}></img>
         :
         <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '30px' }}>
           {featuredSongs.map((song) => {
@@ -194,7 +207,7 @@ function Home() {
               <Grid item >
                 <div  >
                   <Card
-                    onClick={(e) => console.log(e)}
+                    onClick={() => handleAddSongToPlaylist(song)}
                     onMouseEnter={(e) => sendToPlayer(e, song)}
                   >
                     <CardMedia

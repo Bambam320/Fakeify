@@ -98,7 +98,7 @@ function Footer() {
             alt={currentTrack.album ? currentTrack.album.name : currentTrack.name} />
           <div className='footer__songInfo'>
             <h4>{currentTrack.name}</h4>
-            <p>{currentTrack.featured_artist}</p>
+            <p>{currentTrack.featured_artist ? currentTrack.featured_artist : currentTrack.artists[0].name}</p>
           </div>
           </>
         :
