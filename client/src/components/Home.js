@@ -24,6 +24,11 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 
+  // add song artists to songs sent from search results in playlist and from search and from Home
+  // get songs to play on the first playlist render in Home
+  // add playlist name to the top of the songs in Home
+  // figure out why playlists are not being cycled through
+
 function Home() {
   const [featuredSongs, setFeaturedSongs] = useState([]);
   const { setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
@@ -52,13 +57,6 @@ function Home() {
     }
     retrieveRecommendedSongs()
   }, [requestRefresh])
-  
-  
-    useEffect(() => {
-      setTimeout(() => {
-        domRef.current.click();
-      }, 1000); 
-    }, []);
 
   //sets the playlist that the local user wants to add a song to
   function handleLocalPlaylistSelect(e) {
@@ -119,25 +117,23 @@ function Home() {
   //send the song to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
+    console.log("track", track)
     setCurrentTrack(track)
   }
 
-  add song artists to songs sent from search results in playlist and from search and from Home
-  get songs to play on the first playlist render in Home
-  add playlist name to the top of the songs in Home
-  figure out why playlists are not being cycled through
+
 
   return (
     <div >
       <Grid container>
-        <Box sx={{ width: '100%', maxWidth: 600 }} ref={domRef}>
+        <Box sx={{ width: '100%', maxWidth: 600 }} >
           <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px' }}>
             Hover over the song to listen.
           </Typography>
           <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }}>
-            Click to add to the selected playlist.
+            Click on the song to add to the selected playlist.
           </Typography>
-          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }}>
+          <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
             Enjoy the featured recommendations:
           </Typography>
         </Box>
@@ -154,6 +150,7 @@ function Home() {
         >
           <InputLabel id="playlist-select">Select Playlist</InputLabel>
           <Select
+          
             labelId="playlist-select"
             id="playlist-select"
             value={selectedPlaylist.id}
@@ -185,7 +182,7 @@ function Home() {
           }}
         >
           <RefreshIcon sx={{ marginRight: '5px' }} />
-          <h4> Refresh recommended playlist </h4>
+          <h4> Recommend A Playlist </h4>
         </Button>
       </Grid>
       {loader ?

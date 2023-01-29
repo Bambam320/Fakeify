@@ -95,7 +95,7 @@ function Navbar() {
         <LibraryMusicIcon className="sidebarOption_icon" />
         <h4>My Library</h4>
       </Link>
-      <a component='a' href="http://localhost:3000/auth/spotify" className='sidebarOption' onClick={() => {console.log("a link is being fired")}}>
+      <a component='a' href="http://localhost:3000/auth/spotify" className='sidebarOption' onClick={() => {}}>
         <LoginIcon className="sidebarOption_icon" />
         <h4>Sign in with Spotify</h4>
       </a>

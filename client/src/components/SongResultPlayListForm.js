@@ -43,7 +43,6 @@ function SongResultPlayListForm({ track }) {
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddSongToPlaylist() {
-    console.log("track", track)
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
     fetch(`/songs`, {
       method: "POST",
@@ -64,10 +63,7 @@ function SongResultPlayListForm({ track }) {
     }).then((res) => {
       if (res.ok) {
         res.json().then((newSong) => {
-          console.log("newsong", newSong)
           let updatedPlaylists = localUser.playlists.map((pl) => {
-            console.log("selectedplaylist", selectedPlaylist)
-            console.log("pl", pl)
             if (selectedPlaylist.id === pl.id) {
               pl.songs.push(newSong)
               return pl
@@ -82,8 +78,6 @@ function SongResultPlayListForm({ track }) {
       }
     })
   }
-
-  console.log("localuser", localUser)
 
   return (
     <>

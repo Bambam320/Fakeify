@@ -60,7 +60,6 @@ function Search() {
   // lists the playlist search results as 10 cards max
   // add songs to be played from playlist
   let playlistResults = results.playlists.map((playlist) => {
-    console.log(playlist)
     return (
       <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>

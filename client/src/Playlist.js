@@ -94,8 +94,6 @@ function Playlist() {
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddTrack(track, e) {
-    console.log("e", e)
-    console.log("track", track)
     e.preventDefault()
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
     fetch(`/songs`, {
@@ -134,7 +132,6 @@ function Playlist() {
 
   // removes a track from the currentplaylist
   function handleDeleteTrack(song, e) {
-    console.log("handledeletetrack is firing", song)
     e.preventDefault()
     fetch(`/songs/${song.id}`, {
       method: "DELETE",

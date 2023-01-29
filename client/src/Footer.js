@@ -83,9 +83,6 @@ function Footer() {
     }
   }
 
-  console.log("currentTrack", currentTrack)
-  console.log("currentQueue", currentQueue)
-
   return (
     <div className='footer'>
       <audio 

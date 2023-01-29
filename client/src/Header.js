@@ -43,7 +43,6 @@ function Header() {
 
   //set search state and navigate to /search to display results
   function handleSubmit(e) {
-    console.log("submit firing", search)
     e.preventDefault()
     setMainSearch(search)
     setSearch('')
