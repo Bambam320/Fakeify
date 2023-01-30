@@ -4,9 +4,11 @@ import { SpotifyContext } from "./SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
 // imports styles and components
+import "./Collection.css";
 
 //imports material ui
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
@@ -17,9 +19,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
 import Link from "@mui/material/Link"
+import Box from "@mui/material/Box"
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
+import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import AlbumIcon from '@mui/icons-material/Album';
+import PeopleIcon from '@mui/icons-material/People';
 
 function Collection() {
   // sets hooks
@@ -30,6 +37,7 @@ function Collection() {
   let myPlaylists = localUser.playlists.map((playlist) => {
     console.log("local users playlist", playlist)
     return (
+
       <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
           <div style={{ marginLeft: '-20px' }}>
@@ -61,6 +69,26 @@ function Collection() {
 
   return (
     <div>
+      <Grid container sx={{marginLeft: '20em'}}>
+        
+      <Link to="/collection/playlists" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
+        <FeaturedPlayListIcon className="sidebarOption_icon" />
+        <h4> Playlists </h4>
+      </Link>
+      <Link to="/collection/songs" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
+        <MusicNoteIcon className="sidebarOption_icon" />
+        <h4> Songs </h4>
+      </Link>
+      <Link to="/collection/artists" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
+        <AlbumIcon className="sidebarOption_icon" />
+        <h4> Artists </h4>
+      </Link>
+      <Link to="/collection/albums" sx={{color: 'grey'}} className='sidebarOption' >
+        <PeopleIcon className="sidebarOption_icon" />
+        <h4> Albums </h4>
+      </Link>
+      </Grid>
+
       {/* {results.playlists.length > 0 ?
           <> */}
       <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
