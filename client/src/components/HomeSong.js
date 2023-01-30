@@ -38,8 +38,6 @@ function HomeSong({ song, onAddSong, playSong }) {
     setPopoverOpen(null);
   };
 
-  console.log("songsongsong", song)
-
   return (
     <Grid item >
       <div  >

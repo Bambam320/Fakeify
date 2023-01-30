@@ -15,8 +15,6 @@ function SongRow({ track, handleAddTrack }) {
   //set state from context
   const { setCurrentTrack } = useContext(SpotifyContext);
 
-  console.log("track from songrow", track)
-
   return (
     <Grid container className="songRow" width="750px">
 

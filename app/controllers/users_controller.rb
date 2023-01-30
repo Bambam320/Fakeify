@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   def create
     user = User.create!(user_params)
     session[:user_id] = user.id
-    render json: user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist'], status: :created
+    render json: user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist', 'playlists.songs.album'], status: :created
   end
 
   #private methods for users_controller

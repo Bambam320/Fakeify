@@ -45,20 +45,18 @@ function Home() {
 
   //bring in featured songs from the spotify_api
   useEffect(() => {
-    console.log("useeffect is firing")
     const retrieveRecommendedSongs = async () => {
       try {
         setLoader(true);
         const data = await axios
           .get(`/spotify_api/show_featured`)
           .then((res) => {
-            console.log("res", res)
             setFeaturedSongs(res.data.songs);
             setPlaylistInfo(res.data.playlist_info)
           });
         setLoader(false);
       } catch (err) {
-        console.log("error", err)
+        console.log("error from Home useeffect catch error", err)
       }
     }
     retrieveRecommendedSongs()
@@ -77,8 +75,6 @@ function Home() {
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddSongToPlaylist(track) {
-    console.log("track", track)
-    console.log("selectedplaylist", selectedPlaylist)
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
     fetch(`/songs`, {
       method: "POST",
@@ -99,10 +95,7 @@ function Home() {
     }).then((res) => {
       if (res.ok) {
         res.json().then((newSong) => {
-          console.log("newsong", newSong)
           let updatedPlaylists = localUser.playlists.map((pl) => {
-            console.log("selectedplaylist", selectedPlaylist)
-            console.log("pl", pl)
             if (selectedPlaylist.id === pl.id) {
               pl.songs.push(newSong)
               return pl
@@ -122,7 +115,6 @@ function Home() {
   //send the song to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
-    console.log("track", track)
     setCurrentTrack(track)
   }
 
