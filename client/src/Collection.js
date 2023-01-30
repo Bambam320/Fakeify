@@ -1,7 +1,7 @@
 //functional imports
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { SpotifyContext } from "./SpotifyContext";
-import { useNavigate } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 // imports styles and components
 import "./Collection.css";
@@ -18,7 +18,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
-import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -66,27 +65,28 @@ function Collection() {
   });
 
   console.log('localuser', localUser)
-
+  
   return (
     <div>
       <Grid container sx={{marginLeft: '20em'}}>
         
-      <Link to="/collection/playlists" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
-        <FeaturedPlayListIcon className="sidebarOption_icon" />
+      <Link to="/collection/playlists" sx={{marginRight: '45px',  color: 'grey'}} className='collectionLink' >
+        <FeaturedPlayListIcon className="collectionLink_icon" />
         <h4> Playlists </h4>
       </Link>
-      <Link to="/collection/songs" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
-        <MusicNoteIcon className="sidebarOption_icon" />
+      <Link to="/collection/songs" sx={{marginRight: '45px',  color: 'grey'}} className='collectionLink' >
+        <MusicNoteIcon className="collectionLink_icon" />
         <h4> Songs </h4>
       </Link>
-      <Link to="/collection/artists" sx={{marginRight: '45px',  color: 'grey'}} className='sidebarOption' >
-        <AlbumIcon className="sidebarOption_icon" />
+      <Link to="/collection/artists" sx={{marginRight: '45px',  color: 'grey'}} className='collectionLink' >
+        <AlbumIcon className="collectionLink_icon" />
         <h4> Artists </h4>
       </Link>
-      <Link to="/collection/albums" sx={{color: 'grey'}} className='sidebarOption' >
-        <PeopleIcon className="sidebarOption_icon" />
+      <Link to="/collection/albums" sx={{color: 'grey'}} className='collectionLink' >
+        <PeopleIcon className="collectionLink_icon" />
         <h4> Albums </h4>
       </Link>
+ 
       </Grid>
 
       {/* {results.playlists.length > 0 ?

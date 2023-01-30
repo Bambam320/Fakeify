@@ -1,18 +1,19 @@
-.sidebarOption{
+.collectionLink{
   color:grey;
   height: 30px;
   cursor: pointer;
   transition: 200ms color ease-in;
   display: flex;
+  margin-right: '45px';
   align-items: center;
   text-decoration: none;
 }
 
-.sidebarOption:hover{
+.collectionLink:hover{
   color:white
 }
 
-.sidebarOption_icon{
+.collectionLink_icon{
   padding-left: 10px;
   padding-right: 10px;
 }
