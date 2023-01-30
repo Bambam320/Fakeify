@@ -28,7 +28,7 @@ import Box from '@mui/material/Box';
 
 function HomeSong({ song, onAddSong, playSong }) {
   const { setCurrentTrack, currentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
-  const [popoverOpen, setPopoverOpen] = useState(null);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   function handlePopoverOpen (e) {
     setPopoverOpen(e.currentTarget);
@@ -56,8 +56,6 @@ function HomeSong({ song, onAddSong, playSong }) {
             image={song.album.images[0].url}
           />
         </Card>
-
-
         <div>
           <Popover
             id="mouse-over-popover"

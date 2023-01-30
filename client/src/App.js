@@ -21,7 +21,9 @@ import Playlist from "./Playlist";
 import Helmetcode from "./components/Helmetcode";
 import Collection from "./Collection";
 import CollectionPlaylists from "./CollectionPlaylists";
-
+import CollectionAlbums from "./CollectionAlbums";
+import CollectionArtists from "./CollectionArtists";
+import CollectionSongs from "./CollectionSongs";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -89,8 +91,12 @@ const App = () => {
               <Route path='/search' element={<Search />} />
               <Route path="/playlists/:id" element={<Playlist />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path='/collection/' element={<Collection />} >
+              <Route path='/collection/' element={<Collection />}>
+                {/* <Route index element={<Collection />} /> */}
                 <Route path='playlists' element={<CollectionPlaylists />} />
+                <Route path='songs' element={<CollectionSongs />} />
+                <Route path='albums' element={<CollectionAlbums />} />
+                <Route path='artists' element={<CollectionArtists />} />
               </Route>
             </Routes>
           </Grid>
