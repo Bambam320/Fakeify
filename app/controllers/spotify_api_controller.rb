@@ -24,19 +24,26 @@ class SpotifyApiController < ApplicationController
         featuredPlaylist = RSpotify::Playlist.browse_featured[playlist_index]
         unfilteredSongs = featuredPlaylist.tracks
         songs = unfilteredSongs.filter { |song| !song.preview_url.nil? }
+        playlist = Hash.new
+        playlist[:songs] = songs
+        playlist[:playlist_info] = {
+          name: featuredPlaylist.name,
+          description: featuredPlaylist.description,
+        }
+        return playlist
       end
       if session[:current_featured_playlist] == featuredPlaylistLength - 1
-        songs = return_songs(session[:current_featured_playlist])
+        playlist = return_songs(session[:current_featured_playlist])
         session[:current_featured_playlist] = 0
-        render json: songs, status: :ok
+        render json: playlist, status: :ok
       elsif session[:current_featured_playlist] > 0 && 
-        songs = return_songs(session[:current_featured_playlist])
+        playlist = return_songs(session[:current_featured_playlist])
         session[:current_featured_playlist] = session[:current_featured_playlist] + 1
-        render json: songs, status: :ok
+        render json: playlist, status: :ok
       elsif session[:current_featured_playlist] == 0
-        songs = return_songs(session[:current_featured_playlist])
+        playlist = return_songs(session[:current_featured_playlist])
         session[:current_featured_playlist] = session[:current_featured_playlist] + 1
-        render json: songs, status: :ok
+        render json: playlist, status: :ok
       else
         render json: { errors: ["An error occured, please try again."] }, status: :not_found
       end

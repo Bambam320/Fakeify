@@ -5,6 +5,8 @@ import axios from 'axios';
 
 //css and component imports
 import '../SongRow.css'
+import HomeSong from "./HomeSong";
+import "./Login.css";
 
 //imports material ui
 import Button from '@mui/material/Button';
@@ -15,23 +17,21 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
-import Link from "@mui/material/Link";
+import Popover from '@mui/material/Popover';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 
-// show success on add song
-// show detailed song info on hover
-//display errors correctly
-
 function Home() {
   const [featuredSongs, setFeaturedSongs] = useState([]);
-  const { setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
-  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
+  const { setCurrentTrack, currentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
+  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '', name: '' });
   const [track, setTrack] = useState();
   const [requestRefresh, setRequestRefresh] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -41,6 +41,7 @@ function Home() {
     name: '',
     description: ''
   });
+  const [successOpen, SetSuccessOpen] = useState(false);
 
   //bring in featured songs from the spotify_api
   useEffect(() => {
@@ -110,6 +111,7 @@ function Home() {
             }
           })
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
+          SetSuccessOpen(true);
         });
       } else {
         res.json().then((err) => setErrors(err.errors));
@@ -124,6 +126,10 @@ function Home() {
     setCurrentTrack(track)
   }
 
+  //handle closing of success message
+  function handleSuccessClose() {
+    SetSuccessOpen(false);
+  }
   return (
     <div >
       <Grid container>
@@ -134,6 +140,11 @@ function Home() {
           <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
             Choose a Playlist first:
           </Typography>
+          <div className='errordiv'>
+            {errors.map((error) => {
+                return <p key={error} className='error'>{error}</p>;
+              })}
+            </div>
         </Box>
         <FormControl variant="outlined" style={{ minWidth: 150 }}
           sx={{
@@ -204,25 +215,29 @@ function Home() {
         <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '30px' }}>
           {featuredSongs.map((song) => {
             return (
-              <Grid item >
-                <div  >
-                  <Card
-                    onClick={() => handleAddSongToPlaylist(song)}
-                    onMouseEnter={(e) => sendToPlayer(e, song)}
-                  >
-                    <CardMedia
-                      component="img"
-                      alt="green iguana"
-                      height="140"
-                      image={song.album.images[0].url}
-                    />
-                  </Card>
-                </div>
-              </Grid>
+              <HomeSong 
+                key={song.id}
+                song={song}
+                onAddSong={handleAddSongToPlaylist}
+                playSong={sendToPlayer}
+              />
             )
           })}
         </Grid>
       }
+      <Snackbar open={successOpen} autoHideDuration={1000} onClose={handleSuccessClose}>
+        <Alert
+          onClose={handleSuccessClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successOpen ?
+            `You have successfully added "${currentTrack.name}" to ${selectedPlaylist.name}`
+            :
+            ''
+          }
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
