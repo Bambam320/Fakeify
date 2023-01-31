@@ -44,22 +44,23 @@ function CollectionSongsEachSong({ playlist }) {
               {song.album.name}
             </Typography>
           </CardContent>
-          <Button 
+        </div>
+      </CardActionArea>
+        <Button 
           onClick={() => {setCurrentTrack(song)}}
-          className='sidebarOption'
           sx={{
             color: 'grey',
             textTransform: 'none',
             height: '30px',
-            marginLeft: '-8px',
+            marginLeft: '25px',
+            marginBottom: '5px',
             fontSize: '16px',
+            transition: '200ms color ease-in',
           }}
         >
         <PlayCircleIcon sx={{marginRight: '5px'}}/>
           <h4>Track</h4>
         </Button>
-        </div>
-      </CardActionArea>
     </Grid>
       )
   })

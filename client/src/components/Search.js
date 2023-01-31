@@ -61,7 +61,7 @@ function Search() {
   // add songs to be played from playlist
   let playlistResults = results.playlists.map((playlist) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={playlist.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea component={Link} to={`/spotify_playlists/${playlist.id}`}>
           <div style={{ marginLeft: '-20px' }}>
             <CardMedia
@@ -91,7 +91,7 @@ function Search() {
   // lists the song search results as 10 cards max
   let songResults = results.tracks.map((track) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={track.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"
@@ -123,7 +123,7 @@ function Search() {
   // add songs from album to be played
   let albumResults = results.albums.map((album) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={album.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"
@@ -151,7 +151,7 @@ function Search() {
   // add albums and their songs for previews
   let artistResults = results.artists.map((artist) => {
     return (
-      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={artist.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <div style={{ marginLeft: '-20px' }}>
           <CardMedia
             component="img"

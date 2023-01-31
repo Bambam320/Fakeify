@@ -38,7 +38,7 @@ function CollectionPlaylists() {
   let myPlaylists = localUser.playlists.map((playlist) => {
     console.log("local users playlist", playlist)
     return (
-      <Grid item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={playlist.description} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea >
           <div style={{ marginLeft: '-20px' }}>
             <CardMedia
