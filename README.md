@@ -38,7 +38,7 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 
 6. The users profile is available in the upper right hand corner. The specifics about the user can be updated from the profile page.
 
-7. The Library page displays links that will display the users songs and their associated playlists, artists and albums in more detail.
+7. The Library page displays links that render the users songs, playlists, artists or albums in more detail.
 
 <!-- ## Installation
 

@@ -3,11 +3,13 @@ class SpotifyApiController < ApplicationController
     before_action :update_token
     skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse, :featured_songs]
   
+    # searches for tracks based on a search term, returns the songs
     def search_for_tracks
       songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
       render json: songs, status: :ok
     end
   
+    # searches each category with the provided search term and returns, 10 each to the front end
     def browse
       results = {}
       results[:artists] = RSpotify::Artist.search("#{params[:term]}", limit: 10)
@@ -17,6 +19,9 @@ class SpotifyApiController < ApplicationController
       render json: results, status: :ok
     end
   
+    # requests the featured playlist from spotify then chooses the next one in numerical succession
+    # the playlist has its songs filtered for only the ones that include an audio preview_url
+    # then it is sent back as a part of a hash including the basic playlist info
     def featured_songs
       session[:current_featured_playlist] = session[:current_featured_playlist] || 0
       featuredPlaylistLength = RSpotify::Playlist.browse_featured.length
@@ -49,6 +54,7 @@ class SpotifyApiController < ApplicationController
       end
     end
 
+    # receives valid callback from spotify and saves the spotify users information into the local users record then redirects to the profile page in the front end
     def callback
       spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
       current_user = User.find(session[:user_id])
@@ -67,6 +73,7 @@ class SpotifyApiController < ApplicationController
   
     private
   
+    # automatically updates the token and associated info if the logged in users token expired
     def update_token
       currentUser = User.find(session[:user_id])
       if (Time.at(currentUser.spotify_token_lifetime).to_datetime.to_f - Time.now.to_f).negative?() {
