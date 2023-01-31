@@ -30,7 +30,7 @@ import PeopleIcon from '@mui/icons-material/People';
 
 function Collection() {
   // sets hooks
-  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
+  const { localUser } = useContext(SpotifyContext);
   const [errors, setErrors] = useState([]);
 
   console.log('localuser', localUser)
@@ -50,4 +50,4 @@ function Collection() {
   )
 }
 
-export default Collection
+export default Collection;
