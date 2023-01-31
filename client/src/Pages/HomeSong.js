@@ -5,11 +5,11 @@ import React, { useState } from "react";
 import '../CSS/SongRow.css'
 
 //imports material ui
-import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 
 function HomeSong({ song, onAddSong, playSong }) {
   // sets state hooks

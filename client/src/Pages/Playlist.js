@@ -1,44 +1,44 @@
 //functional imports
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
-import { SpotifyContext } from "./SpotifyContext";
+import { SpotifyContext } from "../SpotifyContext";
 
 // css and component imports
-import "./Body.css";
-import "./App.css";
-import SongRow from "./SongRow";
+import "../CSS/Body.css";
+import "../CSS/App.css";
 import PlaylistSongRow from "./PlaylistSongRow";
+import SongRow from "./SongRow";
 
 //material ui imports
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import ClearIcon from '@mui/icons-material/Clear';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import InputBase from '@mui/material/InputBase';
-import ClearIcon from '@mui/icons-material/Clear';
-import SearchIcon from '@mui/icons-material/Search';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
 
 function Playlist() {
   // sets state, params, navigate and context
   const { currentPlaylist, setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
+  const params = useParams();
+  const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
   const [form, setForm] = useState(currentPlaylist);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [tracks, setTracks] = useState([]);
-  const params = useParams();
-  const navigate = useNavigate();
 
   // sets the playlist from the id in the url
   useEffect(() => {
@@ -55,7 +55,7 @@ function Playlist() {
   //sets the form in state used in updating from the currentplaylist
   useEffect(() => {
     setForm(currentPlaylist)
-  }, [currentPlaylist])
+  }, [currentPlaylist]);
 
   // sends the updates attributes of the playlist to the backend and updates state with the updated playlist
   function handleSave(e) {
@@ -90,7 +90,7 @@ function Playlist() {
       }
     })
     setOpen(false);
-  }
+  };
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddTrack(track, e) {
@@ -140,22 +140,20 @@ function Playlist() {
       }
     }).then((res) => {
       if (res.ok) {
-       
-          let updatedPlaylists = localUser.playlists.map((pl) => {
-            if (params.id === pl.id.toString()) {
-              pl.songs = pl.songs.filter((ele) => ele.id !== song.id )
-              return pl
-            } else {
-              return pl
-            }
-          })
-          setLocalUser({ ...localUser, playlists: updatedPlaylists })
-          let updatedSongs = currentPlaylist.songs.filter((ele) => ele.id !== song.id)
-          setCurrentPlaylist({ ...currentPlaylist, songs: updatedSongs })
-  
+        let updatedPlaylists = localUser.playlists.map((pl) => {
+          if (params.id === pl.id.toString()) {
+            pl.songs = pl.songs.filter((ele) => ele.id !== song.id)
+            return pl
+          } else {
+            return pl
+          }
+        })
+        setLocalUser({ ...localUser, playlists: updatedPlaylists })
+        let updatedSongs = currentPlaylist.songs.filter((ele) => ele.id !== song.id)
+        setCurrentPlaylist({ ...currentPlaylist, songs: updatedSongs })
       }
     })
-  }
+  };
 
   // deletes the current playlist and updates states by removing it
   function handleDeletePlaylist(e) {
@@ -179,7 +177,7 @@ function Playlist() {
       }
     })
     handleCloseDeleteMenu()
-  }
+  };
 
   //handles the search submit 
   function handleSearchSubmit(e) {
@@ -197,12 +195,12 @@ function Playlist() {
         }
       })
     setSearch('')
-  }
+  };
 
   //updates the form in state with the changed input values from the form
   function handleDialogUpdate(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  };
 
   //handles opening and closing the form
   const handleClickOpen = () => {
@@ -216,7 +214,7 @@ function Playlist() {
   //updates state held search value for song search input
   function handleSearchInputChange(e) {
     setSearch(e.target.value)
-  }
+  };
 
   //menu open and close handling for the delete threedot button
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -231,9 +229,7 @@ function Playlist() {
   // clear input value in update form in dialog
   const handleFormNameClear = (val) => {
     setForm({ ...form, [val]: '' })
-  }
-
-
+  };
 
   return (
     <>
@@ -251,6 +247,7 @@ function Playlist() {
             <img className="image_class" src={currentPlaylist.image} alt={currentPlaylist.name} />
           </div>
           <div>
+
             {/* delete icon and menu */}
             <div>
               <IconButton
@@ -284,7 +281,6 @@ function Playlist() {
                 </MenuItem>
               </Menu>
             </div>
-
             <div className="body__infoText" onClick={handleClickOpen}>
               <h4>{currentPlaylist.name}</h4>
               <p>{currentPlaylist.description}</p>
@@ -386,26 +382,21 @@ function Playlist() {
         </div>
       </Grid>
 
-
       {/* list songs that belong to playlist */}
       <div>
         {currentPlaylist.songs ?
           currentPlaylist.songs.map((song) => {
-            return <PlaylistSongRow song={song} key={song.id} queue={currentPlaylist.songs} handleDeleteTrack={handleDeleteTrack}/>
+            return <PlaylistSongRow song={song} key={song.id} queue={currentPlaylist.songs} handleDeleteTrack={handleDeleteTrack} />
           })
           :
           <></>
         }
       </div>
-
-
       <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '20px' }} />
 
+      {/* search menu in playlist page to list songs to add */}
       <Grid container>
         <Grid item>
-
-
-          {/* search menu in playlist page to list songs to add */}
           <Paper
             component="form"
             onSubmit={(e) => handleSearchSubmit(e)}
@@ -432,10 +423,7 @@ function Playlist() {
             </IconButton>
           </Paper>
         </Grid>
-
-
       </Grid>
-
 
       {/* List songs from search results */}
       <div>
@@ -447,8 +435,6 @@ function Playlist() {
           <></>
         }
       </div>
-
-
     </>
   )
 }

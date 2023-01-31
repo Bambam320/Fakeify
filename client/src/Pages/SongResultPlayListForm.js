@@ -1,26 +1,19 @@
 //functional imports
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { SpotifyContext } from "../SpotifyContext";
-import { useNavigate } from 'react-router-dom';
 
 //imports material ui
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
-import Link from "@mui/material/Link"
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select'
 
 function SongResultPlayListForm({ track }) {
-  const { localUser, setLocalUser, currentPlaylist, setCurrentPlaylist } = useContext(SpotifyContext);
+  // sets hooks for state and from context
+  const { localUser, setLocalUser } = useContext(SpotifyContext);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
   const [addToPlaylist, setAddToPlaylist] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -81,41 +74,40 @@ function SongResultPlayListForm({ track }) {
 
   return (
     <>
-    <CardActions>
-      <Button size="small" onClick={() => handleDisplayAddToPlaylistSelect()}>Add to playlist...</Button>
-    </CardActions>
-    <CardActionArea sx={{marginLeft: '10px'}}>
-
-      {addToPlaylist ?
-        <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
-          <InputLabel id="playlist-select">Select Playlist</InputLabel>
-          <Select
-            labelId="playlist-select"
-            id="playlist-select"
-            value={selectedPlaylist.id}
-            onChange={handleLocalPlaylistSelect}
-            label="selectedPlaylist"
-          >
-            <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
-            {localUser.playlists.map((playlist) => {
-              let id = playlist.id
-              return (
-                <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
-              )
-            })}
-          </Select>
-        </FormControl >
-        :
-        <></>
-      }
+      <CardActions>
+        <Button size="small" onClick={() => handleDisplayAddToPlaylistSelect()}>Add to playlist...</Button>
+      </CardActions>
+      <CardActionArea sx={{ marginLeft: '10px' }}>
+        {addToPlaylist ?
+          <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
+            <InputLabel id="playlist-select">Select Playlist</InputLabel>
+            <Select
+              labelId="playlist-select"
+              id="playlist-select"
+              value={selectedPlaylist.id}
+              onChange={handleLocalPlaylistSelect}
+              label="selectedPlaylist"
+            >
+              <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
+              {localUser.playlists.map((playlist) => {
+                let id = playlist.id
+                return (
+                  <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl >
+          :
+          <></>
+        }
       </CardActionArea>
       {addToPlaylist ?
-        <Button 
-          size="small" 
+        <Button
+          size="small"
           onClick={handleAddSongToPlaylist}
-          sx={{marginLeft: '10px', marginBottom: '10px'}}
+          sx={{ marginLeft: '10px', marginBottom: '10px' }}
         >Add Song</Button>
-      :
+        :
         <></>
       }
       <div className='errordiv'>
@@ -124,7 +116,7 @@ function SongResultPlayListForm({ track }) {
         })}
       </div>
     </>
-  )
-}
+  );
+};
 
 export default SongResultPlayListForm;

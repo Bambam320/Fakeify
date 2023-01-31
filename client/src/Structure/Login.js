@@ -4,16 +4,15 @@ import * as moment from 'moment'
 
 // imports components and styles
 import { SpotifyContext } from "../SpotifyContext";
-import "./Login.css";
+import "../CSS/Login.css";
 
 //imports material ui components
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 
 function Login() {
-
   //assigns context
   const { setLocalUser, setIsAuthenticated, autoLoginError } = useContext(SpotifyContext);
 
@@ -27,39 +26,39 @@ function Login() {
     email: "",
     birthdate: "",
   };
+  const [errors, setErrors] = useState([]);
   const [form, setForm] = useState(defaultFormValues);
   const [formType, setFormType] = useState("login");
-  const [errors, setErrors] = useState([]);
 
   //grabs any errors from App.js and lists on the login page
   useEffect(() => {
     setTimeout(() => setErrors(autoLoginError), 5000)
-  }, [autoLoginError])
+  }, [autoLoginError]);
 
   //updates the form held in state for login or signup
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  };
 
   //handles the birthdate update
-  function handleTimeChange (e) {
+  function handleTimeChange(e) {
     let birthdate = e._d.toDateString()
-    setForm({...form, ['birthdate']: birthdate })
-  }
+    setForm({ ...form, ['birthdate']: birthdate })
+  };
 
   // changes toggle to use sign up form
   function handleSignUpFormClick(e) {
     e.preventDefault();
     setFormType("users");
     setErrors([]);
-  }
+  };
 
   // changes toggle to use login form
   function handleLoginFormClick(e) {
     e.preventDefault();
     setFormType("login");
     setErrors([]);
-  }
+  };
 
   // submits the login or signup form
   function handleSubmit(e) {
@@ -83,13 +82,12 @@ function Login() {
       }
       setForm(defaultFormValues);
     });
-  }
+  };
 
   return (
     <div className='form'>
       {/* ternary that displays either the login or the signup form */}
       {formType === "login" ? (
-
         // login form
         <div className='login'>
           <h1 className='login__logo'>🎶Fakeify&reg;</h1>
@@ -120,15 +118,13 @@ function Login() {
               Dont have an account? SIGNUP
             </button>
             <div className='errordiv'>
-            {errors.map((error) => {
+              {errors.map((error) => {
                 return <p key={error} className='error'>{error}</p>;
               })}
             </div>
           </form>
         </div>
-
       ) : (
-
         //signup form
         <div className="login" >
           <h1 className='login__logo'>🎶Fakeify&reg;</h1>
@@ -185,9 +181,9 @@ function Login() {
                   },
                 }}
                 renderInput={(params) => <TextField
-                  {...params} 
-                  sx={{backgroundColor: 'white', marginBottom: '25px', borderRadius: '4px',}}
-                /> }
+                  {...params}
+                  sx={{ backgroundColor: 'white', marginBottom: '25px', borderRadius: '4px', }}
+                />}
               />
             </LocalizationProvider>
             <input
@@ -222,6 +218,6 @@ function Login() {
       )}
     </div>
   );
-}
+};
 
 export default Login;

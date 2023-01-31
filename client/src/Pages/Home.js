@@ -9,17 +9,17 @@ import '../CSS/SongRow.css'
 import HomeSong from "./HomeSong";
 
 //imports material ui
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import Grid from '@mui/material/Grid';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import Typography from '@mui/material/Typography';
 
 function Home() {
   // sets context, state and ref hooks

@@ -1,36 +1,18 @@
 //functional imports
-import React, { useState, useContext, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 
 // css and component imports
-import "../Body.css";
-import "../App.css";
+import "../CSS/Body.css";
+import "../CSS/App.css";
 
 //material ui imports
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
-import InputAdornment from '@mui/material/InputAdornment';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import InputBase from '@mui/material/InputBase';
-import ClearIcon from '@mui/icons-material/Clear';
-import SearchIcon from '@mui/icons-material/Search';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
 
-
-
+//////////////////////////////////complete the update for the USER
 function Profile() {
   // sets state, params, navigate and context
-  const { localUser, setLocalUser } = useContext(SpotifyContext);
+  const { localUser } = useContext(SpotifyContext);
   // const [errors, setErrors] = useState([]);
   // const [form, setForm] = useState(currentPlaylist);
   // const [open, setOpen] = useState(false);

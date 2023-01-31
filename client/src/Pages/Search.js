@@ -1,5 +1,5 @@
 //functional imports
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
@@ -8,31 +8,27 @@ import SongResultPlayListForm from './SongResultPlayListForm';
 
 //imports material ui
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
+import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import CardActionArea from "@mui/material/CardActionArea";
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 import Link from "@mui/material/Link"
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
+import Typography from '@mui/material/Typography';
 
 function Search() {
   // sets hooks
-  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
+  const { mainSearch, setMainSearch, setCurrentQueue, setCurrentTrack } = useContext(SpotifyContext);
   const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
   const [results, setResults] = useState({
     artists: [],
     tracks: [],
     albums: [],
     playlists: [],
   });
-  const [errors, setErrors] = useState([]);
 
   //Loads search results when rendered or when the main search field has a new value entered
   useEffect(() => {
@@ -58,7 +54,7 @@ function Search() {
   }
 
   // lists the playlist search results as 10 cards max
-  // add songs to be played from playlist
+  //////////////////////// add songs to be played from playlist
   let playlistResults = results.playlists.map((playlist) => {
     return (
       <Grid key={playlist.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
@@ -120,7 +116,7 @@ function Search() {
   });
 
   // lists the album search results as 10 cards max
-  // add songs from album to be played
+  ///////////////////////// add songs from album to be played
   let albumResults = results.albums.map((album) => {
     return (
       <Grid key={album.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
@@ -148,7 +144,7 @@ function Search() {
   });
 
   // lists the artist search results as 10 cards max
-  // add albums and their songs for previews
+  //////////////////////// add albums and their songs for previews
   let artistResults = results.artists.map((artist) => {
     return (
       <Grid key={artist.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
@@ -188,7 +184,6 @@ function Search() {
         :
         <></>
       }
-
       {results.tracks.length > 0 ?
         <>
           <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
@@ -202,7 +197,6 @@ function Search() {
         :
         <></>
       }
-
       {results.albums.length > 0 ?
         <>
           <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
@@ -235,8 +229,7 @@ function Search() {
         })}
       </div>
     </div>
-
-  )
-}
+  );
+};
 
 export default Search;
