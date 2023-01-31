@@ -2,8 +2,9 @@
 
 This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
   
-## Table of Contents
 
+
+## Table of Contents
 
 - [Features](#Features)
 
@@ -23,18 +24,23 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 
   
 
-<!-- ## Features
+## Features
 
+1. The login and signup pages use BCrypt to authenticate and protect the users passwords in the backend. The signup page requires several information fields to be entered including birthdate, email and an avatar url.
 
-1. The Home page displays all the songs from the list of recommended playlists from spotify. This list changes daily and the playlist could be refreshed from the home page. Each song in the playlist is displayed as a tile and will play when the user hovers over it. Clicking on the tile will add the song to the user selected playlist from the drop down menu. Each tile displays a popover with more information about the song. 
+2. The Home page displays all the songs from the list of recommended playlists from spotify. This list changes daily and the playlist could be refreshed from the home page. Each song in the playlist is displayed as a tile and will play when the user hovers over it. Clicking on the tile will add the song to the user selected playlist from the drop down menu. Each tile displays a popover with more information about the song. 
 
-2. The appointments page allows a doctor to create, read, update and delete appointments that are made with them. The animal logged in can also view, update and delete the appointments.
+3. The Search page allows searching for albums, artists, playlists and songs from a single search term. Ten Results are displayed for each search category. The song results are displayed with buttons that allow playing each song and adding each song to a particular playlist.
 
-3. The doctor can view the patients with which appointments are made and sort and search through them. 
+4. The playlist page displays the playlist information for each playlist owned by the user. Each playlist can be deleted, updated and read. A simple link in the navigation bar is provided for creating a playlist. Each page lists the songs that belong to that playlist and a convenient search bar at the bottom allows searching for new songs. All songs can be played from this page and when played, the playlist is queued in the song list. Clicking on repeat in the play bar at the bottom of the page will play all songs in the playlist on a loop. The songs are played from spotify and not provided in full so they are limited to 30 second clips.
 
-4. The doctor or animal logged in can view their own profile and view other like users at the clinic.
+5. A user is able to login with their spotify account through a convenient link. The users address must be added to the developer app registry before hand. The playlists created in this SPA can then be added to the users spotify account and played from the spotity website when logged into their account. 
 
-## Installation
+6. The users profile is available in the upper right hand corner. The specifics about the user can be updated from the profile page.
+
+7. The Library page displays links that will display the users songs and their associated playlists, artists and albums in more detail.
+
+<!-- ## Installation
 
 This SPA requires both a front and back end and for that reason, there are a few installation commands that need to be used to set the application up for use.
 
