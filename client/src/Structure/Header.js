@@ -1,6 +1,6 @@
 //functional imports
 import React, { useContext, useState } from "react";
-import { SpotifyContext } from "./SpotifyContext";
+import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
 
 // imports styles and components

@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 // imports styles and components
-import "./Collection.css";
+import "../../CSS/Collection.css";
 
 //imports material ui
 import Grid from '@mui/material/Grid';

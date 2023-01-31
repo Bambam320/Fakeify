@@ -1,42 +1,25 @@
 //functional imports
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { SpotifyContext } from "./SpotifyContext";
-import { Link, Outlet } from 'react-router-dom';
+import React, { useContext } from "react";
+import { SpotifyContext } from "../../SpotifyContext";
 
 // imports styles and components
-import "./Collection.css";
-import CollectionLinks from "./CollectionLinks";
+import "../../CSS/Collection.css";
 
 //imports material ui
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from "@mui/material/CardActionArea";
-import Box from "@mui/material/Box"
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import AlbumIcon from '@mui/icons-material/Album';
-import PeopleIcon from '@mui/icons-material/People';
 
 function CollectionPlaylists() {
   // sets hooks
   const { localUser } = useContext(SpotifyContext);
 
-  console.log("collection playlists is running")
-
   // lists the playlists owned by the user
   let myPlaylists = localUser.playlists.map((playlist) => {
-    console.log("local users playlist", playlist)
     return (
       <Grid key={playlist.description} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea >
@@ -74,9 +57,8 @@ function CollectionPlaylists() {
         {myPlaylists}
       </Grid>
       <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
-  
     </>
   )
 }
 
-export default CollectionPlaylists
+export default CollectionPlaylists;

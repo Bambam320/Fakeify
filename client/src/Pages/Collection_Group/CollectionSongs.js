@@ -1,42 +1,41 @@
 //functional imports
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { SpotifyContext } from "./SpotifyContext";
-import { Link, Outlet } from 'react-router-dom';
+import React, { useContext } from "react";
+import { SpotifyContext } from "../../SpotifyContext";
 
 // imports styles and components
-import "./Collection.css";
-import CollectionAlbumsEachAlbum from "./CollectionAlbumsEachAlbum";
+import "../../CSS/Collection.css";
+import CollectionSongsEachSong from "./CollectionSongsEachSong";
 
 //imports material ui
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-function CollectionAlbums() {
+function CollectionSongs() {
   const { localUser } = useContext(SpotifyContext);
 
-  let localAlbums = localUser.playlists.map((playlist) => {
+  let localPlaylists = localUser.playlists.map((playlist) => {
     return (
       <>
-        <Typography key={playlist.name} variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px', marginTop: '30px' }}>
+        <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px', marginTop: '30px' }}>
           {playlist.songs.length > 0 ? `Playlist: ${playlist.name}` : <></>}
         </Typography>
         <Grid key={playlist.id} container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
-          <CollectionAlbumsEachAlbum playlist={playlist}/>
+          <CollectionSongsEachSong key={playlist.description} playlist={playlist} />
         </Grid>
       </>
     )
-  });
+  })
 
   return (
     <>
       <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
-        Albums
+        Songs
       </Typography>
-      {localAlbums}
+        {localPlaylists}
       <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
     </>
   )
 }
 
-export default CollectionAlbums
+export default CollectionSongs;

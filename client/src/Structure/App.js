@@ -1,29 +1,28 @@
 // importing hooks, route components and context
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SpotifyContext } from "./SpotifyContext";
+import { SpotifyContext } from "../SpotifyContext";
 
 // importing components from nodes
 import { HelmetProvider } from "react-helmet-async";
 import Grid from '@mui/material/Grid';
 
 // importing components and css
-import "./App";
-import "./Body.css";
+import "../CSS/Body.css";
+import Collection from "../Pages/Collection_Group/Collection";
+import CollectionPlaylists from "../Pages/Collection_Group/CollectionPlaylists";
+import CollectionAlbums from "../Pages/Collection_Group/CollectionAlbums";
+import CollectionArtists from "../Pages/Collection_Group/CollectionArtists";
+import CollectionSongs from "../Pages/Collection_Group/CollectionSongs";
 import Footer from "./Footer";
 import Header from "./Header";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Navbar from "./components/Navbar";
-import Profile from "./components/Profile";
-import Search from "./components/Search";
-import Playlist from "./Playlist";
-import Helmetcode from "./components/Helmetcode";
-import Collection from "./Collection";
-import CollectionPlaylists from "./CollectionPlaylists";
-import CollectionAlbums from "./CollectionAlbums";
-import CollectionArtists from "./CollectionArtists";
-import CollectionSongs from "./CollectionSongs";
+import Helmetcode from "./Helmetcode";
+import Home from "../Pages/Home";
+import Login from "./Login";
+import Navbar from "./Navbar";
+import Playlist from "../Pages/Playlist";
+import Profile from "../Pages/Profile";
+import Search from "../Pages/Search";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,7 +33,9 @@ const App = () => {
   const [mainSearch, setMainSearch] = useState('');
   const [autoLoginError, setAutoLoginError] = useState([]);
 
-  // checks the browser session for a logged in user and automatically logs them in
+  // checks the browser session for a logged in user and automatically
+  // logs them in, sets localuser, set login error for login component
+  // , sets authenticated to allow routes
   useEffect(() => {
     (async () => {
       const response = await fetch("/me");
@@ -92,7 +93,6 @@ const App = () => {
               <Route path="/playlists/:id" element={<Playlist />} />
               <Route path="/profile" element={<Profile />} />
               <Route path='/collection/' element={<Collection />}>
-                {/* <Route index element={<Collection />} /> */}
                 <Route path='playlists' element={<CollectionPlaylists />} />
                 <Route path='songs' element={<CollectionSongs />} />
                 <Route path='albums' element={<CollectionAlbums />} />

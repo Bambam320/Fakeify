@@ -1,10 +1,8 @@
 //functional imports
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { SpotifyContext } from "./SpotifyContext";
-import { Link, Outlet } from 'react-router-dom';
+import React from "react";
 
 // imports styles and components
-import "./Collection.css";
+import "../../CSS/Collection.css";
 
 //imports material ui
 import Grid from '@mui/material/Grid';
@@ -53,4 +51,4 @@ function CollectionArtistsEachArtist({ playlist }) {
   )
 }
 
-export default CollectionArtistsEachArtist
+export default CollectionArtistsEachArtist;

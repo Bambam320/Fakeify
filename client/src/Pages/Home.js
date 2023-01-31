@@ -4,44 +4,38 @@ import { SpotifyContext } from "../SpotifyContext";
 import axios from 'axios';
 
 //css and component imports
-import '../SongRow.css'
+import "../CSS/Login.css";
+import '../CSS/SongRow.css'
 import HomeSong from "./HomeSong";
-import "./Login.css";
 
 //imports material ui
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import CardActionArea from "@mui/material/CardActionArea";
-import Popover from '@mui/material/Popover';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 
 function Home() {
-  const [featuredSongs, setFeaturedSongs] = useState([]);
+  // sets context, state and ref hooks
   const { setCurrentTrack, currentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
-  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '', name: '' });
-  const [track, setTrack] = useState();
-  const [requestRefresh, setRequestRefresh] = useState(false);
-  const [errors, setErrors] = useState([]);
-  const [loader, setLoader] = useState(false);
   const domRef = useRef(null);
+  const [errors, setErrors] = useState([]);
+  const [featuredSongs, setFeaturedSongs] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [playlistInfo, setPlaylistInfo] = useState({
     name: '',
     description: ''
   });
+  const [requestRefresh, setRequestRefresh] = useState(false);
+  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '', name: '' });
   const [successOpen, SetSuccessOpen] = useState(false);
+  const [track, setTrack] = useState();
 
   //bring in featured songs from the spotify_api
   useEffect(() => {
@@ -110,18 +104,19 @@ function Home() {
         res.json().then((err) => setErrors(err.errors));
       }
     })
-  }
+  };
 
   //send the song to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
     setCurrentTrack(track)
-  }
+  };
 
   //handle closing of success message
   function handleSuccessClose() {
     SetSuccessOpen(false);
-  }
+  };
+
   return (
     <div >
       <Grid container>
@@ -134,18 +129,16 @@ function Home() {
           </Typography>
           <div className='errordiv'>
             {errors.map((error) => {
-                return <p key={error} className='error'>{error}</p>;
-              })}
-            </div>
+              return <p key={error} className='error'>{error}</p>;
+            })}
+          </div>
         </Box>
         <FormControl variant="outlined" style={{ minWidth: 150 }}
           sx={{
             "& .MuiInputLabel-root": { color: 'white' },
-
             '&.Mui-focused .MuiInputLabel-root': {
               color: 'white',
             },
-
             "& .MuiOutlinedInput-root.Mui-focused": {
               "& > fieldset": {
                 borderColor: "white",
@@ -156,7 +149,6 @@ function Home() {
         >
           <InputLabel id="playlist-select">Select Playlist</InputLabel>
           <Select
-
             labelId="playlist-select"
             id="playlist-select"
             value={selectedPlaylist.id}
@@ -207,7 +199,7 @@ function Home() {
         <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '30px' }}>
           {featuredSongs.map((song) => {
             return (
-              <HomeSong 
+              <HomeSong
                 key={song.id}
                 song={song}
                 onAddSong={handleAddSongToPlaylist}

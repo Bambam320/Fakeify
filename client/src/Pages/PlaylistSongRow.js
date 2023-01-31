@@ -1,6 +1,6 @@
 //functional imports
 import React, { useContext } from 'react'
-import { SpotifyContext } from "./SpotifyContext";
+import { SpotifyContext } from "../SpotifyContext";
 
 //css and component imports
 import './SongRow.css'
