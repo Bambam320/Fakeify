@@ -1,4 +1,3 @@
-
 # Spotify Clone
 
 This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
@@ -27,7 +26,7 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 <!-- ## Features
 
 
-1. The signup form can handle two types of users, a doctor or animal. The user is then automatically logged in, the user can log out then log in again. The usernames are unique so there is no need to choose the type of role being logged into. The user can automatically stay logged as long as the browser stays open.
+1. The Home page displays all the songs from the list of recommended playlists from spotify. This list changes daily and the playlist could be refreshed from the home page. Each song in the playlist is displayed as a tile and will play when the user hovers over it. Clicking on the tile will add the song to the user selected playlist from the drop down menu. Each tile displays a popover with more information about the song. 
 
 2. The appointments page allows a doctor to create, read, update and delete appointments that are made with them. The animal logged in can also view, update and delete the appointments.
 

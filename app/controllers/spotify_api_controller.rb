@@ -59,7 +59,7 @@ class SpotifyApiController < ApplicationController
         spotify_display_name: spotify_user.display_name,
         spotify_email: spotify_user.email,
         spotify_id: spotify_user.id,
-        spotify_img: spotify_user.images.length > 0 ? spotify_user.images[0] : '',
+        spotify_img: spotify_user.images.length > 0 ? spotify_user.images[0].url : '',
         spotify_region: spotify_user.country,
       )
       redirect_to "http://localhost:4000/profile"
