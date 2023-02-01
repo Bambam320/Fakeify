@@ -10,6 +10,7 @@ import PlaylistSongRow from "./PlaylistSongRow";
 import SongRow from "./SongRow";
 
 //material ui imports
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import Dialog from '@mui/material/Dialog';
@@ -128,7 +129,7 @@ function Playlist() {
         });
       }
     })
-  }
+  };
 
   // removes a track from the currentplaylist
   function handleDeleteTrack(song, e) {
@@ -195,6 +196,23 @@ function Playlist() {
         }
       })
     setSearch('')
+  };
+
+  // sends request to spotify to save the playlist and its contents to the logged in spotify account
+  function handleAddPlaylistToSpotify() { 
+    fetch(`/spotify_api/save_playlist`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(currentPlaylist)
+    }).then((res) => {
+      if (res.ok) {
+        
+      } else {
+
+      };
+    });
   };
 
   //updates the form in state with the changed input values from the form
@@ -281,6 +299,46 @@ function Playlist() {
                 </MenuItem>
               </Menu>
             </div>
+
+            {/* add icon and add to spotify menu */}
+            {localUser.spotify_token ?
+              <div>
+                <IconButton
+                  aria-label="more"
+                  id="long-button"
+                  aria-controls={openDeletePlaylist ? 'long-menu' : undefined}
+                  aria-expanded={openDeletePlaylist ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleOpenDeleteMenu}
+                >
+                  <AddBoxIcon
+                    sx={{
+                      marginLeft: '-10px',
+                      // height: '40px',
+                      marginBottom: '-20px',
+                      color: 'white',
+                    }}
+                  />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'long-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={openDeletePlaylist}
+                  onClose={handleCloseDeleteMenu}
+                >
+                  <MenuItem onClick={handleAddPlaylistToSpotify}>
+                    Add Playlist To Spotify Account
+                  </MenuItem>
+                </Menu>
+              </div>
+            :
+              <p>Login with Spotify to save this playlist to your account!</p>
+            }
+
+            {/* playlist information */}
             <div className="body__infoText" onClick={handleClickOpen}>
               <h4>{currentPlaylist.name}</h4>
               <p>{currentPlaylist.description}</p>
