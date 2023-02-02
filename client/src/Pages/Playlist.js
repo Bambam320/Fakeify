@@ -201,7 +201,7 @@ function Playlist() {
   // sends request to spotify to save the playlist and its contents to the logged in spotify account
   function handleAddPlaylistToSpotify() { 
     fetch(`/spotify_api/save_playlist`, {
-      method: "POST",
+      method: "POST", 
       headers: {
         "Content-Type": "application/json",
       },

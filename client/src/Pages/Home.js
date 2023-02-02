@@ -209,6 +209,11 @@ function Home() {
           })}
         </Grid>
       }
+      <Grid>
+        <Grid item>
+          <div />
+        </Grid>
+      </Grid>
       <Snackbar open={successOpen} autoHideDuration={1000} onClose={handleSuccessClose}>
         <Alert
           onClose={handleSuccessClose}

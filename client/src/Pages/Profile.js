@@ -164,10 +164,11 @@ function Profile() {
   //   setForm({ ...form, [val]: '' })
   // }
 
+  //renders 0 if the token has expired or actual time remaining if valid
+  let timeRemaining = Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0 ? 0 : Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60)
 
   return (
     <>
-
       <Grid container className='body'>
         <Grid item xs={4} sx={{}}>
           <img className="profile_image_class" src={localUser.avatar_url} alt={localUser.username} />
@@ -189,7 +190,7 @@ function Profile() {
             </Grid>
             <Grid item className="body__infoText" >
               <h4>Associated Spotify account details :</h4>
-              <p>{`Remaining minutes for this session: ${Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60)}`}</p>
+              <p>{`Remaining minutes for this session: ${timeRemaining}`}</p>
               <p>{`Spotify display name: ${localUser.spotify_display_name}`}</p>
               <p>{`Spotify Id: ${localUser.spotify_id}`}</p>
               <p>{`Spotify email: ${localUser.spotify_email}`}</p>

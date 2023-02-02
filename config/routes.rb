@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "spotify_api/user", to: "spotify_api#current_user"
   get "spotify_api/browse", to: "spotify_api#browse"
   get "spotify_api/show_featured", to: "spotify_api#featured_songs"
+  post "spotify_api/save_playlist", to: "spotify_api#new_playlist"
 
   get '*path',
   to: 'fallback#index',

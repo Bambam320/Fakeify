@@ -54,6 +54,11 @@ class SpotifyApiController < ApplicationController
       end
     end
 
+    # sends playlist to spotify users account
+    def new_playlist
+      byebug
+    end
+
     # receives valid callback from spotify and saves the spotify users information into the local users record then redirects to the profile page in the front end
     def callback
       spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
