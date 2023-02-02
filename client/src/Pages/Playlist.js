@@ -198,14 +198,17 @@ function Playlist() {
     setSearch('')
   };
 
+  console.log("currentPlaylist", currentPlaylist)
+
   // sends request to spotify to save the playlist and its contents to the logged in spotify account
   function handleAddPlaylistToSpotify() { 
+    let updatePackage = {...localUser, playlists: currentPlaylist}
     fetch(`/spotify_api/save_playlist`, {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(currentPlaylist)
+      body: JSON.stringify(updatePackage)
     }).then((res) => {
       if (res.ok) {
         

@@ -55,7 +55,43 @@ class SpotifyApiController < ApplicationController
     end
 
     # sends playlist to spotify users account
+    ########## add custom image api and save tracks to playlist
     def new_playlist
+      spotify_user = RSpotify::User.new({
+        'credentials' => {
+          "token" => params[:spotify_token],
+          "refresh_token" => params[:spotify_refresh_token],
+        },
+        'id' => params[:spotify_id]
+      })
+      new_playlist = spotify_user.create_playlist!(params[:playlists][:name])
+      filled_playlist = new_playlist.add_tracks!()
+      byebug
+
+#add_tracks!(tracks, position: nil) ⇒ Array<Track>
+
+      tracks = RSpotify::Track.search('Know', 30)
+      playlist = user.create_playlist!('my-awesome-playlist')
+      
+      playlist.add_tracks!(tracks)
+      playlist.tracks.size       #=> 30
+      playlist.tracks.first.name #=> "Somebody That I Used To Know"
+      
+      playlist.add_tracks!(tracks, position: 20)
+      playlist.tracks[20].name #=> "Somebody That I Used To Know"
+
+      #replace_image!(image, content_type) ⇒ NilClass
+
+      url = "https://api.spotify.com/v1/users/user_id/playlists"
+      request_data = {
+        name: "the playlist",
+        public: true,
+        description: "the description of the playlist",
+        collaborative: false
+      }.to_json
+      response = RSpotify::User.oauth_post(params[:spotify_id], url, request_data)
+      return response if RSpotify.raw_response
+      Playlist.new response
       byebug
     end
 
