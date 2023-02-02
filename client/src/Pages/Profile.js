@@ -165,7 +165,14 @@ function Profile() {
   // }
 
   //renders 0 if the token has expired or actual time remaining if valid
-  let timeRemaining = Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0 ? 0 : Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60)
+  setInterval(checkTimeRemaining, 30000);
+  function checkTimeRemaining () {
+    if (Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0) {
+      return 0
+    } else {
+      return Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60)
+    }
+  } 
 
   return (
     <>
@@ -190,7 +197,7 @@ function Profile() {
             </Grid>
             <Grid item className="body__infoText" >
               <h4>Associated Spotify account details :</h4>
-              <p>{`Remaining minutes for this session: ${timeRemaining}`}</p>
+              <p>{`Remaining minutes for this session: ${checkTimeRemaining()}`}</p>
               <p>{`Spotify display name: ${localUser.spotify_display_name}`}</p>
               <p>{`Spotify Id: ${localUser.spotify_id}`}</p>
               <p>{`Spotify email: ${localUser.spotify_email}`}</p>
