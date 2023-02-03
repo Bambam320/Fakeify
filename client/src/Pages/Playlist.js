@@ -103,6 +103,7 @@ function Playlist() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        spotify_id: track.id,
         spotify_album_id: track.album.id,
         playlist_id: currentPlaylist.id,
         spotify_artist_id: track.artists[0].id,
