@@ -45,3 +45,21 @@
 .Avatar{
   margin-right: 10px;
 }
+
+.errordiv {
+  justify-self: center;
+  margin-top: 5px;
+  margin-bottom: -35px;
+}
+
+.error {
+  color: red;
+  background: pink;
+  border: 1px solid red;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 25px;
+  /* margin-top: 25px; */
+  /* margin-left: 25px; */
+  /* margin-right: 25px; */
+}

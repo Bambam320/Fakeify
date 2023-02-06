@@ -1,5 +1,5 @@
 //functional imports
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 
 // css and component imports
@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 function Profile() {
   // sets state, params, navigate and context
   const { localUser } = useContext(SpotifyContext);
+  const [timeRemaining, setTimeRemaining] = useState(0);
   // const [errors, setErrors] = useState([]);
   // const [form, setForm] = useState(currentPlaylist);
   // const [open, setOpen] = useState(false);
@@ -165,12 +166,12 @@ function Profile() {
   // }
 
   //renders 0 if the token has expired or actual time remaining if valid, twice a minute
-  setInterval(checkTimeRemaining, 30000);
+  setInterval(checkTimeRemaining, 1000);
   function checkTimeRemaining () {
     if (Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0) {
-      return 0
+      setTimeRemaining(0)
     } else {
-      return Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60)
+      setTimeRemaining(Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60))
     }
   } 
 
@@ -197,7 +198,7 @@ function Profile() {
             </Grid>
             <Grid item className="body__infoText" >
               <h4>Associated Spotify account details :</h4>
-              <p>{`Remaining minutes for this session: ${checkTimeRemaining()}`}</p>
+              <p>{`Remaining minutes for this session: ${timeRemaining}`}</p>
               <p>{`Spotify display name: ${localUser.spotify_display_name}`}</p>
               <p>{`Spotify Id: ${localUser.spotify_id}`}</p>
               <p>{`Spotify email: ${localUser.spotify_email}`}</p>

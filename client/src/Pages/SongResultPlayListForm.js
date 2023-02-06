@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 
 //imports material ui
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 import CardActionArea from "@mui/material/CardActionArea";
@@ -10,13 +11,15 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select'
+import Snackbar from '@mui/material/Snackbar';
 
 function SongResultPlayListForm({ track }) {
   // sets hooks for state and from context
   const { localUser, setLocalUser } = useContext(SpotifyContext);
-  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
   const [addToPlaylist, setAddToPlaylist] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '' });
+  const [successOpen, setSuccessOpen] = useState(false);
 
   //sets the playlist that the local user wants to add a song to
   function handleLocalPlaylistSelect(e) {
@@ -34,6 +37,11 @@ function SongResultPlayListForm({ track }) {
     setAddToPlaylist(!addToPlaylist)
   }
 
+    //handle closing of success message
+    function handleSuccessClose() {
+      setSuccessOpen(false);
+    };
+
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddSongToPlaylist() {
     let songGenre = track.album.genres === null ? null : track.album.genres[0]
@@ -43,6 +51,7 @@ function SongResultPlayListForm({ track }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        spotify_id: track.id,
         spotify_album_id: track.album.id,
         playlist_id: selectedPlaylist.id,
         spotify_artist_id: track.artists[0].id,
@@ -65,6 +74,7 @@ function SongResultPlayListForm({ track }) {
             }
           })
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
+          setSuccessOpen(true);
         });
       } else {
         res.json().then((err) => setErrors(err.errors));
@@ -110,6 +120,19 @@ function SongResultPlayListForm({ track }) {
         :
         <></>
       }
+      <Snackbar open={successOpen} autoHideDuration={1000} onClose={handleSuccessClose}>
+        <Alert
+          onClose={handleSuccessClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successOpen ?
+            `You have successfully added "${track.name}" to ${selectedPlaylist.name}`
+            :
+            ''
+          }
+        </Alert>
+      </Snackbar>
       <div className='errordiv'>
         {errors.map((error) => {
           return <p key={error} className='error'>{error}</p>;

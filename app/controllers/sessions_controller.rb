@@ -8,9 +8,10 @@ class SessionsController < ApplicationController
   # finds a user and authenticates them then returns the user with 201 status code
   # sessions#login
   def create
-    user = User.find_by!(username: user_params[:username])
-    if user&.authenticate(user_params[:password])
-      session[:user_id] = user.id
+    this_user = User.find_by!(username: user_params[:username])
+    if this_user&.authenticate(user_params[:password])
+      session[:user_id] = this_user.id
+      user = clear_spotify_information(this_user)
       render json: user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist', 'playlists.songs.album'], status: 201
     else
       render json: { errors: ["Username or Password is incorrect"] }, status: :unprocessable_entity
@@ -34,16 +35,7 @@ class SessionsController < ApplicationController
     user = User.find(session[:user_id])
     #using update_columns to avoid validations as this stores private token 
     #information from spotify and not the user
-    user.update_columns(
-      spotify_token: '',
-      spotify_refresh_token: '',
-      spotify_token_lifetime: '',
-      spotify_display_name: '',
-      spotify_email: '',
-      spotify_id: '',
-      spotify_img: '',
-      spotify_region: '',
-    )
+    clear_spotify_information
     session[:user_id] = nil
     head :no_content
   end
@@ -64,6 +56,21 @@ class SessionsController < ApplicationController
   #returns the errors in case the record isnt found
   def render_not_found_response
     render json: { errors: ["User not found"] }, status: :not_found
+  end
+
+  # updates the spootify information in the user model to null upon login in case the user didn't properly logout
+  def clear_spotify_information user
+    user.update_columns(
+      spotify_token: '',
+      spotify_refresh_token: '',
+      spotify_token_lifetime: '',
+      spotify_display_name: '',
+      spotify_email: '',
+      spotify_id: '',
+      spotify_img: '',
+      spotify_region: '',
+    )
+    user
   end
 
 end

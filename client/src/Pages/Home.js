@@ -24,7 +24,7 @@ import Typography from '@mui/material/Typography';
 function Home() {
   // sets context, state and ref hooks
   const { setCurrentTrack, currentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
-  const domRef = useRef(null);
+  const snackbarInfo = useRef(null);
   const [errors, setErrors] = useState([]);
   const [featuredSongs, setFeaturedSongs] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -34,7 +34,7 @@ function Home() {
   });
   const [requestRefresh, setRequestRefresh] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '', name: '' });
-  const [successOpen, SetSuccessOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
   const [track, setTrack] = useState();
 
   //bring in featured songs from the spotify_api
@@ -49,8 +49,9 @@ function Home() {
             setPlaylistInfo(res.data.playlist_info)
           });
         setLoader(false);
+        setErrors([])
       } catch (err) {
-        console.log("error from Home useeffect catch error", err)
+        setErrors(err.errors);
       }
     }
     retrieveRecommendedSongs()
@@ -60,6 +61,7 @@ function Home() {
   function handleLocalPlaylistSelect(e) {
     let thisPlaylist = localUser.playlists.find((playlist) => playlist.id === e.target.value)
     setSelectedPlaylist(thisPlaylist)
+    setErrors([])
   }
 
   //sets the selected playlist to an empty string so the value returns to null
@@ -76,6 +78,7 @@ function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        spotify_id: track.id,
         spotify_album_id: track.album.id,
         playlist_id: selectedPlaylist.id,
         spotify_artist_id: track.artists[0].id,
@@ -98,10 +101,11 @@ function Home() {
             }
           })
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
-          SetSuccessOpen(true);
+          snackbarInfo.current = track.name
+          setSuccessOpen(true);
         });
       } else {
-        res.json().then((err) => setErrors(err.errors));
+        res.json().then((err) => setErrors(err.error));
       }
     })
   };
@@ -114,7 +118,7 @@ function Home() {
 
   //handle closing of success message
   function handleSuccessClose() {
-    SetSuccessOpen(false);
+    setSuccessOpen(false);
   };
 
   return (
@@ -127,7 +131,7 @@ function Home() {
           <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
             Choose a Playlist first:
           </Typography>
-          <div className='errordiv'>
+          <div className='errordiv' style={{marginLeft: '10em'}}>
             {errors.map((error) => {
               return <p key={error} className='error'>{error}</p>;
             })}
@@ -221,7 +225,7 @@ function Home() {
           sx={{ width: '100%' }}
         >
           {successOpen ?
-            `You have successfully added "${currentTrack.name}" to ${selectedPlaylist.name}`
+            `You have successfully added "${snackbarInfo.current}" to ${selectedPlaylist.name}`
             :
             ''
           }

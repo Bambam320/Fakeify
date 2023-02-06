@@ -11,6 +11,7 @@ import { Avatar } from "@mui/material";
 //imports material ui
 import { styled, alpha } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -20,14 +21,18 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
+import Snackbar from '@mui/material/Snackbar';
 
 function Header() {
   // setting state for search field
-  const [search, setSearch] = useState("")
+  const [errors, setErrors] = useState([]);
+  const [failureOpen, setFailureOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [updateOpen, setUpdateOpen] = useState(false);
   const navigate = useNavigate();
 
   // brings state from context
-  const { localUser, setLocalUser, setIsAuthenticated, setMainSearch } = useContext(SpotifyContext);
+  const { localUser, setLocalUser, setIsAuthenticated, setMainSearch, setCurrentTrack } = useContext(SpotifyContext);
 
   //updates the search value to state
   function handleChange(e) {
@@ -42,6 +47,38 @@ function Header() {
     navigate("/search")
   }
 
+  // automatically checks if the token has expired and requests an updated token and new token_lifetime
+  setTimeout(checkSpotifyTimeRemaining, 20000)
+  function checkSpotifyTimeRemaining() {
+    if (typeof (localUser.spotify_token_lifetime) === 'number') {
+      let timeRemaining = Math.floor((localUser.spotify_token_lifetime - Date.now() / 1000) / 60)
+      if (timeRemaining < 0) {
+        fetch('/spotify_api/update_token')
+          .then((res) => {
+            if (res.ok) {
+              res.json().then((user) => {
+                setUpdateOpen(true)
+                setLocalUser(user)
+              })
+            } else {
+              setFailureOpen(true)
+              setLocalUser({
+                ...localUser,
+                spotify_display_name: "",
+                spotify_email: "",
+                spotify_id: "",
+                spotify_img: "",
+                spotify_refresh_token: "",
+                spotify_region: "",
+                spotify_token: "",
+                spotify_token_lifetime: ""
+              })
+            }
+          })
+      }
+    }
+  }
+
   //passed back from Navbar and removes the current user for logout
   function handleLogout() {
     fetch("/logout",
@@ -50,6 +87,7 @@ function Header() {
         if (res.ok) {
           setLocalUser({})
           setIsAuthenticated(false)
+          setCurrentTrack()
         }
         setAnchorEl(null)
       })
@@ -111,10 +149,22 @@ function Header() {
   function handleMyProfile() {
     navigate('/profile')
     setAnchorEl(null);
-  }
+  };
+
+  // closes the snackbar indicating successful spotify token update
+  function handleUpdateClose() {
+    setUpdateOpen(false);
+  };
+
+  // closes the snackbar indicating a failure to update the spotify token
+  function handleFailureClose() {
+    setFailureOpen(false);
+  };
 
   return (
     <div className='header'>
+
+      {/* renders search bar */}
       <div className='header__left'>
         <form onSubmit={handleSubmit}>
           <Paper
@@ -140,6 +190,15 @@ function Header() {
           </Paper>
         </form>
       </div>
+
+      {/* renders errors */}
+      <div className='errordiv' style={{ marginLeft: '10em' }}>
+        {errors.map((error) => {
+          return <p key={error} className='error'>{error}</p>;
+        })}
+      </div>
+
+      {/* renders user menu */}
       <div className='header__right'>
         <Button
           id="demo-customized-button"
@@ -177,6 +236,37 @@ function Header() {
           </MenuItem>
         </StyledMenu>
       </div>
+
+      {/* snackbar for displaying spotify token update information */}
+      <Snackbar open={updateOpen} autoHideDuration={10000} onClose={handleUpdateClose}>
+        <Alert
+          onClose={handleUpdateClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {updateOpen ?
+            `Your spotify token has been automatically updated!`
+            :
+            ''
+          }
+        </Alert>
+      </Snackbar>
+
+      {/* snackbar for displaying spotify token update information */}
+      <Snackbar open={failureOpen} autoHideDuration={30000} onClose={handleFailureClose}>
+        <Alert
+          onClose={handleFailureClose}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {failureOpen ?
+            `Your spotify token has failed to update automatically. You may login again by clicking the link above!`
+            :
+            ''
+          }
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 };

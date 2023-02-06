@@ -1,8 +1,5 @@
 class SpotifyApiController < ApplicationController
 
-    before_action :update_token
-    skip_before_action :update_token, only: [:callback, :search_for_tracks, :browse, :featured_songs]
-  
     # searches for tracks based on a search term, returns the songs
     def search_for_tracks
       songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
@@ -64,9 +61,9 @@ class SpotifyApiController < ApplicationController
         },
         'id' => params[:spotify_id]
       })
+      byebug
       new_playlist = spotify_user.create_playlist!(params[:playlists][:name])
       filled_playlist = new_playlist.add_tracks!()
-      byebug
 
 #add_tracks!(tracks, position: nil) ⇒ Array<Track>
 
@@ -112,28 +109,23 @@ class SpotifyApiController < ApplicationController
       redirect_to "http://localhost:4000/profile"
     end
   
-    private
-  
-    # automatically updates the token and associated info if the logged in users token expired
+    # updates the token and associated info for the user
     def update_token
-      currentUser = User.find(session[:user_id])
-      if (Time.at(currentUser.spotify_token_lifetime).to_datetime.to_f - Time.now.to_f).negative?() {
-        body = {
-          grant_type: "refresh_token",
-          refresh_token: currentUser.spotify_refresh_token,
-          client_id: Rails.application.credentials.spotify.client_id,
-          client_secret: Rails.application.credentials.spotify.client_secret
-        }
-        spotify_response = RestClient.post('https://accounts.spotify.com/api/token', body)
-        spotify_auth_params = JSON.parse(spotify_reponse)
-        currentUser.update!(
-          spotify_token: spotify_auth_params.access_token,
-          spotify_token_lifetime: currentUser.spotify_token_lifetime + spotify_auth_params.expires_in
-        )
-      } 
-      end
+      @user = User.find(session[:user_id])
+      body = {
+        grant_type: "refresh_token",
+        refresh_token: @user.spotify_refresh_token,
+        client_id: Rails.application.credentials.spotify.client_id,
+        client_secret: Rails.application.credentials.spotify.client_secret
+      }
+      spotify_response = RestClient.post('https://accounts.spotify.com/api/token', body)
+      spotify_auth_params = JSON.parse(spotify_response)
+      @user.update_columns(
+        spotify_token: spotify_auth_params["access_token"],
+        spotify_token_lifetime: @user.spotify_token_lifetime + spotify_auth_params["expires_in"]
+      )
+      render json: @user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist', 'playlists.songs.album'], status: :ok
     end
-  
   end
   
-  
+  # (Time.at(currentUser.spotify_token_lifetime).to_datetime.to_f - Time.now.to_f).negative?()

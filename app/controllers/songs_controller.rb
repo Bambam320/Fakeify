@@ -27,7 +27,6 @@ def create
     artist_id: artist.id
   )
   album.update_album
-  byebug
   updated_song_params = song_params.clone
   updated_song_params["artist_id"] = artist.id
   updated_song_params["album_id"] = album.id
@@ -59,7 +58,7 @@ private
 
   #returns the errors in case the record isnt found
   def render_not_found_response
-    render json: { error: ["User not found"] }, status: :not_found
+    render json: { error: ["Playlist not found"] }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.
