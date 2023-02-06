@@ -11,6 +11,7 @@ import SongRow from "./SongRow";
 
 //material ui imports
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import Dialog from '@mui/material/Dialog';
@@ -28,6 +29,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
+import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 
 function Playlist() {
@@ -497,6 +499,21 @@ function Playlist() {
           <></>
         }
       </div>
+
+      {/* sets alert to open when playlist is added to spotify account  */}
+      {/* <Snackbar open={snackbpen} autoHideDuration={1000} onClose={handleSuccessClose}>
+        <Alert
+          onClose={handleSuccessClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successOpen ?
+            `You have successfully added "${snackbarInfo.current}" to ${selectedPlaylist.name}`
+            :
+            ''
+          }
+        </Alert> */}
+      {/* </Snackbar> */}
     </>
   )
 }
