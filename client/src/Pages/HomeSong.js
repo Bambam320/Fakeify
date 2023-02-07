@@ -13,18 +13,25 @@ import Typography from '@mui/material/Typography';
 
 function HomeSong({ song, onAddSong, playSong }) {
   // sets state hooks
+  const [anchorSong, setAnchorSong] = useState();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   // opens popover and provides element to hook pop up to.
-  function handlePopoverOpen(e) {
-    setPopoverOpen(e.currentTarget);
+  function handlePopoverOpen() {
+    setPopoverOpen(true)
   };
+  
+  // sets the anchor element for the popover to display against the song being hovered over
+  function handleAnchorSongElementSelect (e) {
+    setAnchorSong(e.currentTarget);
+  }
 
   // closes popover by taking away element to hook popover to and sets to null
   function handlePopoverClose() {
-    setPopoverOpen(null);
+    setPopoverOpen(false);
   };
 
+  // make the popover backlit when that song is playing
   return (
     <Grid item >
       <div  >
@@ -33,6 +40,7 @@ function HomeSong({ song, onAddSong, playSong }) {
           onMouseEnter={(e) => {
             playSong(e, song)
             handlePopoverOpen(e)
+            handleAnchorSongElementSelect(e)
           }}
           onMouseLeave={handlePopoverClose}
         >
@@ -50,7 +58,7 @@ function HomeSong({ song, onAddSong, playSong }) {
               pointerEvents: 'none',
             }}
             open={popoverOpen}
-            anchorEl={popoverOpen}
+            anchorEl={anchorSong}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',

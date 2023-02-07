@@ -292,7 +292,7 @@ function Playlist() {
           <div>
 
             {/* delete icon and menu */}
-            <div>
+            <div style={{marginTop: '-5px', marginBottom: '54px'}}>
               <IconButton
                 aria-label="more"
                 id="long-button"
@@ -301,6 +301,7 @@ function Playlist() {
                 aria-haspopup="true"
                 onClick={handleOpenDeleteMenu}
               >
+                <div>where is this</div>
                 <MoreHorizIcon
                   sx={{
                     marginLeft: '-10px',
@@ -509,7 +510,7 @@ function Playlist() {
       </Grid>
 
       {/* List songs from search results */}
-      <div>
+      <div style={{marginTop: '-120px', marginBottom: '125px'}}>
         {tracks.length > 0 ?
           tracks.map((track) => {
             return <SongRow track={track} key={track.id} handleAddTrack={handleAddTrack} />

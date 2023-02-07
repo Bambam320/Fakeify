@@ -200,7 +200,7 @@ function Home() {
       {loader ?
         <img src="/Infinity.gif" alt="infinity loader" style={{ marginLeft: '250px' }}></img>
         :
-        <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '30px' }}>
+        <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '125px' }}>
           {featuredSongs.map((song) => {
             return (
               <HomeSong
