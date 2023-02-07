@@ -17,6 +17,8 @@ import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
+// add popover on top of buttons in player to describe action
+// add volume and seek control
 function Footer() {
   //sets hooks
   const { currentTrack, setCurrentTrack, currentQueue } = useContext(SpotifyContext);

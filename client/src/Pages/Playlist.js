@@ -32,6 +32,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 
+// add dialog
 function Playlist() {
   // sets state, params, navigate and context
   const { currentPlaylist, setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
@@ -252,13 +253,23 @@ function Playlist() {
   };
 
   //menu open and close handling for the delete threedot button
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openDeletePlaylist = Boolean(anchorEl);
+  const [deleteAnchorEl, setDeleteAnchorEl] = useState(null);
+  const openDeletePlaylist = Boolean(deleteAnchorEl);
   const handleOpenDeleteMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+    setDeleteAnchorEl(event.currentTarget);
   };
   const handleCloseDeleteMenu = () => {
-    setAnchorEl(null);
+    setDeleteAnchorEl(null);
+  };
+
+  //menu open and close handling for the add to playlist plus button
+  const [addPlaylistAnchorEl, setAddPlaylistAnchorEl] = useState(null);
+  const openAddToPlaylist = Boolean(addPlaylistAnchorEl);
+  const handleOpenAddToPlaylistMenu = (event) => {
+    setAddPlaylistAnchorEl(event.currentTarget);
+  };
+  const handleCloseAddToPlaylistMenu = () => {
+    setAddPlaylistAnchorEl(null);
   };
 
   // clear input value in update form in dialog
@@ -292,7 +303,7 @@ function Playlist() {
           <div>
 
             {/* delete icon and menu */}
-            <div style={{marginTop: '-5px', marginBottom: '54px'}}>
+            <div style={{marginTop: '-10px', marginBottom: '10px'}}>
               <IconButton
                 aria-label="more"
                 id="long-button"
@@ -301,7 +312,6 @@ function Playlist() {
                 aria-haspopup="true"
                 onClick={handleOpenDeleteMenu}
               >
-                <div>where is this</div>
                 <MoreHorizIcon
                   sx={{
                     marginLeft: '-10px',
@@ -316,7 +326,7 @@ function Playlist() {
                 MenuListProps={{
                   'aria-labelledby': 'long-button',
                 }}
-                anchorEl={anchorEl}
+                anchorEl={deleteAnchorEl}
                 open={openDeletePlaylist}
                 onClose={handleCloseDeleteMenu}
               >
@@ -332,10 +342,10 @@ function Playlist() {
                 <IconButton
                   aria-label="more"
                   id="long-button"
-                  aria-controls={openDeletePlaylist ? 'long-menu' : undefined}
-                  aria-expanded={openDeletePlaylist ? 'true' : undefined}
+                  aria-controls={openAddToPlaylist ? 'long-menu' : undefined}
+                  aria-expanded={openAddToPlaylist ? 'true' : undefined}
                   aria-haspopup="true"
-                  onClick={handleOpenDeleteMenu}
+                  onClick={handleOpenAddToPlaylistMenu}
                 >
                   <AddBoxIcon
                     sx={{
@@ -351,9 +361,9 @@ function Playlist() {
                   MenuListProps={{
                     'aria-labelledby': 'long-button',
                   }}
-                  anchorEl={anchorEl}
-                  open={openDeletePlaylist}
-                  onClose={handleCloseDeleteMenu}
+                  anchorEl={addPlaylistAnchorEl}
+                  open={openAddToPlaylist}
+                  onClose={handleCloseAddToPlaylistMenu}
                 >
                   <MenuItem onClick={handleAddPlaylistToSpotify}>
                     Add Playlist To Spotify Account
