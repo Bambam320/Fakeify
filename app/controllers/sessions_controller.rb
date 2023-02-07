@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
     user = User.find(session[:user_id])
     #using update_columns to avoid validations as this stores private token 
     #information from spotify and not the user
-    clear_spotify_information
+    clear_spotify_information(user)
     session[:user_id] = nil
     head :no_content
   end

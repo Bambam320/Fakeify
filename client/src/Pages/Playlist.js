@@ -1,5 +1,5 @@
 //functional imports
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { SpotifyContext } from "../SpotifyContext";
 
@@ -35,12 +35,17 @@ import TextField from '@mui/material/TextField';
 function Playlist() {
   // sets state, params, navigate and context
   const { currentPlaylist, setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
-  const params = useParams();
   const navigate = useNavigate();
+  const params = useParams();
+  const addPlaylistMessage = useRef('');
   const [errors, setErrors] = useState([]);
   const [form, setForm] = useState(currentPlaylist);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [snackOpen, setSnackOpen] = useState({
+    severity: null,
+    bool: false
+  });
   const [tracks, setTracks] = useState([]);
 
   // sets the playlist from the id in the url
@@ -214,9 +219,15 @@ function Playlist() {
       body: JSON.stringify(updatePackage)
     }).then((res) => {
       if (res.ok) {
-        
+        res.json().then((message) => {
+          setSnackOpen({severity: true, bool: true})
+          addPlaylistMessage.current = message.message
+        })
       } else {
-
+        res.json().then((error) => {
+          setSnackOpen({severity: false, bool: true})
+          addPlaylistMessage.current = error.error
+        })
       };
     });
   };
@@ -254,6 +265,14 @@ function Playlist() {
   const handleFormNameClear = (val) => {
     setForm({ ...form, [val]: '' })
   };
+
+  // closes the snackbar after a song has been added
+  function handleSnackClose () {
+    setSnackOpen({
+      severity: null, 
+      bool: false
+    })
+  }
 
   return (
     <>
@@ -381,7 +400,7 @@ function Playlist() {
                   InputProps={{
                     endAdornment: (
                       <div >
-                        <InputAdornment>
+                        <InputAdornment position="start">
                           <IconButton onClick={() => { handleFormNameClear('name') }}>
                             <ClearIcon />
                           </IconButton>
@@ -401,7 +420,7 @@ function Playlist() {
                   InputProps={{
                     endAdornment: (
                       <div >
-                        <InputAdornment>
+                        <InputAdornment position="start">
                           <IconButton onClick={() => { handleFormNameClear('description') }}>
                             <ClearIcon />
                           </IconButton>
@@ -421,7 +440,7 @@ function Playlist() {
                   InputProps={{
                     endAdornment: (
                       <div >
-                        <InputAdornment>
+                        <InputAdornment position="start">
                           <IconButton onClick={() => { handleFormNameClear('image') }}>
                             <ClearIcon />
                           </IconButton>
@@ -482,8 +501,8 @@ function Playlist() {
               value={search}
               onChange={handleSearchInputChange}
             />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon onClick={(e) => handleSearchSubmit(e)} />
+            <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={(e) => handleSearchSubmit(e)}>
+              <SearchIcon />
             </IconButton>
           </Paper>
         </Grid>
@@ -501,19 +520,19 @@ function Playlist() {
       </div>
 
       {/* sets alert to open when playlist is added to spotify account  */}
-      {/* <Snackbar open={snackbpen} autoHideDuration={1000} onClose={handleSuccessClose}>
+      <Snackbar open={snackOpen.bool} autoHideDuration={8000} onClose={handleSnackClose}>
         <Alert
-          onClose={handleSuccessClose}
-          severity="success"
+          onClose={handleSnackClose}
+          severity={snackOpen.severity ? "success" : "error" }
           sx={{ width: '100%' }}
         >
-          {successOpen ?
-            `You have successfully added "${snackbarInfo.current}" to ${selectedPlaylist.name}`
+          {snackOpen.bool ?
+            `${addPlaylistMessage.current}`
             :
             ''
           }
-        </Alert> */}
-      {/* </Snackbar> */}
+        </Alert>
+      </Snackbar>
     </>
   )
 }

@@ -61,13 +61,13 @@ class SpotifyApiController < ApplicationController
         },
         'id' => params[:spotify_id]
       })
-      byebug
       new_playlist = spotify_user.create_playlist!(params[:playlists][:name])
       song_id_array = params[:playlists][:songs].map{|song| song[:spotify_id]}.filter{|id| !id.nil?}
-      if filled_playlist = new_playlist.add_tracks!(song_id_array) 
-        render json: {message: ["#{params[:playlists][:name]} has been succesfully added to your spotify account, #{params[:spotify_display_name]}"]}, status: :created
+      song_uri_array = RSpotify::Track.find(song_id_array).map{|song| song.uri }
+      if filled_playlist = new_playlist.add_tracks!(song_uri_array) 
+        render json: {message: "#{params[:playlists][:name]} has been succesfully added to your spotify account, #{params[:spotify_display_name]}"}, status: :created
       else 
-        render json: {error: ["A failure has occured while adding playlist #{params[:playlists][:name]}, please try again!"]}, status: :bad_request
+        render json: {error: "A failure has occured while adding playlist #{params[:playlists][:name]}, please try again!"}, status: :bad_request
       end
     end
 
