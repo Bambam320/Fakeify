@@ -1,3 +1,4 @@
+<base target="_blank">
 # Spotify Clone
 
 This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
