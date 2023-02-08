@@ -4,6 +4,8 @@ This is an SPA that aims to clone the spotify application and allow the user to 
   
 [Visit the application](https://spotify-app-8rdu.onrender.com)
 
+[Opens in new tab](https://external.ink?to=/https://spotify-app-8rdu.onrender.com)
+
 ## Table of Contents
 
 - [Features](#Features)
@@ -98,7 +100,7 @@ spotify:
   client_secret: <-- client secret here -->
 ```
 Be sure to close the file and verify you recieved the following message.
-```rb
+```
 $ File encrypted and saved.
 ```
 Remember to follow your hosting services guidelines to host this app!
