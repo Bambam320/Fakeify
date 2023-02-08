@@ -6,6 +6,8 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 
 [Opens in new tab](https://external.ink?to=/https://spotify-app-8rdu.onrender.com)
 
+<a href="https://spotify-app-8rdu.onrender.com" target="_blank">a tag link</a>
+
 ## Table of Contents
 
 - [Features](#Features)
