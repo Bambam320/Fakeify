@@ -129,7 +129,9 @@ function Login() {
         <div className="login" >
           <h1 className='login__logo'>🎶Fakeify&reg;</h1>
           <form onSubmit={handleSubmit}>
-            <h1>Sign up for some sweet tunes!</h1>
+            <div className='title'>
+              <h1>Sign up for some sweet tunes!</h1>
+            </div>
             <input
               className=''
               name='username'
@@ -143,7 +145,7 @@ function Login() {
               className=''
               name='password'
               type='password'
-              placeholder='Enter Password'
+              placeholder='Password 6 character minimum'
               value={form.password}
               onChange={handleChange}
               required
@@ -208,6 +210,9 @@ function Login() {
             <button onClick={handleLoginFormClick}>
               Back to Login.
             </button>
+            <div className='title'>
+              <p> All fields are required! </p>
+            </div>
             <div className='errordiv'>
               {errors.map((error) => {
                 return <p key={error} className='error'>{error}</p>;

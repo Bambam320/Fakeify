@@ -6,6 +6,7 @@ import { SpotifyContext } from "../SpotifyContext";
 // css and component imports
 import "../CSS/Body.css";
 import "../CSS/App.css";
+import PlaylistInfo from "./PlaylistInfo";
 import PlaylistSongRow from "./PlaylistSongRow";
 import SongRow from "./SongRow";
 
@@ -32,7 +33,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 
-// add dialog
+// break this down into smaller components
+// send the image, text and dialog to the next child
+// send the search bar to the next child
 function Playlist() {
   // sets state, params, navigate and context
   const { currentPlaylist, setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
@@ -134,8 +137,9 @@ function Playlist() {
             }
           })
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
-          setCurrentPlaylist({ ...currentPlaylist, songs: [...currentPlaylist.songs, newSong] })
         });
+      } else {
+        res.json().then((err) => setErrors(err.error))
       }
     })
   };
@@ -161,6 +165,8 @@ function Playlist() {
         setLocalUser({ ...localUser, playlists: updatedPlaylists })
         let updatedSongs = currentPlaylist.songs.filter((ele) => ele.id !== song.id)
         setCurrentPlaylist({ ...currentPlaylist, songs: updatedSongs })
+      } else {
+        res.json().then((err) => setErrors(err.error))
       }
     })
   };
@@ -207,13 +213,11 @@ function Playlist() {
     setSearch('')
   };
 
-  console.log("currentPlaylist", currentPlaylist)
-
   // sends request to spotify to save the playlist and its contents to the logged in spotify account
-  function handleAddPlaylistToSpotify() { 
-    let updatePackage = {...localUser, playlists: currentPlaylist}
+  function handleAddPlaylistToSpotify() {
+    let updatePackage = { ...localUser, playlists: currentPlaylist }
     fetch(`/spotify_api/save_playlist`, {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -221,12 +225,12 @@ function Playlist() {
     }).then((res) => {
       if (res.ok) {
         res.json().then((message) => {
-          setSnackOpen({severity: true, bool: true})
+          setSnackOpen({ severity: true, bool: true })
           addPlaylistMessage.current = message.message
         })
       } else {
         res.json().then((error) => {
-          setSnackOpen({severity: false, bool: true})
+          setSnackOpen({ severity: false, bool: true })
           addPlaylistMessage.current = error.error
         })
       };
@@ -256,6 +260,7 @@ function Playlist() {
   const [deleteAnchorEl, setDeleteAnchorEl] = useState(null);
   const openDeletePlaylist = Boolean(deleteAnchorEl);
   const handleOpenDeleteMenu = (event) => {
+    setTimeout(handleCloseDeleteMenu, 15000)
     setDeleteAnchorEl(event.currentTarget);
   };
   const handleCloseDeleteMenu = () => {
@@ -266,6 +271,7 @@ function Playlist() {
   const [addPlaylistAnchorEl, setAddPlaylistAnchorEl] = useState(null);
   const openAddToPlaylist = Boolean(addPlaylistAnchorEl);
   const handleOpenAddToPlaylistMenu = (event) => {
+    setTimeout(handleCloseAddToPlaylistMenu, 15000)
     setAddPlaylistAnchorEl(event.currentTarget);
   };
   const handleCloseAddToPlaylistMenu = () => {
@@ -278,9 +284,9 @@ function Playlist() {
   };
 
   // closes the snackbar after a song has been added
-  function handleSnackClose () {
+  function handleSnackClose() {
     setSnackOpen({
-      severity: null, 
+      severity: null,
       bool: false
     })
   }
@@ -290,20 +296,18 @@ function Playlist() {
       {/* playlist information */}
       <Grid container className="body">
         <div className="body__info">
-          {errors.map((error) => {
-            return (
-              <span key={error} className='error'>
-                {error}
-              </span>
-            );
-          })}
+          <div className='errordiv' style={{ marginLeft: '10em' }}>
+            {errors.map((error) => {
+              return <p key={error} className='error'>{error}</p>;
+            })}
+          </div>
           <div onClick={handleClickOpen} >
             <img className="image_class" src={currentPlaylist.image} alt={currentPlaylist.name} />
           </div>
           <div>
 
             {/* delete icon and menu */}
-            <div style={{marginTop: '-10px', marginBottom: '10px'}}>
+            <div style={{ marginTop: '-10px', marginBottom: '10px' }}>
               <IconButton
                 aria-label="more"
                 id="long-button"
@@ -370,7 +374,7 @@ function Playlist() {
                   </MenuItem>
                 </Menu>
               </div>
-            :
+              :
               <p>Login with Spotify to save this playlist to your account!</p>
             }
 
@@ -379,6 +383,7 @@ function Playlist() {
               <h4>{currentPlaylist.name}</h4>
               <p>{currentPlaylist.description}</p>
               <p>{`${localUser.username}'s playlist`}</p>
+              <p>{`${ currentPlaylist.songs ? currentPlaylist.songs.length : 0 } songs`}</p>
             </div>
           </div>
 
@@ -477,10 +482,17 @@ function Playlist() {
       </Grid>
 
       {/* list songs that belong to playlist */}
-      <div>
+      <div style={{ marginBottom: '30px' }} >
         {currentPlaylist.songs ?
           currentPlaylist.songs.map((song) => {
-            return <PlaylistSongRow song={song} key={song.id} queue={currentPlaylist.songs} handleDeleteTrack={handleDeleteTrack} />
+            return (
+              <PlaylistSongRow
+                key={song.spotify_id}
+                song={song}
+                queue={currentPlaylist.songs}
+                handleDeleteTrack={handleDeleteTrack}
+              />
+            )
           })
           :
           <></>
@@ -520,10 +532,17 @@ function Playlist() {
       </Grid>
 
       {/* List songs from search results */}
-      <div style={{marginTop: '-120px', marginBottom: '125px'}}>
+      <div style={{ marginTop: '-120px', marginBottom: '125px' }}>
         {tracks.length > 0 ?
           tracks.map((track) => {
-            return <SongRow track={track} key={track.id} handleAddTrack={handleAddTrack} />
+            return (
+              <SongRow
+                track={track}
+                key={track.id}
+                handleAddTrack={handleAddTrack}
+                queue={tracks}
+              />
+            )
           })
           :
           <></>
@@ -534,7 +553,7 @@ function Playlist() {
       <Snackbar open={snackOpen.bool} autoHideDuration={8000} onClose={handleSnackClose}>
         <Alert
           onClose={handleSnackClose}
-          severity={snackOpen.severity ? "success" : "error" }
+          severity={snackOpen.severity ? "success" : "error"}
           sx={{ width: '100%' }}
         >
           {snackOpen.bool ?

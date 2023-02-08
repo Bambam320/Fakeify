@@ -11,9 +11,15 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
-function SongRow({ track, handleAddTrack }) {
+function SongRow({ track, handleAddTrack, queue }) {
   //set state from context
-  const { setCurrentTrack } = useContext(SpotifyContext);
+  const { setCurrentTrack, setCurrentQueue } = useContext(SpotifyContext);
+
+    // sets track and queue so footer component will play the song
+    function handlePlayTrack(e) {
+      setCurrentTrack(track)
+      setCurrentQueue(queue)
+    }
 
   return (
     <Grid container className="songRow" width="750px">
@@ -31,7 +37,7 @@ function SongRow({ track, handleAddTrack }) {
       </Grid>
       <Grid item xs={3}>
         <Button
-          onClick={() => { setCurrentTrack(track) }}
+          onClick={(e) => { handlePlayTrack(e) }}
           className='sidebarOption'
           sx={{
             color: 'grey',

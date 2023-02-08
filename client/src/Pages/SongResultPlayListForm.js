@@ -77,7 +77,7 @@ function SongResultPlayListForm({ track }) {
           setSuccessOpen(true);
         });
       } else {
-        res.json().then((err) => setErrors(err.errors));
+        res.json().then((err) => setErrors(err.error));
       }
     })
   }

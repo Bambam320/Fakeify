@@ -40,19 +40,19 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 
 7. The Library page displays links that render the users songs, playlists, artists or albums in more detail.
 
-<!-- ## Installation
+## Installation
 
-This SPA requires both a front and back end and for that reason, there are a few installation commands that need to be used to set the application up for use.
+After cloning this repository, you will need to install the frontend dependencies and the backend gems. Some configuration will be required to get the database to work, to provide credentials from the spotify to use their API and to host this app.
 
-First, clone the repository and once open in the editor, navigate to the client directory and run the command for installing the nodes using the following.
+Open in the editor and navigate to the client directory and run the command for installing the nodes using the following.
 ```js
-$ npm install
+$ npm install 
 ```
 It is built with the React framework and must be initialized by running the following command.
 ```js
 $ npm start
 ```
-The best method for setting up the back end requires opening a new terminal and preparing the backend first, by finding the ```vetapp``` directory and from within running the bundle installation.
+In a new terminal window at the root of the app, run the following command to install the gems required.
 ```rb
 $ bundle install
 ```
@@ -60,10 +60,33 @@ Then run the following to start the server.
 ```rb
 rails s
 ```
+In order to change the database configuration to work with your preferred database, open the ```config/database.yml``` file and find the following entries, change the adapter to your preferred relational database management system, then change the name of the database to the name of yours.
+```rb
+default: &default
+  adapter: postgresql <-- change to your preferred system -->
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+```
+Find the environment database declaration and change the name to your database name.
+```rb
+  test:
+  <<: *default
+  database: spotify_app_test <-- change to the name of your database -->
+  
+  development:
+  <<: *default
+  database: spotify_app_development <-- change to the name of your database -->
+```
+If you will be hosting this app, then you will need to provide the database url of your hosted database instance from your hosting service.
+```rb
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+```
 
 Enjoy!
 
-Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-project) -->
+Clone the repo [from Github here](https://github.com/Bambam320/spotify-app)
 
 ## Development
 

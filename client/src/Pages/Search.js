@@ -215,7 +215,7 @@ function Search() {
           <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
             Artists
           </Typography>
-          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
+          <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '125px' }}>
             {artistResults}
           </Grid>
           <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />

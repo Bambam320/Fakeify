@@ -4,7 +4,7 @@ import { SpotifyContext } from "../SpotifyContext";
 import axios from 'axios';
 
 //css and component imports
-import "../CSS/Login.css";
+import "../CSS/Body.css";
 import '../CSS/SongRow.css'
 import HomeSong from "./HomeSong";
 
@@ -23,7 +23,7 @@ import Typography from '@mui/material/Typography';
 
 function Home() {
   // sets context, state and ref hooks
-  const { setCurrentTrack, currentTrack, localUser, setLocalUser } = useContext(SpotifyContext);
+  const { setCurrentTrack, setCurrentQueue, localUser, setLocalUser } = useContext(SpotifyContext);
   const snackbarInfo = useRef(null);
   const [errors, setErrors] = useState([]);
   const [featuredSongs, setFeaturedSongs] = useState([]);
@@ -110,9 +110,10 @@ function Home() {
     })
   };
 
-  //send the song to the player
+  //send the song and entire playlist to the player
   function sendToPlayer(e, track) {
     e.preventDefault()
+    setCurrentQueue(featuredSongs)
     setCurrentTrack(track)
   };
 
@@ -131,7 +132,7 @@ function Home() {
           <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
             Choose a Playlist first:
           </Typography>
-          <div className='errordiv' style={{marginLeft: '10em'}}>
+          <div className='errordiv' style={{ marginLeft: '10em' }}>
             {errors.map((error) => {
               return <p key={error} className='error'>{error}</p>;
             })}
@@ -187,31 +188,33 @@ function Home() {
           <h4> Recommend A Playlist </h4>
         </Button>
       </Grid>
-      <Grid container>
-        <Box sx={{ width: '100%', maxWidth: 600 }} >
-          <Typography variant="h4" component="div" sx={{ color: 'white', marginLeft: '25px', marginTop: '25px' }}>
-            {playlistInfo.name}
-          </Typography>
-          <Typography variant="h5" component="div" sx={{ color: 'purple', marginLeft: '25px' }}>
-            {playlistInfo.description}
-          </Typography>
-        </Box>
-      </Grid>
       {loader ?
         <img src="/Infinity.gif" alt="infinity loader" style={{ marginLeft: '250px' }}></img>
         :
-        <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '125px' }}>
-          {featuredSongs.map((song) => {
-            return (
-              <HomeSong
-                key={song.id}
-                song={song}
-                onAddSong={handleAddSongToPlaylist}
-                playSong={sendToPlayer}
-              />
-            )
-          })}
-        </Grid>
+        <>
+          <Grid container>
+            <Box sx={{ width: '100%', maxWidth: 600 }} >
+              <Typography variant="h4" component="div" sx={{ color: 'white', marginLeft: '25px', marginTop: '25px' }}>
+                {playlistInfo.name}
+              </Typography>
+              <Typography variant="h5" component="div" sx={{ color: 'purple', marginLeft: '25px' }}>
+                {playlistInfo.description}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '125px' }}>
+            {featuredSongs.map((song) => {
+              return (
+                <HomeSong
+                  key={song.id}
+                  song={song}
+                  onAddSong={handleAddSongToPlaylist}
+                  playSong={sendToPlayer}
+                />
+              )
+            })}
+          </Grid>
+        </>
       }
       <Grid>
         <Grid item>

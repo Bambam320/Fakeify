@@ -20,7 +20,7 @@ function CollectionSongs() {
         <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px', marginTop: '30px' }}>
           {playlist.songs.length > 0 ? `Playlist: ${playlist.name}` : <></>}
         </Typography>
-        <Grid key={playlist.id} container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }}>
+        <Grid key={playlist.id} container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '60px' }}>
           <CollectionSongsEachSong key={playlist.description} playlist={playlist} />
         </Grid>
       </>

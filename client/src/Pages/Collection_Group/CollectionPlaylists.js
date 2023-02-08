@@ -21,7 +21,7 @@ function CollectionPlaylists() {
   // lists the playlists owned by the user
   let myPlaylists = localUser.playlists.map((playlist) => {
     return (
-      <Grid key={playlist.description} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+      <Grid key={playlist.id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
         <CardActionArea >
           <div style={{ marginLeft: '-20px' }}>
             <CardMedia
@@ -53,7 +53,7 @@ function CollectionPlaylists() {
       <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
         Playlists
       </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px' }} >
+      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '60px' }} >
         {myPlaylists}
       </Grid>
       <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />

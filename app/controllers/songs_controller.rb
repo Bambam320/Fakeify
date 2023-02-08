@@ -20,9 +20,9 @@ end
 # POST /songs
 def create
   playlist = Playlist.find(song_params[:playlist_id])
-  artist = Artist.find_or_create_by(spotify_id: song_params[:spotify_artist_id])
+  artist = Artist.create!(spotify_id: song_params[:spotify_artist_id])
   artist.update_artist
-  album = Album.find_or_create_by(
+  album = Album.create!(
     spotify_id: song_params[:spotify_album_id],
     artist_id: artist.id
   )

@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 function CollectionSongsEachSong({ playlist }) {
-  const { setCurrentTrack } = useContext(SpotifyContext);
+  const { setCurrentTrack, setCurrentQueue } = useContext(SpotifyContext);
 
   let songs = playlist.songs.map((song) => {
     return (
@@ -46,7 +46,10 @@ function CollectionSongsEachSong({ playlist }) {
           </div>
         </CardActionArea>
         <Button
-          onClick={() => { setCurrentTrack(song) }}
+          onClick={() => { 
+            setCurrentTrack(song) 
+            setCurrentQueue(playlist.songs)
+          }}
           sx={{
             color: 'grey',
             textTransform: 'none',
