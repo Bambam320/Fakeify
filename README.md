@@ -2,7 +2,7 @@
 
 This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
   
-
+[Visit the application](https://spotify-app-8rdu.onrender.com)
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ This is an SPA that aims to clone the spotify application and allow the user to 
 ## Installation
 
 After cloning this repository, you will need to install the frontend dependencies and the backend gems. Some configuration will be required to get the database to work, to provide credentials from the spotify to use their API and to host this app.
-
+##### General Setup
 Open in the editor and navigate to the client directory and run the command for installing the nodes using the following.
 ```js
 $ npm install 
@@ -60,6 +60,7 @@ Then run the following to start the server.
 ```rb
 rails s
 ```
+##### Database configuration
 In order to change the database configuration to work with your preferred database, open the ```config/database.yml``` file and find the following entries, change the adapter to your preferred relational database management system, then change the name of the database to the name of yours.
 ```rb
 default: &default
@@ -81,8 +82,26 @@ If you will be hosting this app, then you will need to provide the database url 
 ```rb
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %> <-- This URL reads from render, change to satisfy your hosting service's requirements -->
 ```
+##### Spotify developer credentials
+This app uses the API from Spotify through the RSpotify gem and requires a registered applications' credentials to be used for authorizing API calls to spotify and authenticating a spotify user to access their account from this application.
+Use the following link to visit [Spotify](https://developer.spotify.com/documentation/web-api/quick-start/) for the steps to register this app and obtain your ```client_id``` and ```client_secret```.
+Then run the following command to open your credential editor.
+```rb
+$ EDITOR="code --wait" bin/rails credentials:edit
+```
+Then paste your information from spotify inside the credentials file in the following format.
+```rb
+spotify:
+  client_id: <-- client_id here -->
+  client_secret: <-- client secret here -->
+```
+Be sure to close the file and verify you recieved the following message.
+```rb
+$ File encrypted and saved.
+```
+Remember to follow your hosting services guidelines to host this app!
 
 Enjoy!
 
