@@ -1,13 +1,8 @@
-<base target="_blank">
 # Spotify Clone
 
 This is an SPA that aims to clone the spotify application and allow the user to search for music, create playlists and save them to their authenticated spotify account. The user can create, manage and add songs to local playlists, listen to a preview version of the songs and upload their new playlists to spotify.
   
 [Visit the application](https://spotify-app-8rdu.onrender.com)
-
-[Opens in new tab](https://external.ink?to=/https://spotify-app-8rdu.onrender.com)
-
-<a href="https://spotify-app-8rdu.onrender.com" target="_blank">a tag link</a>
 
 ## Table of Contents
 
@@ -134,7 +129,8 @@ Clone the repo [from Github here](https://github.com/Bambam320/spotify-app)
 ![](wire_frames/Collection/songs/collection_songs_page_wire_frame.png)
 ![](wire_frames/Collection/playlists/collection_playlists_page_wire_frame.png)
 ![](wire_frames/Collection/albums/collection_albums_page_wire_frame.png)
-<!-- ## Usage
+
+## Usage
 
 The SPA's functions are described below with imagery and code to best demonstrate their use.
 
@@ -144,28 +140,36 @@ The component tree includes an index file that attaches the react app to the DOM
 ```
 Index from the src folder
 └── App 
-  ├── NavBar
-  |   └── LoggedIn
+  ├── Helmetcode
+  ├── Login
+  ├── Navbar
+  ├── Header
   ├── Home
-  ├── Login   
-  ├── Appointments
-  |   └── AppointmentCard
-  |       └── AppointmentCardUpdate
-  ├── AppointmentForm
-  ├── AllProfileCard
-  |   └── DoctorProfileCard
-  |   └── AnimalProfileCard
-  ├── Signup
-  ├── Profile
-  |   └── DoctorProfileCard
-  |   └── AnimalProfileCard
-  └── Patients
+  |   └── HomeSong
+  ├── Search
+  |   └── SongResultPlaylistForm
+  ├── Playlist 
+  |   └── PlaylistInfo
+  |       └── PlaylistInfoDialog
+  |   └── PlaylistSongRow
+  |   └── SongRow 
+  ├── Profile 
+  ├── Collection
+  |   └── CollectionLinks
+  ├── CollectionPlaylists
+  ├── CollectionSongs
+  |   └── CollectionSongEachSong
+  ├── CollectionAlbums
+  |   └── CollectionAlbumsEachAlbum
+  ├── CollectionArtists
+  |   └── CollectionArtistsEachArtist
+  └── Footer
 ```
 ***Entity Relationship Model***
 
 Each character in the schema has many spells and each spell belongs to a single character.
 
-![](images/ERM.png  "Entity Relationship Model")
+![](client/public/ERD.png  "Entity Relationship Model")
 
 ***SignUp Page***
 
@@ -347,4 +351,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
   
 
 ![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project)
- -->

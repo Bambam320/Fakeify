@@ -2,8 +2,12 @@ class SpotifyApiController < ApplicationController
 
     # searches for tracks based on a search term, returns the songs
     def search_for_tracks
+      if params[:search] != 'blank'
       songs = RSpotify::Track.search("#{params[:search]}", limit: 30)
       render json: songs, status: :ok
+      else
+        render json: {error: ["No search term provided"]}, status: :not_found
+      end
     end
   
     # searches each category with the provided search term and returns, 10 each to the front end

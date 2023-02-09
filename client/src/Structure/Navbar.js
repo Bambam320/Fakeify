@@ -3,6 +3,11 @@ import React, { useState, useContext } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 import { Link, useNavigate } from 'react-router-dom';
 
+// css and component imports
+import "../CSS/Header.css";
+import "../CSS/Sidebar.css";
+import "../CSS/SidebarOption.css";
+
 // material ui components
 import { Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
@@ -12,11 +17,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import LoginIcon from "@mui/icons-material/Login";
 import SearchIcon from "@mui/icons-material/Search";
-
-// css and component imports
-import "../CSS/Header.css";
-import "../CSS/Sidebar.css";
-import "../CSS/SidebarOption.css";
 
 function Navbar() {
   //sets state, context and navigate hooks

@@ -16,14 +16,14 @@ function CollectionAlbums() {
 
   let localAlbums = localUser.playlists.map((playlist) => {
     return (
-      <>
+      <React.Fragment key={playlist.id}>
         <Typography key={playlist.name} variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px', marginTop: '30px' }}>
           {playlist.songs.length > 0 ? `Playlist: ${playlist.name}` : <></>}
         </Typography>
-        <Grid key={playlist.id} container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '60px' }}>
+        <Grid  container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '60px' }}>
           <CollectionAlbumsEachAlbum playlist={playlist} />
         </Grid>
-      </>
+      </React.Fragment>
     )
   });
 
