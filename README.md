@@ -136,7 +136,12 @@ The SPA's functions are described below with imagery and code to best demonstrat
 
 ***SPA Component Tree***
 
-The component tree includes an index file that attaches the react app to the DOM. Then an ```<App>``` component provides context and routing for all children's elements. The first is a ```<NavBar>``` component that provides a logo and links which vary by the type of user logged in if logged in at all. The ```<LoggedIn>``` component provides the name of the currently logged in user. The next is the ```<Appointments>``` component which displays all appointments by using the ```<AppointmentCard>``` for each appointment. The ```<AppointmentCardUpdate>``` component provides a form that can be used by the doctor to update the appointment information. The ```<AppointmentForm>``` component provides a form which the doctor can use to create a new appointment. The ```<AllProfileCard>``` and ```<ProfileCard>``` components will render a ```<DoctorProfileCard>``` or ```<AnimalProfileCard>``` component based on what type of user is logged in. The next is the ```<Signup>``` component that offers a form for a user or a doctor to sign up. Last is the ```<Patients>``` component which shows the logged in doctors current patients.
+The component tree includes an index file that attaches the react app to the DOM. Then the ```<App>``` component provides context and routing for all of the children elements. The ```<Helmetcode>``` component provides the favicon and description for the tab in the browser. The first component that the user sees is the ```<Login>``` component, which provides the login and signup page. The three main structural components are the ```<NavBar>, <Header> and <Footer>``` components. The ```<Navbar>``` component provides the links for all the components in the app, and it provides a list of all of the users playlists. The ```<Header>``` component provides a menu for the user to view their profile or logout and a main search bar. The ```<Footer>``` component is essentially a player which provides the song information as well as play, pause, skip, previous, shuffle and replay buttons. 
+
+The ```<Home>``` component provides all the songs from the featured playlists from spotify. Each playlist comes from spotify and each song is provided as a tile. The song can be played by hovering over it or added to the selected playlist by clicking on it. The ```<Home>``` component renders a ```<HomeSong>``` component for each song. The ```<Search>``` component uses the search term from the main search bar in the ```<Header>``` component and lists a limit of 10 results for artists, albums, songs and playlists. The songs in the results render a ```<SongResultPlaylistForm>``` which allows selection of a playlist and a button to add the song to a playlist. The ```<Playlist>``` component renders when a specific playlist is clicked from the ```<Navbar>``` component. The ```<PlaylistInfo>``` component renders the information about the playlist, and clicking on any portion of the playlists information, renders the ```<PlaylistInfoDialog>``` component which opens a dialog that allows updating the information of the playlist. The ```<PlaylistSongRow>``` component renders the songs that belong to that playlist and allow the user to play the song or remove it from the playlist. The ```<SongRow>``` component lists the songs returned from the search bar that is available just below the playlists songs. It allows a user to play the song or add it to the playlist.
+
+The ```<Profile>``` component provides information about the logged in user and the users authorized spotify account information. The ```<Collection>``` component renders links through the ```<CollectionLinks>``` component for displaying the users playlists, songs, artists and albums per playlist. The ```<CollectionPlaylists>``` display each playlist as a tile. The ```<CollectionSongs>``` renders each playlist and for each playlist it renders ```<CollectionSongEachSong>``` which displays each song for each playlist. The ```<CollectionAlbums>``` and ```<CollectionArtists>``` respectively render ```<CollectionAlbumsEachAlbum>``` and ```<CollectionArtistsEachArtist>``` displaying albums and artists for each playlist.
+
 ```
 Index from the src folder
 └── App 
@@ -171,93 +176,105 @@ Each character in the schema has many spells and each spell belongs to a single 
 
 ![](client/public/ERD.png  "Entity Relationship Model")
 
-***SignUp Page***
+***Login and SignUp Pages***
 
-![](images/Signup.png  "Sign Up Page Example")
+![](client/public/LoginSignupPage.png  "Login and Sign Up Page Example")
 
-The SignUp component renders provides a form that is provided by rendering a controlled input from each key in the object form. That data is sent to the back end and automatically used to create either a doctor or animal with an associated user.
+The Login and SignUp page are provided when no user is logged in and provide fields to create a new user or login. Their is an autologin function that automatically reads whether or not a user has signed in previously and logs them in.
 ```
-  ├── Signup  
+  ├── Login
 ```
 
-The ```<SignUp>``` component provides an object that is defaulted to either a form for doctors or animals to sign up. That form is controlled and submitted to the back end for creating a user and an associated doctor or animal. The create action below, determines if the parameters are meant for a doctor, then extract and permit only those that a doctor needs. Those params are used to create a new doctor which will then be used to create a new user by association. That user is returned with the appropriately provided information, where a doctor will be sent with the associated animals and vice versa.
+The ```<Login>``` component provides a form for a user to login through or a signup form that allows entry of a username, password and confirmation, avatar image address, birthdate, region and email address. The fields in the signup page are required, especially for the email address. This email address is used in order to be white-listed with spotify so that a user can login with their spotify account. That is used to save playlists created in this app to the users spotify account.
+The backend provides actions to create and delete a user, as well as logging a user in, manually and automatically. All users are returned with their associated playlists, the playlists associated songs and the songs associated artists and albums.
 
 ```rb
+  # finds a user and authenticates them then returns the user with 201 status code
+  # sessions#login
   def create
-    if params[:role] == 'doc'
-    permitted_doctor_params = params.extract!(:phone_number, :name, :address, :degree, :logo, :university, :specialty).permit!
-    doctor = Doctor.create!(permitted_doctor_params)
-    permitted_user_params = params.extract!(
-      :username, :password, :password_confirmation, :role
-    ).permit!
-    user = doctor.create_user!(permitted_user_params)
-    session[:user_id] = user.id
-    render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
-  elsif params[:role] == 'pet'
-    permitted_animal_params = params.extract!(:name, :sex, :breed, :color, :existing_conditions, :age, :disposition, :classification).permit!
-    animal = Animal.create!(permitted_animal_params)
-    permitted_user_params = params.extract!(
-      :username, :password, :password_confirmation, :role
-    ).permit!
-    user = animal.create_user!(permitted_user_params)
-    session[:user_id] = user.id
-    render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: 201
+    this_user = User.find_by!(username: user_params[:username])
+    if this_user&.authenticate(user_params[:password])
+      session[:user_id] = this_user.id
+      user = clear_spotify_information(this_user)
+      render json: user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist', 'playlists.songs.album'], status: 201
+    else
+      render json: { errors: ["Username or Password is incorrect"] }, status: :unprocessable_entity
     end
   end
 ```
-***Appointments Pages***
+***Home Page***
 
-![](images/Appointments.png  "Appointment Page Example")
+![](client/public/HomePage.png "Home Page Example")
 
-The appointments pages provide functionality to render, create, update and delete appointments.
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for the various pages. Below that it displays a link for each of the users playlists along with their image. The Header component provides an icon with the users name and avatar which opens a dropdown menu that provides a link to the users profile and a logout button which logs the user out of the application. The Footer component provides all of the information and functions for playing a song. The ```<Home>``` component provides a menu to select the playlist which the user wants to add a song to. Next to that is a buttom for requesting the next playlist from Spotify's featured playlists of the day. The title and the description of the playlist is displayed above the song tiles. Each tile represents a song from the playlist and allows a user to play the song when hovered over and to add a song to their playlist when clicked. Each tile displays a popover with additional information about the song.
 
 ```
-  ├── Appointments
-  |   └── AppointmentCard
-  |       └── AppointmentCardUpdate
+  ├── Navbar
+  ├── Header
+  ├── Home
+  |   └── HomeSong
+  └── Footer
 ```
-The Appointments Controller is fairly straightforward It provides actions to view all, create, update or delete an appointment. 
+The backend receives the request from a ```useEffect``` in the ```<Home>``` component. The ```requestRefresh``` is a boolean held in state which is set by the clicking of the "refresh" button. This allows the fetch to run on the first render and when the button is clicked.
+
+```js
+  //bring in featured songs from the spotify_api
+  useEffect(() => {
+    const retrieveRecommendedSongs = async () => {
+      try {
+        setLoader(true);
+        const data = await axios
+          .get(`/spotify_api/show_featured`)
+          .then((res) => {
+            setFeaturedSongs(res.data.songs);
+            setPlaylistInfo(res.data.playlist_info)
+          });
+        setLoader(false);
+        setErrors([])
+      } catch (err) {
+        setErrors(err.errors);
+      }
+    }
+    retrieveRecommendedSongs()
+  }, [requestRefresh])
+```
+The spotify controller in the backend receives this request with the ```featured_songs``` action.
 
 ```rb
-# Appointments Controller
-  #returns all appointments
-  def index
-    render json: Appointment.all, status: :ok
-  end
-
-  # creates an appointment and returns it if valid
-  def create
-    appointment = Appointment.create!(appointment_params)
-    if appointment
-      render json: appointment, status: :created
+    # requests the featured playlist from spotify then chooses the next one in numerical succession
+    # the playlist has its songs filtered for only the ones that include an audio preview_url
+    # then it is sent back as a part of a hash including the basic playlist info
+    def featured_songs
+      session[:current_featured_playlist] = session[:current_featured_playlist] || 0
+      featuredPlaylistLength = RSpotify::Playlist.browse_featured.length
+      def return_songs playlist_index
+        featuredPlaylist = RSpotify::Playlist.browse_featured[playlist_index]
+        unfilteredSongs = featuredPlaylist.tracks
+        songs = unfilteredSongs.filter { |song| !song.preview_url.nil? }
+        playlist = Hash.new
+        playlist[:songs] = songs
+        playlist[:playlist_info] = {
+          name: featuredPlaylist.name,
+          description: featuredPlaylist.description,
+        }
+        return playlist
+      end
+      if session[:current_featured_playlist] == featuredPlaylistLength - 1
+        playlist = return_songs(session[:current_featured_playlist])
+        session[:current_featured_playlist] = 0
+        render json: playlist, status: :ok
+      elsif session[:current_featured_playlist] > 0 && 
+        playlist = return_songs(session[:current_featured_playlist])
+        session[:current_featured_playlist] = session[:current_featured_playlist] + 1
+        render json: playlist, status: :ok
+      elsif session[:current_featured_playlist] == 0
+        playlist = return_songs(session[:current_featured_playlist])
+        session[:current_featured_playlist] = session[:current_featured_playlist] + 1
+        render json: playlist, status: :ok
+      else
+        render json: { errors: ["An error occured, please try again."] }, status: :not_found
+      end
     end
-  end
-
-  # updates an appointment and returns it if valid
-  def update
-    if find_appointment.update!(appointment_params)
-      render json: find_appointment, status: :ok
-    end
-  end
-
-  #destroys the appointment provided and returns an empty object
-  def destroy
-    find_appointment.destroy
-    render json: {}, status: :accepted
-  end
-```
-The create, update, and destroy actions are protected from unauthorized users with the following private authorization methods.
-
-```rb
-  #authorizes a user for actions pertaining only to that user
-  def authorize_user
-    return render json: { errors: ["Not authorized"] }, status: :unauthorized unless session[:user_id] == find_appointment.doctor.user.id || session[:user_id] == find_appointment.animal.user.id
-  end
-
-  #authorizes a user to be logged in before allowing the action
-  def authorize_general
-    return render json:{errors: ["not authorized"]}, status: :unauthorized unless session.include? :user_id
-  end
 ```
 ![](images/AppointmentCreate.png  "Appointment Page Example")
 
