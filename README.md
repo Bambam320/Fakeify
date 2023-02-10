@@ -607,9 +607,51 @@ The ```<Footer>``` component is only displayed when there is a valid song provid
 ```
 └── Footer
 ```
+The audio used to play the songs is provided through a ```preview_url``` which is attached to most songs available from Spotify. The backend in this SPA filters out those songs which do not have a ```preview_url``` associated with it. Each ```preview_url``` is approximately 30 seconds long. The player uses a ```useRef``` hook called  ```audioElem``` which is referenced by the ref prop in the ```<audio>``` tag. When the hooks current value for play, pause, duration etc. is changed, it is made available to the ```<audio>``` tag through the reference prop. Setting the ```currentTrack``` state with a new song, prompts the ```<audio>``` tag to use a new url for the song. The buttons in the player are then available to act on the song being played, which can play or pause the song by setting the ref props current value to play or pause. Similarly, the duration value of the ```<audio>``` can be tracked and automatically play the next song in the queue when it finishes playing. 
+```js
+  const audioElem = useRef();
+
+  <audio
+    src={currentTrack.preview_url}
+    ref={audioElem}
+    onTimeUpdate={trackTime} 
+  />
+
+  //play or pause based on playstate
+  useEffect(() => {
+    if (playState) {
+      audioElem.current.play();
+    }
+    else {
+      audioElem.current.pause();
+    }
+  }, [playState, currentTrack]);
+
+  // sets play reference to current track to false to end play and display play button
+  function trackTime() {
+    if (audioElem.current.duration === audioElem.current.currentTime) {
+      setPlayState(false)
+    }
+    if (audioElem.current.duration === audioElem.current.currentTime && repeat) {
+      nextSong()
+    }
+  };
+
+  //autoplays a newly selected song
+  useEffect(() => {
+    currentTrack ? setPlayState(true) : setPlayState(false)
+  }, [currentTrack]);
+
+  //set next song in playlist
+  function nextSong() {
+    let currentSongIndex = currentQueue.findIndex((song) => song.id === currentTrack.id);
+    let next = shuffle ? currentQueue[Math.floor(Math.random() * currentQueue.length)] : currentQueue.indexOf(currentTrack) === currentQueue.length - 1 ? currentQueue[0] : currentQueue[currentSongIndex + 1]
+    setCurrentTrack(next)
+  };
+```
 
 
-## Instructional-GIF
+<!-- ## Instructional-GIF
 
 ***Login***
 
@@ -645,4 +687,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
   
 
-![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project)
+![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project) -->
