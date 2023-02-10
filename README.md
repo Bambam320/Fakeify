@@ -652,14 +652,35 @@ The audio used to play the songs is provided through a ```preview_url``` which i
 
 ## Instructional-GIF
 
-***Login***
+***Home Page***
 
-![](https://media.giphy.com/media/47mcaSeFTi7sjNC6Tt/giphy.gif)
+![](https://media.giphy.com/media/74S6odndsvmiTLKOGx/giphy.gif)
 
-***Updating and deleting appointments***
+![](https://media.giphy.com/media/q6JTCzjlzgllUXxybW/giphy.gif)
 
-![](https://media.giphy.com/media/mVVW24GOYasetICweF/giphy.gif)
+![](https://media.giphy.com/media/lI7Mf9IgjzTZnTkMyB/giphy.gif)
 
+
+***Search Page***
+
+![](https://media.giphy.com/media/manFkwpSJ4gZYCfkrV/giphy.gif)
+
+![](https://media.giphy.com/media/LM7ms8MrunxuEgJcoC/giphy.gif)
+
+***My Library Collection***
+
+![](https://media.giphy.com/media/WIRFJaojmeuQ2PQmlN/giphy.gif)
+
+![](https://media.giphy.com/media/fkK7UI8W1iDzHT8ElB/giphy.gif)
+
+***My Playlist Page***
+![]()
+![]()
+![]()
+![]()
+![]()
+![]()
+![]()
 
 ## Video-Describing-Functionality
 

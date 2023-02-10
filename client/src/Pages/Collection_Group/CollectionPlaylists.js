@@ -53,7 +53,7 @@ function CollectionPlaylists() {
       <Typography variant="h5" component="div" sx={{ color: '#a7b2c4', marginLeft: '100px', marginBottom: '40px' }}>
         Playlists
       </Typography>
-      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '60px' }} >
+      <Grid container spacing={2} maxWidth='900px' sx={{ marginLeft: '30px', marginBottom: '90px' }} >
         {myPlaylists}
       </Grid>
       <Divider variant="middle" sx={{ bgcolor: 'white', marginTop: '-20px', marginBottom: '30px', marginTop: '30px' }} />
