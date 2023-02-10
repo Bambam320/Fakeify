@@ -215,6 +215,110 @@ The Home page introduces the main components of the app, namely the Navbar, Head
   |   └── HomeSong
   └── Footer
 ```
+The ```<Header>``` component runs the ```checkSpotifyTimeRemaining``` function every minute to check whether or not the lifetime of the token provided by the Spotify API has expired. If it has, the spotify controller's action ```update_token``` will be fired. If the update was successful, the localuser will be updated with the updated token and lifetime keys updated to their new values.
+```js
+  // automatically checks if the token has expired and requests an updated token and new token_lifetime
+  setTimeout(checkSpotifyTimeRemaining, 20000)
+  function checkSpotifyTimeRemaining() {
+    if (typeof (localUser.spotify_token_lifetime) === 'number') {
+      let timeRemaining = Math.floor((localUser.spotify_token_lifetime - Date.now() / 1000) / 60)
+      if (timeRemaining < 0) {
+        fetch('/spotify_api/update_token')
+          .then((res) => {
+            if (res.ok) {
+              res.json().then((user) => {
+                setUpdateOpen(true)
+                setLocalUser(user)
+              })
+            } else {
+              setFailureOpen(true)
+              setLocalUser({
+                ...localUser,
+                spotify_display_name: "",
+                spotify_email: "",
+                spotify_id: "",
+                spotify_img: "",
+                spotify_refresh_token: "",
+                spotify_region: "",
+                spotify_token: "",
+                spotify_token_lifetime: ""
+              });
+            };
+          });
+      };
+    };
+  };
+```
+The ```update_token``` action will send a request to the Spotify API, it will include the credentials that allow this app to make requests, the refresh token which was provided from the previous sign up and the grant type so that the backend knows what type of data we are requesting. The response information will be used to update the user that made the request by saving the new information into the database. Then the user is returned back to the front end.
+```rb
+  # updates the token and associated info for the user
+  def update_token
+    @user = User.find(session[:user_id])
+    body = {
+      grant_type: "refresh_token",
+      refresh_token: @user.spotify_refresh_token,
+      client_id: Rails.application.credentials.spotify.client_id,
+      client_secret: Rails.application.credentials.spotify.client_secret
+    }
+    spotify_response = RestClient.post('https://accounts.spotify.com/api/token', body)
+    spotify_auth_params = JSON.parse(spotify_response)
+    @user.update_columns(
+      spotify_token: spotify_auth_params["access_token"],
+      spotify_token_lifetime: @user.spotify_token_lifetime + spotify_auth_params["expires_in"]
+    )
+    render json: @user, include: ['playlists', 'playlists.songs', 'playlists.songs.artist', 'playlists.songs.album'], status: :ok
+  end
+```
+The ```<Navbar>``` component provides a link to allow the user to login to spotify with this app. The link sends a request to ```/auth/spotify``` which is the oauth environment provided in the oauth dependency installed in this SPA. The environment makes the appropriate request to the Spotify API for authorization and the reply is directed to a callback function.
+
+```js
+  <a component='a' href="http://localhost:3000/auth/spotify" className='sidebarOption' onClick={() => { }}>
+    <LoginIcon className="sidebarOption_icon" />
+    <h4>Sign in with Spotify</h4>
+  </a>
+```
+The reply is used to instantiate a new user in the RSpotify gem, then the local user model is updated with the appropriate information from spotify. This information is used to create requests that only an authorized user can make.
+```rb
+    # receives valid callback from spotify and saves the spotify users information into the local users record then redirects to the profile page in the front end
+    def callback
+      spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
+      current_user = User.find(session[:user_id])
+      current_user.update_columns(
+        spotify_token: spotify_user.credentials.token,
+        spotify_refresh_token: spotify_user.credentials.refresh_token,
+        spotify_token_lifetime: spotify_user.credentials.expires_at,
+        spotify_display_name: spotify_user.display_name,
+        spotify_email: spotify_user.email,
+        spotify_id: spotify_user.id,
+        spotify_img: spotify_user.images.length > 0 ? spotify_user.images[0].url : '',
+        spotify_region: spotify_user.country,
+      )
+      redirect_to "http://localhost:4000/profile"
+    end
+```
+The ```<Navbar>``` component provides a specific link that will create a new playlist and route that user to the new playlist. The ```currentPlaylist``` state will be updated with the new playlist as will the user held in state. The user will navigate to the playlist page using the id as a parameter. Then the ```<App>``` component will render the ```<Playlist>``` component with the appropriate paramters in the url.
+```js
+  // creates and sets a brand new playlist with default values and sets state with the new playlist
+  function handleCreateAndRouteToPlaylist() {
+    fetch('/playlists', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ instructions: "Make a new playlist, bitch!" })
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((newPlaylist) => {
+          setCurrentPlaylist(newPlaylist)
+          setLocalUser({ ...localUser, playlists: [...localUser.playlists, newPlaylist] })
+          setTimeout(navigate(`/playlists/${newPlaylist.id}`), 1000)
+        });
+      } else {
+        response.json().then((err) => setErrors(err.errors));
+      }
+    });
+  };
+```
 The backend receives the request from a ```useEffect``` in the ```<Home>``` component. The ```requestRefresh``` is a boolean held in state which is set by the clicking of the "refresh" button. This allows the fetch to run on the first render and when the button is clicked.
 
 ```js
@@ -374,60 +478,124 @@ def create
   render json: song, status: :created
 end
 ```
-![](images/AppointmentCreate.png  "Appointment Page Example")
+***Search Page***
 
-The animals index action provides all users when requested by an animal. If the request comes from a doctor, then the animals will be provided to the frontend with the animals that already have an association with the logged in doctor filtered out. 
+![](client/public/SearchPage.png "Search Page Example")
+
+The Search page uses the information from the main search bar located in the ```<Header>``` component. The text entry by the user is sent to the ```spotify_api``` controller where it is used to send requests to the Spotify API and return 10 results per query. They are listed out as cards on the search page. The song cards have a menu which allows selecting a playlist which that song may be added to. 
+
+```
+  ├── Search
+  |   └── SongResultPlaylistForm
+```
+The ```browse``` action is fired when the main search bar is queried with some kind of text. The RSpotify gem will be used to send the request to the API and return 10 results which are then sent back to the front end.
 
 ```rb
-  # sends only those animals that do not currently have an appointment with the logged in doctor
-  def index
-    user = User.find(session[:user_id])
-    if user.user_info_type == 'Doctor'
-      animals_with_set_appointments = Appointment.where('doctor_id = ?', user.user_info_id).map { |apps| apps.animal_id }
-      animals_with_set_appointments.length > 0 ? nil : animals_with_set_appointments = [0]
-      render json: Animal.where.not("id IN (?)", animals_with_set_appointments).order(:name), status: :ok
-      # otherwise all animals are sent
-    else
-      render json: Animal.all, status: :ok
-    end
+  # searches each category with the provided search term and returns, 10 each to the front end
+  def browse
+    results = {}
+    results[:artists] = RSpotify::Artist.search("#{params[:term]}", limit: 10)
+    results[:tracks] = RSpotify::Track.search("#{params[:term]}", limit: 10)
+    results[:albums] = RSpotify::Album.search("#{params[:term]}", limit: 10)
+    results[:playlists] = RSpotify::Playlist.search("#{params[:term]}", limit: 10)
+    render json: results, status: :ok
   end
-
 ```
-The associations are created in the model files as described below. The ```Appointments``` model uses a join table between ```Doctors``` and ```Animals``` where it holds the primary key of each model as its foreign key. The The doctor and animal each may have many appointments and the appointment belongs to a doctor and to an animal. The ```User``` model uses a has_one / belongs_to relationship with a doctor and an animal. The doctor and animal model each have a ```has_one :user, as: :user_info``` where each can hold a record in the ```users``` table stored as user_info. This is allowed through the polymorphic option set to true.
-```rb
-class Animal < ApplicationRecord
-  # has a user names as user_info which is shared with the doctor model
-  has_one :user, as: :user_info
-  # has many appointments and doctors
-  has_many :appointments
-  has_many :doctors, through: :appointments
-end
-
-class User < ApplicationRecord
-  #validates the username to be unique between animals and doctors
-  validates :username, presence: true, uniqueness: true
-  #has a secure password from bcrypt
-  has_secure_password
-  #belongs to the user_info index in user which can store animals or doctors using the polymorphic option
-  belongs_to :user_info, polymorphic: true
-end
-
-class Doctor < ApplicationRecord
-  # validates some attributes
-  validates :name, :address, presence: true, uniqueness: true
-  # has a user names as user_info which is shared with the doctor model
-  has_one :user, as: :user_info
-  #has many appointments and animals
-  has_many :appointments
-  has_many :animals, through: :appointments
-end
-
-class Appointment < ApplicationRecord
-  #each appointment belongs to a doctor and an animal
-  belongs_to :doctor
-  belongs_to :animal
-end
+The Search component renders each of the 10 results as cards. The ```<SongResultPlaylistForm>``` component is rendered along with each song card. It uses the ```<Select>``` tag from Material UI and sets ```selectedPlaylist``` state with the value, which is also used to display the value in the input field. A user can then click the "add" button and similarly to the ```<Home>``` component, it will add a new song to the database with the proper associations.
+```js
+          <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
+            <InputLabel id="playlist-select">Select Playlist</InputLabel>
+            <Select
+              labelId="playlist-select"
+              id="playlist-select"
+              value={selectedPlaylist.id}
+              onChange={handleLocalPlaylistSelect}
+              label="selectedPlaylist"
+            >
+              <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
+              {localUser.playlists.map((playlist) => {
+                let id = playlist.id
+                return (
+                  <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl >
 ```
+
+***Profile Page***
+
+![](client/public/ProfilePage.png "Profile Page Example")
+
+The Profile page displays the users information used to login and also the associated spotify users information, if they have logged into it. The  
+```
+  ├── Profile 
+```
+
+
+***Collection Pages***
+
+![](client/public/CollectionPage.png "Collection Page Example")
+
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+```
+  ├── Collection
+  |   └── CollectionLinks
+  ├── CollectionPlaylists
+  ├── CollectionSongs
+  |   └── CollectionSongEachSong
+  ├── CollectionAlbums
+  |   └── CollectionAlbumsEachAlbum
+  ├── CollectionArtists
+  |   └── CollectionArtistsEachArtist
+```
+
+
+
+
+
+
+
+***Home Page***
+
+![](client/public/HomePage.png "Home Page Example")
+
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+```
+  ├── Profile 
+```
+
+***Home Page***
+
+![](client/public/HomePage.png "Home Page Example")
+
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+```
+  ├── Profile 
+```
+
+***Home Page***
+
+![](client/public/HomePage.png "Home Page Example")
+
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+```
+  ├── Profile 
+```
+
+***Home Page***
+
+![](client/public/HomePage.png "Home Page Example")
+
+The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+```
+  ├── Profile 
+```
+
+
+
+
+
 
 ## Instructional-GIF
 

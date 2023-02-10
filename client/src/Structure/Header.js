@@ -72,12 +72,12 @@ function Header() {
                 spotify_region: "",
                 spotify_token: "",
                 spotify_token_lifetime: ""
-              })
-            }
-          })
-      }
-    }
-  }
+              });
+            };
+          });
+      };
+    };
+  };
 
   //passed back from Navbar and removes the current user for logout
   function handleLogout() {
