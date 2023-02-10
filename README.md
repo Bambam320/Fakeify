@@ -202,6 +202,31 @@ The backend provides actions to create and delete a user, as well as logging a u
     end
   end
 ```
+The "signup" portion of the login component utilizes the date/time picker from "Momentjs" which allows the user to choose their birthdate using a calendar. It utilizes the ```AdapterMoment``` package which provides the data to the ```<DesktopDatePicker>``` tag in the form of a moment object. That date is stored in state as a string in the key, ```form.birthdate``` and then converted back to a moment for use in the value prop of the tag.
+```js
+  <LocalizationProvider dateAdapter={AdapterMoment}>
+  <DesktopDatePicker
+    label="Birthdate"
+    inputFormat="MM/DD/YYYY"
+    name='birthdate'
+    value={moment(form.birthdate)}
+    onChange={(e) => handleTimeChange(e)}
+    inputProps={{
+      style: {
+        height: "0",
+        fontSize: '19px',
+        alignItems: 'center',
+        paddingTop: '20px',
+      },
+    }}
+    renderInput={(params) => <TextField
+      {...params}
+      sx={{ backgroundColor: 'white', marginBottom: '25px', borderRadius: '4px', }}
+    />}
+  />
+</LocalizationProvider>
+```
+
 ***Home Page***
 
 ![](client/public/HomePage.png "Home Page Example")
@@ -503,41 +528,53 @@ The ```browse``` action is fired when the main search bar is queried with some k
 ```
 The Search component renders each of the 10 results as cards. The ```<SongResultPlaylistForm>``` component is rendered along with each song card. It uses the ```<Select>``` tag from Material UI and sets ```selectedPlaylist``` state with the value, which is also used to display the value in the input field. A user can then click the "add" button and similarly to the ```<Home>``` component, it will add a new song to the database with the proper associations.
 ```js
-          <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
-            <InputLabel id="playlist-select">Select Playlist</InputLabel>
-            <Select
-              labelId="playlist-select"
-              id="playlist-select"
-              value={selectedPlaylist.id}
-              onChange={handleLocalPlaylistSelect}
-              label="selectedPlaylist"
-            >
-              <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
-              {localUser.playlists.map((playlist) => {
-                let id = playlist.id
-                return (
-                  <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
-                )
-              })}
-            </Select>
-          </FormControl >
+  <FormControl variant="outlined" style={{ minWidth: 150, marginLeft: '-15px' }} >
+    <InputLabel id="playlist-select">Select Playlist</InputLabel>
+    <Select
+      labelId="playlist-select"
+      id="playlist-select"
+      value={selectedPlaylist.id}
+      onChange={handleLocalPlaylistSelect}
+      label="selectedPlaylist"
+    >
+      <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
+      {localUser.playlists.map((playlist) => {
+        let id = playlist.id
+        return (
+          <MenuItem key={id} value={id} >{`${playlist.name}`}</MenuItem>
+        )
+      })}
+    </Select>
+  </FormControl >
 ```
 
 ***Profile Page***
 
 ![](client/public/ProfilePage.png "Profile Page Example")
 
-The Profile page displays the users information used to login and also the associated spotify users information, if they have logged into it. The  
+The Profile page displays the users information used to login and also the associated spotify users information, if they have logged with it.  
 ```
   ├── Profile 
 ```
-
+The time provided in the ```localUser``` state is checked against the current time and then divided down into minutes so that the user can view how many minutes are remaining in their session. The state held ```TimeRemaining``` is updated with the current time or 0.
+```js
+  //renders 0 if the token has expired or actual time remaining if valid, every second
+  setInterval(checkTimeRemaining, 1000);
+  function checkTimeRemaining () {
+    if (Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0) {
+      setTimeRemaining(0)
+    } else {
+      setTimeRemaining(Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60))
+    };
+  };
+```
 
 ***Collection Pages***
 
 ![](client/public/CollectionPage.png "Collection Page Example")
 
-The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+The ```<Collection>``` component renders the ```<CollectionLinks>``` component which provides a link for each model in this SPA. Each component excluding the```<CollectionPlaylists>``` component will behave similarly. The songs, albums and artists components will list the songs, or artists, or albums associated with each playlist. The ```<CollectionSongs>``` component will provide a card for each song with a play button that will play that song.
+
 ```
   ├── Collection
   |   └── CollectionLinks
@@ -549,52 +586,27 @@ The Home page introduces the main components of the app, namely the Navbar, Head
   ├── CollectionArtists
   |   └── CollectionArtistsEachArtist
 ```
-
-
-
-
-
-
-
-***Home Page***
-
-![](client/public/HomePage.png "Home Page Example")
-
-The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
-```
-  ├── Profile 
+On a special note, albums and artists must be listed differently than songs because an artist or album can have many songs. In listing out albums, just as artists are listed, the duplicated must be removed. Below, the ```albums``` variable is created by taking each playlist that the user has and maps over it. The new array that is created contains elements that include the album name and the entire song itself. From that array, a new array is created with ```[...new Map```. The new array will only bring in elements that are not duplicates, since each element in the array must have a unique key. Then, the ```)).values()]``` method pulls only the ```song``` or the value of each element from the new array. Now, the last map, ```.map((song) =>)``` maps over each song and lists the contents. This new array does not contain any duplicates and will not list an album x amount of times for each song in the playlist that belongs to the album.
+```js
+  let albums = [...new Map(playlist.songs.map((song) => [song.album.name, song])).values()]
+    .map((song) => {
+      let album = song.album
+      return (
+        <Grid key={album.spotify_id} item component={Card} xs={2.2} sx={{ margin: '5px' }}>
+          ...
+        </Grid>
+      )
+    });
 ```
 
-***Home Page***
+***Footer Page***
 
-![](client/public/HomePage.png "Home Page Example")
+![](FooterPlayer "Footer / Player Example")
 
-The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
+The ```<Footer>``` component is only displayed when there is a valid song provided to the player in this SPA. It provides an image, name and album for the song being played. It also provides a button for playing and pausing, as well as a next, previous, shuffle and repeat function. 
 ```
-  ├── Profile 
+└── Footer
 ```
-
-***Home Page***
-
-![](client/public/HomePage.png "Home Page Example")
-
-The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
-```
-  ├── Profile 
-```
-
-***Home Page***
-
-![](client/public/HomePage.png "Home Page Example")
-
-The Home page introduces the main components of the app, namely the Navbar, Header and Footer. The Navbar displays the links available in the app for 
-```
-  ├── Profile 
-```
-
-
-
-
 
 
 ## Instructional-GIF

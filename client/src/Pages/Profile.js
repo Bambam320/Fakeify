@@ -165,15 +165,15 @@ function Profile() {
   //   setForm({ ...form, [val]: '' })
   // }
 
-  //renders 0 if the token has expired or actual time remaining if valid, twice a minute
+  //renders 0 if the token has expired or actual time remaining if valid, every second
   setInterval(checkTimeRemaining, 1000);
   function checkTimeRemaining () {
     if (Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60) < 0) {
       setTimeRemaining(0)
     } else {
       setTimeRemaining(Math.floor((localUser.spotify_token_lifetime - Date.now()/1000)/60))
-    }
-  } 
+    };
+  };
 
   return (
     <>
