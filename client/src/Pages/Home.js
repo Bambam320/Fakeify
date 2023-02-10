@@ -106,8 +106,8 @@ function Home() {
         });
       } else {
         res.json().then((err) => setErrors(err.error));
-      }
-    })
+      };
+    });
   };
 
   //send the song and entire playlist to the player

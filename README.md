@@ -172,11 +172,11 @@ Index from the src folder
 ```
 ***Entity Relationship Model***
 
-Each character in the schema has many spells and each spell belongs to a single character.
+The User has many playlists and each of those playlists has many songs. Each song also belongs to an album and an artist. The artist also has many albums.
 
 ![](client/public/ERD.png  "Entity Relationship Model")
 
-***Login and SignUp Pages***
+***Login and Sign Up Pages***
 
 ![](client/public/LoginSignupPage.png  "Login and Sign Up Page Example")
 
@@ -238,7 +238,7 @@ The backend receives the request from a ```useEffect``` in the ```<Home>``` comp
     retrieveRecommendedSongs()
   }, [requestRefresh])
 ```
-The spotify controller in the backend receives this request with the ```featured_songs``` action.
+The spotify controller in the backend receives this request with the ```featured_songs``` action. A counter is held in a session that is incremented based on which featured playlist is requested. It is set to ```0``` initially, so the first playlist is returned, then incremented by 1 for each successive request for playlists. After the last playlist is requested, the session counter is set to ```0``` so the playlists are looped over. The songs are provided in a hash as a key, along with the playlist name and description.
 
 ```rb
     # requests the featured playlist from spotify then chooses the next one in numerical succession
@@ -275,6 +275,104 @@ The spotify controller in the backend receives this request with the ```featured
         render json: { errors: ["An error occured, please try again."] }, status: :not_found
       end
     end
+```
+The ```<HomeSong>``` component is rendered for each song provided in the featured playlist. The ```onAddSong``` and ```playSong``` functions are passed down to each song.
+```js
+  <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '125px' }}>
+    {featuredSongs.map((song) => {
+      return (
+        <HomeSong
+          key={song.id}
+          song={song}
+          onAddSong={handleAddSongToPlaylist}
+          playSong={sendToPlayer}
+        />
+      )
+    })}
+  </Grid>
+```
+When the pointer enters a song tile, a popover is opened to display extra information, the anchor is set as the song tile for the popover to open against and the song is sent to the player located in the ```<Footer>``` component.
+```js
+  <Card
+    onClick={() => onAddSong(song)}
+    onMouseEnter={(e) => {
+      playSong(e, song)
+      handlePopoverOpen(e)
+      handleAnchorSongElementSelect(e)
+    }}
+    onMouseLeave={handlePopoverClose}
+  >
+```
+The player function sets state for both the song that is meant to be played and the collection that the song belongs to. In this case, the song collection is all of the songs in the playlist. That state is sent to the Footer component which is listening for changes in this state to play the song.
+```js
+  //send the song and entire playlist to the player
+  function sendToPlayer(e, track) {
+    e.preventDefault()
+    setCurrentQueue(featuredSongs)
+    setCurrentTrack(track)
+  };
+```
+The song tile can also be clicked which calls the ```handleAddSongToPlaylist``` function, shown below. It will send a post request to the songs controller with a specific object that details the information needed for all the attributes in the song model. If a song is added to the database successfully, the users playlists will be mapped over to find the playlist associated with the user that matches the playlist in which a song is being added, then the song will be added to the playlists songs and the user held in state will be updated with the new playlist.
+```js
+  // adds track to currentplaylist then updates state with the updated playlist from the backend
+  function handleAddSongToPlaylist(track) {
+    let songGenre = track.album.genres === null ? null : track.album.genres[0]
+    fetch(`/songs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        spotify_id: track.id,
+        spotify_album_id: track.album.id,
+        playlist_id: selectedPlaylist.id,
+        spotify_artist_id: track.artists[0].id,
+        featured_artist: track.artists[0].name,
+        release_date: track.album.release_date,
+        name: track.name,
+        genre: songGenre,
+        preview_url: track.preview_url,
+        cover_art: track.album.images[0].url,
+      })
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((newSong) => {
+          let updatedPlaylists = localUser.playlists.map((pl) => {
+            if (selectedPlaylist.id === pl.id) {
+              pl.songs.push(newSong)
+              return pl
+            } else {
+              return pl
+            }
+          })
+          setLocalUser({ ...localUser, playlists: updatedPlaylists })
+          snackbarInfo.current = track.name
+          setSuccessOpen(true);
+        });
+      } else {
+        res.json().then((err) => setErrors(err.error));
+      };
+    });
+  };
+```
+The create action will be fired when a ```POST``` request is sent to ```/songs```. This action will find the playlist to which a song will be added, then create an artist and album with their respective spotify_id. The ```update_artist``` and ```update_album``` functions are held in the model files and update the meta data for the album and artist using the RSpotify gem. The id of the artist and album will then be added to ```updated_song_params``` which will be used to create a new song with it's associations properly created and then send the new song to the front end which will set state with it.
+```rb
+# POST /songs
+def create
+  playlist = Playlist.find(song_params[:playlist_id])
+  artist = Artist.create!(spotify_id: song_params[:spotify_artist_id])
+  artist.update_artist
+  album = Album.create!(
+    spotify_id: song_params[:spotify_album_id],
+    artist_id: artist.id
+  )
+  album.update_album
+  updated_song_params = song_params.clone
+  updated_song_params["artist_id"] = artist.id
+  updated_song_params["album_id"] = album.id
+  song = playlist.songs.create!(updated_song_params)
+  render json: song, status: :created
+end
 ```
 ![](images/AppointmentCreate.png  "Appointment Page Example")
 
