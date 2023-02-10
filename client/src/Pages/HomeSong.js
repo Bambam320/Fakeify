@@ -1,5 +1,6 @@
 //functional imports
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { SpotifyContext } from "../SpotifyContext";
 
 //css and component imports
 import '../CSS/SongRow.css'
@@ -12,7 +13,8 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
 function HomeSong({ song, onAddSong, playSong }) {
-  // sets state hooks
+  // sets state and context hooks
+  const { setPlayState } = useContext(SpotifyContext);
   const [anchorSong, setAnchorSong] = useState();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
@@ -24,7 +26,7 @@ function HomeSong({ song, onAddSong, playSong }) {
   // sets the anchor element for the popover to display against the song being hovered over
   function handleAnchorSongElementSelect (e) {
     setAnchorSong(e.currentTarget);
-  }
+  };
 
   // closes popover by taking away element to hook popover to and sets to null
   function handlePopoverClose() {
@@ -42,7 +44,10 @@ function HomeSong({ song, onAddSong, playSong }) {
             handlePopoverOpen(e)
             handleAnchorSongElementSelect(e)
           }}
-          onMouseLeave={handlePopoverClose}
+          onMouseLeave={(e) => {
+            handlePopoverClose(e)
+            setPlayState(false)
+          }}
         >
           <CardMedia
             component="img"

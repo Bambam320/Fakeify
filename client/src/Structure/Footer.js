@@ -21,14 +21,14 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 // add volume and seek control
 function Footer() {
   //sets hooks
-  const { currentTrack, setCurrentTrack, currentQueue } = useContext(SpotifyContext);
-  const [playState, setPlayState] = useState(false);
+  const { currentTrack, setCurrentTrack, currentQueue, playState, setPlayState } = useContext(SpotifyContext);
   const audioElem = useRef();
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState(false);
 
   //play or pause based on playstate
   useEffect(() => {
+    console.log('playstate is changing')
     if (playState) {
       audioElem.current.play();
     }

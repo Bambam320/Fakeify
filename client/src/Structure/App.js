@@ -32,6 +32,7 @@ const App = () => {
   const [currentQueue, setCurrentQueue] = useState([]);
   const [mainSearch, setMainSearch] = useState('');
   const [autoLoginError, setAutoLoginError] = useState([]);
+  const [playState, setPlayState] = useState(false);
 
   // checks the browser session for a logged in user and automatically
   // logs them in, sets localuser, set login error for login component
@@ -77,6 +78,8 @@ const App = () => {
           setCurrentQueue,
           mainSearch,
           setMainSearch,
+          playState,
+          setPlayState
         }}
       >
         <Helmetcode />
