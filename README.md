@@ -650,8 +650,7 @@ The audio used to play the songs is provided through a ```preview_url``` which i
   };
 ```
 
-
-<!-- ## Instructional-GIF
+## Instructional-GIF
 
 ***Login***
 
@@ -685,6 +684,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 ## Badges
 
-  
+![](https://img.shields.io/github/languages/code-size/Bambam320/spotify-app)
 
-![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project) -->
+![](https://img.shields.io/github/commit-activity/w/Bambam320/spotify-app?style=for-the-badge)

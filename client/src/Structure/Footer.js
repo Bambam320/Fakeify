@@ -69,7 +69,7 @@ function Footer() {
   //handles logic for repeat button
   function handleRepeat() {
     setRepeat(!repeat)
-  };
+  }; 
 
   // sets play reference to current track to false to end play and display play button
   function trackTime() {

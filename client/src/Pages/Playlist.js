@@ -40,11 +40,11 @@ function Playlist() {
       let thisPagesPlaylist = localUser.playlists.find((playlist) => {
         if (playlist.id.toString() === params.id) {
           return playlist
-        }
+        } else {}
       })
       setCurrentPlaylist(thisPagesPlaylist)
     }
-  }, [params, localUser])
+  }, [params, localUser]);
 
   // adds track to currentplaylist then updates state with the updated playlist from the backend
   function handleAddTrack(track, e) {
