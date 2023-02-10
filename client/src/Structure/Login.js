@@ -79,8 +79,7 @@ function Login() {
         });
       } else {
         res.json().then((err) => setErrors(err.errors));
-      }
-      setForm(defaultFormValues);
+      };
     });
   };
 

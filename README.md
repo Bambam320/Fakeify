@@ -663,9 +663,9 @@ The audio used to play the songs is provided through a ```preview_url``` which i
 
 ***Search Page***
 
-![](https://media.giphy.com/media/manFkwpSJ4gZYCfkrV/giphy.gif)
-
 ![](https://media.giphy.com/media/LM7ms8MrunxuEgJcoC/giphy.gif)
+
+![](https://media.giphy.com/media/manFkwpSJ4gZYCfkrV/giphy.gif)
 
 ***My Library Collection***
 
