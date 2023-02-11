@@ -674,19 +674,12 @@ The audio used to play the songs is provided through a ```preview_url``` which i
 ![](https://media.giphy.com/media/fkK7UI8W1iDzHT8ElB/giphy.gif)
 
 ***My Playlist Page***
-![]()
-![]()
-![]()
-![]()
-![]()
-![]()
-![]()
 
-## Video-Describing-Functionality
+![](https://media.giphy.com/media/PZ9atnEhaQ5ZMyaabI/giphy.gif)
 
-    
-   [![Watch the video](https://i.imgur.com/4KV9DO3.png)](https://youtu.be/OtEJsTMXXcs)
+![](https://media.giphy.com/media/UqWguLFZhRMCCo953e/giphy.gif)
 
+![](https://media.giphy.com/media/UqWguLFZhRMCCo953e/giphy.gif)
 
 
 ## License
