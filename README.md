@@ -685,7 +685,7 @@ The audio used to play the songs is provided through a ```preview_url``` which i
 ## Video-Describing-Functionality
 
     
-   [![Watch the video]([img]https://i.imgur.com/2Z9jOr0.png[/img])](https://youtu.be/BF0-3nLP-T0)
+   [![Watch the video](https://i.imgur.com/2Z9jOr0.png)](https://youtu.be/BF0-3nLP-T0)
 
 
 ## License
