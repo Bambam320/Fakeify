@@ -10,4 +10,6 @@ class Song < ApplicationRecord
     end 
   }
   # create active storage to save image file here
+  # the firs thing to do is to remove image storage as part of an attribute in the models
+  
 end
