@@ -94,7 +94,7 @@ function Navbar() {
         <LibraryMusicIcon className="sidebarOption_icon" />
         <h4>My Library</h4>
       </Link>
-      <a component='a' href="/auth/spotify" className='sidebarOption' onClick={() => { }}>
+      <a component='a' href="https://spotify-app-8rdu.onrender.com/auth/spotify" className='sidebarOption' onClick={() => { }}>
         <LoginIcon className="sidebarOption_icon" />
         <h4>Sign in with Spotify</h4>
       </a>
