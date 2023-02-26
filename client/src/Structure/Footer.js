@@ -28,7 +28,6 @@ function Footer() {
 
   //play or pause based on playstate
   useEffect(() => {
-    console.log('playstate is changing')
     if (playState) {
       audioElem.current.play();
     }
