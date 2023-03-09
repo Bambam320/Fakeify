@@ -128,6 +128,13 @@ function PlaylistInfoDialog({open, setOpen, handleClose, form, setForm, setError
             )
           }}
         />
+        {/* active storage update */}
+          <TextField
+            name="image"
+            margin="dense"
+          />
+
+
         <TextField
           sx={{ input: { color: 'white' } }}
           margin="dense"
