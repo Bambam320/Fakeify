@@ -9,7 +9,4 @@ class Song < ApplicationRecord
       "The song #{object.name}, has already been added to your playlist" 
     end 
   }
-  
-  # active storage update
-  has_one_attached :cover_blob
 end

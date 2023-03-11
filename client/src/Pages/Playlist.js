@@ -33,8 +33,6 @@ function Playlist() {
     severity: null,
     bool: false
   });
-  //active storage update
-  const [songImage, setSongImage] = useState(null)
 
   // sets the playlist from the id in the url
   useEffect(() => {

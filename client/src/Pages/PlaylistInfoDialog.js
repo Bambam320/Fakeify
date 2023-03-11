@@ -1,5 +1,5 @@
 //functional imports
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { SpotifyContext } from "../SpotifyContext";
 
@@ -19,10 +19,15 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 
-function PlaylistInfoDialog({open, setOpen, handleClose, form, setForm, setErrors}) {
+function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErrors }) {
   // sets state, params, navigate and context
   const { currentPlaylist, setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
   const params = useParams();
+
+  //active storage update
+  const [playlistCover, setPlaylistCover] = useState(null)
+
+  console.log("cover", playlistCover)
 
   // sends the updates attributes of the playlist to the backend and updates state with the updated playlist
   function handleSave(e) {
@@ -128,13 +133,6 @@ function PlaylistInfoDialog({open, setOpen, handleClose, form, setForm, setError
             )
           }}
         />
-        {/* active storage update */}
-          <TextField
-            name="image"
-            margin="dense"
-          />
-
-
         <TextField
           sx={{ input: { color: 'white' } }}
           margin="dense"
@@ -155,6 +153,19 @@ function PlaylistInfoDialog({open, setOpen, handleClose, form, setForm, setError
             )
           }}
         />
+        {/* active storage update */}
+        <Button
+          variant="contained"
+          component="label"
+        >
+          Upload An Image
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => { setPlaylistCover(e.target.files[0]) }}
+            hidden
+          />
+        </Button>
       </DialogContent>
       <DialogActions
         sx={{ backgroundColor: '#3b3637' }}

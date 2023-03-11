@@ -64,7 +64,7 @@ private
   # active storage additions
   # Only allow a list of trusted parameters through.
   def song_params
-    params.permit(:cover_art, :cover_blob, :preview_url, :playlist_id, :name, :preview_url, :spotify_album_id, :spotify_playlist_id, :spotify_artist_id, :featured_artist, :release_date, :genre, :spotify_id)
+    params.permit(:cover_art, :preview_url, :playlist_id, :name, :preview_url, :spotify_album_id, :spotify_playlist_id, :spotify_artist_id, :featured_artist, :release_date, :genre, :spotify_id)
   end
 
 end
