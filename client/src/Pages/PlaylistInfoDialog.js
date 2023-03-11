@@ -32,7 +32,13 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
   // sends the updates attributes of the playlist to the backend and updates state with the updated playlist
   function handleSave(e) {
     e.preventDefault()
+    // active storage update
+    const imageUpload = new FormData()
+    imageUpload.append('cover_blob', playlistCover)
+    
     fetch(`/playlists/${currentPlaylist.id}`, {
+
+
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
