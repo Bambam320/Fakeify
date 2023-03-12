@@ -33,21 +33,17 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
   function handleSave(e) {
     e.preventDefault()
     // active storage update
-    const imageUpload = new FormData()
-    imageUpload.append('cover_blob', playlistCover)
+    const uploadForm = new FormData()
+    uploadForm.append('cover_blob', playlistCover)
+    uploadForm.append('name', form.name)
+    uploadForm.append('description', form.description)
     
     fetch(`/playlists/${currentPlaylist.id}`, {
-
-
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name: form.name,
-        description: form.description,
-        image: form.image
-      })
+      body: JSON.stringify(uploadForm)
     }).then((res) => {
       if (res.ok) {
         res.json().then((updatedPlaylist) => {
