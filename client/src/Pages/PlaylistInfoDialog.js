@@ -38,6 +38,8 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
     uploadForm.append('name', form.name)
     uploadForm.append('description', form.description)
     
+    console.log("uploadForm", uploadForm)
+
     fetch(`/playlists/${currentPlaylist.id}`, {
       method: "PATCH",
       headers: {
@@ -47,6 +49,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
     }).then((res) => {
       if (res.ok) {
         res.json().then((updatedPlaylist) => {
+          console.log('ok - updated playlist', updatedPlaylist)
           setCurrentPlaylist(updatedPlaylist)
           let updatedPlaylists = localUser.playlists.map((pl) => {
             if (params.id === pl.id.toString()) {
@@ -58,6 +61,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
           setLocalUser({ ...localUser, playlists: updatedPlaylists })
         });
       } else {
+        console.log('error')
         res.json().then((err) => {
           setErrors(err.error)
         });
@@ -160,7 +164,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
           variant="contained"
           component="label"
         >
-          Upload An Image
+          Select An Image
           <input
             type="file"
             accept="image/*"
@@ -168,6 +172,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
             hidden
           />
         </Button>
+          <div> {playlistCover ? playlistCover.name : ''} </div>
       </DialogContent>
       <DialogActions
         sx={{ backgroundColor: '#3b3637' }}

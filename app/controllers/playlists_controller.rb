@@ -38,7 +38,7 @@ class PlaylistsController < ApplicationController
 
   # PATCH/PUT /playlists/1
   def update
-    byebug
+    # byebug
     playlist = Playlist.find(params[:id])
     playlist.update!(playlist_params)
     render json: playlist, status: :ok
