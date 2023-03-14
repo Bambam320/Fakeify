@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import "../CSS/Header.css";
 import "../CSS/Sidebar.css";
 import "../CSS/SidebarOption.css";
+import PlaylistCreate from "../Pages/PlaylistCreate";
 
 // material ui components
 import { Avatar } from "@mui/material";
@@ -21,8 +22,6 @@ function Navbar() {
   const { localUser } = useContext(SpotifyContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState([])
-
-
 
   //sort and map over users playlists and list them as links
   const ListUserPlaylists = () => {
