@@ -1,6 +1,10 @@
 //functional imports
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { SpotifyContext } from "../SpotifyContext";
+import { useNavigate } from 'react-router-dom';
+
+// file imports
+import defaultImage from "../images/add_image.png";
 
 // material ui components
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -9,10 +13,12 @@ import Button from '@mui/material/Button';
 function PlaylistCreate() {
   //sets state, context and navigate hooks
   const { setCurrentPlaylist, localUser, setLocalUser } = useContext(SpotifyContext);
-
+  const [errors, setErrors] = useState([])
+  const navigate = useNavigate();
 
   // creates and sets a brand new playlist with default values and sets state with the new playlist
   function handleCreateAndRouteToPlaylist() {
+    const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
     fetch('/playlists', {
       method: "POST",
       headers: {

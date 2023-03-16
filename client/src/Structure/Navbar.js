@@ -21,7 +21,6 @@ function Navbar() {
   //sets state, context and navigate hooks
   const { localUser } = useContext(SpotifyContext);
   const navigate = useNavigate();
-  const [errors, setErrors] = useState([])
 
   //sort and map over users playlists and list them as links
   const ListUserPlaylists = () => {
