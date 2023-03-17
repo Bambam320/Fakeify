@@ -18,13 +18,16 @@ function PlaylistCreate() {
 
   // creates and sets a brand new playlist with default values and sets state with the new playlist
   function handleCreateAndRouteToPlaylist() {
+    console.log('create a playlist')
     const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
+    const newPlaylistForm = new FormData()
+    newPlaylistForm.append('cover_blob', image)
     fetch('/playlists', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ instructions: "Make a new playlist" })
+      body: JSON.stringify(newPlaylistForm)
     }).then((response) => {
       if (response.ok) {
         response.json().then((newPlaylist) => {
