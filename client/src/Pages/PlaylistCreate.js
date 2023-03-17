@@ -18,6 +18,11 @@ function PlaylistCreate() {
 
   // creates and sets a brand new playlist with default values and sets state with the new playlist
   function handleCreateAndRouteToPlaylist() {
+    // send an actual image file uploaded from react and create a playlist with a
+    // blob in the backend
+    // then try updating it and make sure it can be read after create and update
+    // then try sending a new file and creating the blob
+    // then try making a blob, then a file from the blob, then sending it
     console.log('create a playlist')
     const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
     const newPlaylistForm = new FormData()
@@ -27,7 +32,7 @@ function PlaylistCreate() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPlaylistForm)
+      body: newPlaylistForm,
     }).then((response) => {
       if (response.ok) {
         response.json().then((newPlaylist) => {
