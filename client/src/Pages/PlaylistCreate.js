@@ -16,6 +16,11 @@ function PlaylistCreate() {
   const [errors, setErrors] = useState([])
   const navigate = useNavigate();
 
+    //active storage update
+    const [playlistCover, setPlaylistCover] = useState(null)
+
+    console.log('file for creating playlist', playlistCover)
+
   // creates and sets a brand new playlist with default values and sets state with the new playlist
   function handleCreateAndRouteToPlaylist() {
     // send an actual image file uploaded from react and create a playlist with a
@@ -24,14 +29,14 @@ function PlaylistCreate() {
     // then try sending a new file and creating the blob
     // then try making a blob, then a file from the blob, then sending it
     console.log('create a playlist')
-    const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
+    // const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
     const newPlaylistForm = new FormData()
-    newPlaylistForm.append('cover_blob', image)
+    newPlaylistForm.append('cover_blob', playlistCover)
     fetch('/playlists', {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
       body: newPlaylistForm,
     }).then((response) => {
       if (response.ok) {
@@ -47,6 +52,7 @@ function PlaylistCreate() {
   };
 
   return (
+    <>
     <Button className='sidebarOption'
       sx={{
         color: 'grey',
@@ -59,9 +65,22 @@ function PlaylistCreate() {
     >
       <AddBoxIcon
         className="sidebarOption_icon"
-      />
+        />
       <h4 >Create A Playlist</h4>
     </Button>
+    <Button
+          variant="contained"
+          component="label"
+        >
+          Select An Image
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => { setPlaylistCover(e.target.files[0]) }}
+            hidden
+          />
+        </Button>
+    </>
   )
 }
 

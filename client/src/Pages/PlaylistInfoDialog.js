@@ -27,7 +27,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
   //active storage update
   const [playlistCover, setPlaylistCover] = useState(null)
 
-  console.log("cover", playlistCover)
+  // console.log("cover", playlistCover)
 
   // sends the updates attributes of the playlist to the backend and updates state with the updated playlist
   function handleSave(e) {
