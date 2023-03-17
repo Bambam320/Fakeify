@@ -19,7 +19,7 @@ function PlaylistCreate() {
     //active storage update
     const [playlistCover, setPlaylistCover] = useState(null)
 
-    console.log('file for creating playlist', playlistCover)
+    // console.log('file for creating playlist', playlistCover)
 
   // creates and sets a brand new playlist with default values and sets state with the new playlist
   function handleCreateAndRouteToPlaylist() {
@@ -29,9 +29,12 @@ function PlaylistCreate() {
     // then try sending a new file and creating the blob
     // then try making a blob, then a file from the blob, then sending it
     console.log('create a playlist')
-    // const image = new File([defaultImage], 'add_button.png', {type: 'image/*'})
+    const image = new File([defaultImage], 'add_button.png', {type: 'image/png'})
     const newPlaylistForm = new FormData()
-    newPlaylistForm.append('cover_blob', playlistCover)
+    newPlaylistForm.append('cover_blob', image)
+    console.log('playlistcover from state', playlistCover)
+    console.log('default image file', image)
+
     fetch('/playlists', {
       method: "POST",
       // headers: {
