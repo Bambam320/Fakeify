@@ -41,6 +41,7 @@ function PlaylistCreate() {
     }).then((response) => {
       if (response.ok) {
         response.json().then((newPlaylist) => {
+          console.log('create successful', newPlaylist)
           setCurrentPlaylist(newPlaylist)
           setLocalUser({ ...localUser, playlists: [...localUser.playlists, newPlaylist] })
           setTimeout(navigate(`/playlists/${newPlaylist.id}`), 1000)

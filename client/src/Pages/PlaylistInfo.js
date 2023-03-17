@@ -135,7 +135,7 @@ function PlaylistInfo() {
             })}
           </div>
           <div onClick={handleClickOpen} >
-            <img className="image_class" src={currentPlaylist.image} alt={currentPlaylist.name} />
+            <img className="image_class" src={currentPlaylist.cover_blob} alt={currentPlaylist.name} />
           </div>
           <div>
 
