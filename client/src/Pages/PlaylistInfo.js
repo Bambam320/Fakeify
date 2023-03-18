@@ -124,6 +124,8 @@ function PlaylistInfo() {
     setForm(currentPlaylist)
   };
 
+  console.log('current playlist', currentPlaylist)
+
   return (
     <>
       {/* Playlist information */}
