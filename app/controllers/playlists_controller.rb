@@ -37,7 +37,7 @@ class PlaylistsController < ApplicationController
     render json: playlist, status: :created
   end
 
-  # user.picture.attach(io: File.open('/path/to/file'), filename: 'my_picture.png')
+  # playlist.cover_blob.attach(io: File.open('/path/to/file'), filename: 'my_picture.png')
 
   # PATCH/PUT /playlists/1
   def update
