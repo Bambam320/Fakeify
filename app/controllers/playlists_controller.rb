@@ -38,7 +38,7 @@ class PlaylistsController < ApplicationController
   end
 
   # playlist.cover_blob.attach(io: File.open('/path/to/file'), filename: 'my_picture.png')
-
+  # need to add the local host address to the url helper
   # PATCH/PUT /playlists/1
   def update
     byebug
