@@ -37,6 +37,7 @@ const App = () => {
   // checks the browser session for a logged in user and automatically
   // logs them in, sets localuser, set login error for login component
   // , sets authenticated to allow routes
+  
   useEffect(() => {
     (async () => {
       const response = await fetch("/me");

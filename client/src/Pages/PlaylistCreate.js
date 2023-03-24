@@ -28,6 +28,7 @@ function PlaylistCreate() {
     // then try updating it and make sure it can be read after create and update
     // then try sending a new file and creating the blob
     // then try making a blob, then a file from the blob, then sending it
+    // build for each fetch that uses images
     console.log('create a playlist')
     const blob = new Blob([defaultImage], {type: 'image/png'});
     const image = new File([blob], 'add_image.png', {type: 'image/png'});
