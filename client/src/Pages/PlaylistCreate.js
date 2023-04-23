@@ -29,13 +29,13 @@ function PlaylistCreate() {
     // then try sending a new file and creating the blob
     // then try making a blob, then a file from the blob, then sending it
     // build for each fetch that uses images
-    console.log('create a playlist')
-    const blob = new Blob([defaultImage], {type: 'image/png'});
+    // console.log('create a playlist')
+    // const blob = new Blob([defaultImage], {type: 'image/png'});
     const image = new File([blob], 'add_image.png', {type: 'image/png'});
     const newPlaylistForm = new FormData()
     newPlaylistForm.append('cover_blob', defaultImage)
-    console.log('playlistcover from state', playlistCover)
-    console.log('default image file', image)
+    // console.log('playlistcover from state', playlistCover)
+    // console.log('default image file', image)
 
     fetch('/playlists', {
       method: "POST",

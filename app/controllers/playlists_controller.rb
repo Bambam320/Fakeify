@@ -25,7 +25,7 @@ class PlaylistsController < ApplicationController
   def create
     user = User.find(session[:user_id])
     new_playlist_name = user.playlists.length < 1 ? "My Playlist #1" : "My Playlist ##{user.playlists.last.id + 1}"
-
+    playlist.blob.attach(file: params[:cover_blob])
     playlist = user.playlists.create!(
       user_id: user.id,
       name: new_playlist_name,
