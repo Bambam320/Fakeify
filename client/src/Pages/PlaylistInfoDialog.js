@@ -33,7 +33,7 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
   function handleSave(e) {
     e.preventDefault()
     // active storage update
-    const uploadForm = new FormData()
+    // const uploadForm = new FormData()
     // uploadForm.append('cover_blob', playlistCover)
     // uploadForm.append('name', form.name)
     // uploadForm.append('description', form.description)

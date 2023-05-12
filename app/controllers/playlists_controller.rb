@@ -42,6 +42,7 @@ class PlaylistsController < ApplicationController
   # PATCH/PUT /playlists/1
   def update
     byebug
+    #attach blob from local storage here
     playlist = Playlist.find(params[:id])
     playlist.update!(playlist_params)
     render json: playlist, status: :ok
