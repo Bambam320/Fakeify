@@ -165,12 +165,12 @@ function PlaylistInfoDialog({ open, setOpen, handleClose, form, setForm, setErro
           component="label"
         >
           Select An Image
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             onChange={(e) => { setPlaylistCover(e.target.files[0]) }}
             hidden
-          />
+          /> */}
         </Button>
           <div> {playlistCover ? playlistCover.name : ''} </div>
       </DialogContent>
