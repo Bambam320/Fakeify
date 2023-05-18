@@ -23,18 +23,18 @@ class PlaylistsController < ApplicationController
 
   # POST /playlists
   def create
-    user = User.find(session[:user_id])
-    new_playlist_name = user.playlists.length < 1 ? "My Playlist #1" : "My Playlist ##{user.playlists.last.id + 1}"
-    playlist.blob.attach(file: params[:cover_blob])
-    playlist = user.playlists.create!(
-      user_id: user.id,
-      name: new_playlist_name,
-      cover_blob: playlist_params[:cover_blob],
-      description: 'My Playlist includes ...',
-      spotify_id: '',
-      type_of_playlist: 'regular ol\' playlist',
-    )
-    render json: playlist, status: :created
+    # user = User.find(session[:user_id])
+    # new_playlist_name = user.playlists.length < 1 ? "My Playlist #1" : "My Playlist ##{user.playlists.last.id + 1}"
+    # playlist.blob.attach(file: params[:cover_blob])
+    # playlist = user.playlists.create!(
+    #   user_id: user.id,
+    #   name: new_playlist_name,
+    #   cover_blob: playlist_params[:cover_blob],
+    #   description: 'My Playlist includes ...',
+    #   spotify_id: '',
+    #   type_of_playlist: 'regular ol\' playlist',
+    # )
+    # render json: playlist, status: :created
   end
 
   # playlist.cover_blob.attach(io: File.open('/path/to/file'), filename: 'my_picture.png')
