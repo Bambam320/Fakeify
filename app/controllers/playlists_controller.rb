@@ -40,6 +40,7 @@ class PlaylistsController < ApplicationController
   # playlist.cover_blob.attach(io: File.open('/path/to/file'), filename: 'my_picture.png')
   # need to add the local host address to the url helper
   # PATCH/PUT /playlists/1
+  # Finish the update for active storage and bring back oauth for the hosted version
   def update
     byebug
     #attach blob from local storage here
