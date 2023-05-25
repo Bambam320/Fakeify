@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SpotifyContext } from "../SpotifyContext";
+import axios from 'axios';
 
 // importing components from nodes
 import { HelmetProvider } from "react-helmet-async";
