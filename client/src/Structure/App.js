@@ -46,6 +46,7 @@ const App = () => {
       console.log(data);
       // Work with the data here
     } catch (error) {
+      return the error messages attached to the object without using the ! or excepetions
       console.log('Error:', error);
     }
   }
