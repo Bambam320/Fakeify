@@ -41,6 +41,7 @@ class PlaylistsController < ApplicationController
   # need to add the local host address to the url helper
   # PATCH/PUT /playlists/1
   # Finish the update for active storage and bring back oauth for the hosted version
+  #check this against the other repo to determine where the attribute got lost from the songs table
   def update
     byebug
     #attach blob from local storage here
