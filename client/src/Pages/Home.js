@@ -39,7 +39,7 @@ function Home() {
 
   //bring in featured songs from the spotify_api
   useEffect(() => {
-    const retrieveRecommendedSongs = async () => {
+    (async () => {
       try {
         setLoader(true);
         const data = await axios
@@ -53,8 +53,7 @@ function Home() {
       } catch (err) {
         setErrors(err.errors);
       }
-    }
-    retrieveRecommendedSongs()
+    })()
   }, [requestRefresh])
 
   //sets the playlist that the local user wants to add a song to

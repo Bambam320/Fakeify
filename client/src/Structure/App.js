@@ -37,29 +37,17 @@ const App = () => {
 
   // checks the browser session for a logged in user and automatically
   // logs them in, sets localuser, set login error for login component
-  // , sets authenticated to allow routes
-  
-  async function fetchData() {
-    try {
-      const response = await axios.get('https://api.example.com/posts');
-      const data = response.data;
-      console.log(data);
-      // Work with the data here
-    } catch (error) {
-      return the error messages attached to the object without using the ! or excepetions
-      console.log('Error:', error);
-    }
-  }
+  // , sets authenticated to allow route
 
   useEffect(() => {
     (async () => {
-      const response = await fetch("/me");
-      const data = await response.json();
-      if (response.ok) {
+      try {
+        const response = await axios.get("/me");
+        const data = response.data
         setIsAuthenticated(true);
         setLocalUser(data);
-      } else {
-        setAutoLoginError(data.errors)
+      } catch (err) {
+        setAutoLoginError(err.response.data.errors)
       };
     })();
   }, []);
