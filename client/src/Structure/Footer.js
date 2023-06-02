@@ -27,14 +27,14 @@ function Footer() {
   const [repeat, setRepeat] = useState(false);
 
   //play or pause based on playstate
-  useEffect(() => {
-    if (playState) {
-      audioElem.current.play();
-    }
-    else {
-      audioElem.current.pause();
-    }
-  }, [playState, currentTrack]);
+  // useEffect(() => {
+  //   if (playState) {
+  //     audioElem.current.play();
+  //   }
+  //   else {
+  //     audioElem.current.pause();
+  //   }
+  // }, [playState, currentTrack]);
 
   //autoplays a newly selected song
   useEffect(() => {

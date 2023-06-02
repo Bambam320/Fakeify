@@ -47,7 +47,7 @@ const App = () => {
         setIsAuthenticated(true);
         setLocalUser(data);
       } catch (err) {
-        setAutoLoginError(err.response.data.errors)
+        // setAutoLoginError(err.response.data.errors)
       };
     })();
   }, []);
