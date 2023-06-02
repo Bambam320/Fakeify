@@ -65,7 +65,7 @@ function Playlist() {
         name: track.name,
         genre: songGenre,
         preview_url: track.preview_url,
-        cover_art: track.album.images[0].url,
+        image_url: track.album.images[0].url,
       })
     }).then((res) => {
       if (res.ok) {

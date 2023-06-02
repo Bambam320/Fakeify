@@ -27,14 +27,14 @@ function Footer() {
   const [repeat, setRepeat] = useState(false);
 
   //play or pause based on playstate
-  // useEffect(() => {
-  //   if (playState) {
-  //     audioElem.current.play();
-  //   }
-  //   else {
-  //     audioElem.current.pause();
-  //   }
-  // }, [playState, currentTrack]);
+  useEffect(() => {
+    if (playState) {
+      audioElem.current.play();
+    }
+    else {
+      audioElem.current.pause();
+    }
+  }, [playState, currentTrack]);
 
   //autoplays a newly selected song
   useEffect(() => {
@@ -91,7 +91,7 @@ function Footer() {
           <>
             <img
               className="footer__albumLogo"
-              src={currentTrack.album ? currentTrack.album.image_url ? currentTrack.album.image_url : currentTrack.album.images[0].url : currentTrack.cover_art}
+              src={currentTrack.album ? currentTrack.album.image_url ? currentTrack.album.image_url : currentTrack.album.images[0].url : currentTrack.url}
               alt={currentTrack.album ? currentTrack.album.name : currentTrack.name} />
             <div className='footer__songInfo'>
               <h4>{currentTrack.name}</h4>

@@ -5,7 +5,8 @@ import axios from 'axios';
 
 //css and component imports
 import "../CSS/Body.css";
-import '../CSS/SongRow.css'
+import "../CSS/SongRow.css";
+import "../CSS/Home.css";
 import HomeSong from "./HomeSong";
 
 //imports material ui
@@ -30,7 +31,8 @@ function Home() {
   const [loader, setLoader] = useState(false);
   const [playlistInfo, setPlaylistInfo] = useState({
     name: '',
-    description: ''
+    description: '',
+    image_url: ''
   });
   const [requestRefresh, setRequestRefresh] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState({ id: '', name: '' });
@@ -38,6 +40,13 @@ function Home() {
   const [track, setTrack] = useState();
 
   //bring in featured songs from the spotify_api
+
+  // collect similar functions into a context file
+  // add toggle to hover to listen or click to listen
+  // fix the grid so everything appears to the right of the nav bar
+  // style the menu above the songs
+  // style the instructions
+  // add volume slider to footer
   useEffect(() => {
     (async () => {
       try {
@@ -51,7 +60,11 @@ function Home() {
         setLoader(false);
         setErrors([])
       } catch (err) {
-        setErrors(err.errors);
+        if (err.errors) {
+          setErrors(err.errors)
+        } else {
+          setErrors([err.errors.response.statusText])
+        }
       }
     })()
   }, [requestRefresh])
@@ -86,7 +99,7 @@ function Home() {
         name: track.name,
         genre: songGenre,
         preview_url: track.preview_url,
-        cover_art: track.album.images[0].url,
+        image_url: track.album.images[0].url,
       })
     }).then((res) => {
       if (res.ok) {
@@ -191,14 +204,17 @@ function Home() {
         <img src="/Infinity.gif" alt="infinity loader" style={{ marginLeft: '250px' }}></img>
         :
         <>
-          <Grid container>
-            <Box sx={{ width: '100%', maxWidth: 600 }} >
-              <Typography variant="h4" component="div" sx={{ color: 'white', marginLeft: '25px', marginTop: '25px' }}>
-                {playlistInfo.name}
-              </Typography>
-              <Typography variant="h5" component="div" sx={{ color: 'purple', marginLeft: '25px' }}>
-                {playlistInfo.description}
-              </Typography>
+          <Grid container sx={{marginTop: '10px'}}>
+            <Box className='feat_playlist_info_box'>
+              <img src={playlistInfo.image_url} className='feat_playlist_img'></img>
+              <div>
+                <Typography variant="h3" component="div" sx={{ color: 'white', marginLeft: '25px', marginTop: '25px' }}>
+                  {playlistInfo.name}
+                </Typography>
+                <Typography variant="h5" component="div" sx={{ color: 'darkGrey', marginLeft: '25px' }}>
+                  {playlistInfo.description}
+                </Typography>
+              </div>
             </Box>
           </Grid>
           <Grid container spacing={4} width='1000px' sx={{ marginLeft: '35px', marginTop: '35px', marginBottom: '125px' }}>

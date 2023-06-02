@@ -1,0 +1,13 @@
+.feat_playlist_info_box {
+  background: linear-gradient(to top, rgb(31, 29, 29), rgb(53, 52, 52) 30%);
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.feat_playlist_img {
+  box-shadow: 20px 20px 50px hsla(0, 0%, 0%, 0.943);
+  width: 300px;
+  height: 300px;
+  margin: 35px;
+}
