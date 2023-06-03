@@ -3,12 +3,17 @@ import React, { useState, useContext } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 
 //css and component imports
-import '../CSS/SongRow.css'
+import '../CSS/SongRow.css';
+import '../CSS/HomeSong.css';
 
 //imports material ui
+import AddCircle from '@mui/icons-material/AddCircle';
+import Album from '@mui/icons-material/Album';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import Face from '@mui/icons-material/Face';
 import Grid from '@mui/material/Grid';
+import MusicNote from '@mui/icons-material/MusicNote';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
@@ -18,6 +23,8 @@ function HomeSong({ song, onAddSong, playSong }) {
   const [anchorSong, setAnchorSong] = useState();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
+
+  console.log("songgggggggggggggggggg", song)
   // opens popover and provides element to hook pop up to.
   function handlePopoverOpen() {
     setPopoverOpen(true)
@@ -74,12 +81,14 @@ function HomeSong({ song, onAddSong, playSong }) {
             }}
             onClose={handlePopoverClose}
             disableRestoreFocus
+            className='parent_popover'
           >
             {/* Try to set spotify external URL */}
-            <Typography sx={{ p: 1 }}>{`name: ${song.name}`}</Typography>
-            <Typography sx={{ p: 1 }}>{`album: ${song.album.name}, track ${song.track_number}`}</Typography>
-            <Typography sx={{ p: 1 }}>{`artist: ${song.artists[0].name}`}</Typography>
-            {/* <a href={`${song.external_urls[0].spotify}`} target="_blank">From Spotify</a> */}
+            <div className='popover' ><MusicNote></MusicNote><Typography> {song.name}</Typography></div>
+            <div className='popover' ><Album></Album><Typography> {song.album.name}</Typography></div>
+            <div className='popover' ><Face></Face><Typography> {song.artists[0].name}</Typography></div>
+            <div className='popover' ><AddCircle></AddCircle><Typography> Click on artwork to add to playlist </Typography></div>
+            <a href={`${song.external_urls.spotify}`} target="_blank">From Spotify</a>
           </Popover>
         </div>
       </div>

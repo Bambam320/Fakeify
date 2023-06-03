@@ -70,7 +70,7 @@ class PlaylistsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def playlist_params
-      params.permit(:cover_blob, :user_id, :id, :name, :description, :spotify_id, :type_of_playlist, :image)
+      params.permit(:user_id, :id, :name, :description, :spotify_id, :type_of_playlist, :image_url)
     end
     
 end

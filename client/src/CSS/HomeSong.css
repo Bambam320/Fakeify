@@ -1,0 +1,19 @@
+.parent_popover {}
+
+.popover {
+  display: flex;
+  align-items: center;
+  margin: 8px;
+}
+
+.parent_popover .popover:last-of_type > .MuiSvgIcon-root{
+  color: hsla(0, 1%, 26%, 0.594);
+}
+
+.popover > .MuiTypography-root {
+  padding-left: 5px;
+}
+
+.popover > .MuiSvgIcon-root {
+  margin: 2px;
+}

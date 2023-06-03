@@ -32,9 +32,11 @@ class SpotifyApiController < ApplicationController
         songs = unfilteredSongs.filter { |song| !song.preview_url.nil? }
         playlist = Hash.new
         playlist[:songs] = songs
+        # byebug
         playlist[:playlist_info] = {
           name: featuredPlaylist.name,
           description: featuredPlaylist.description,
+          image_url: featuredPlaylist.images[0]['url']
         }
         return playlist
       end

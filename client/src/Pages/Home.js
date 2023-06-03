@@ -138,19 +138,13 @@ function Home() {
     <div >
       <Grid container>
         <Box sx={{ width: '100%', maxWidth: 350 }} >
-          <Typography variant="p" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px', marginTop: '-25px', marginBottom: '25px' }}>
-            Hover to listen. Click to add.
-          </Typography>
-          <Typography variant="h6" component="div" sx={{ color: '#a7b2c4', marginLeft: '25px' }} >
-            Choose a Playlist first:
-          </Typography>
           <div className='errordiv' style={{ marginLeft: '10em' }}>
             {errors.map((error) => {
               return <p key={error} className='error'>{error}</p>;
             })}
           </div>
         </Box>
-        <FormControl variant="outlined" style={{ minWidth: 150 }}
+        <FormControl variant="outlined" 
           sx={{
             "& .MuiInputLabel-root": { color: 'white' },
             '&.Mui-focused .MuiInputLabel-root': {
@@ -161,10 +155,11 @@ function Home() {
                 borderColor: "white",
                 color: "orange"
               }
-            }
+            },
+            width: 'auto',
           }}
         >
-          <InputLabel id="playlist-select">Select Playlist</InputLabel>
+          <InputLabel id="playlist-select"> Choose a Playlist to add songs to </InputLabel>
           <Select
             labelId="playlist-select"
             id="playlist-select"
@@ -173,7 +168,7 @@ function Home() {
             label="selectedPlaylist"
             sx={{ backgroundColor: '#a7a7a8' }}
           >
-            <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Select A Playlist </MenuItem>
+            <MenuItem value={selectedPlaylist.id} onClick={(e) => handleLocalPlaylistDeselect(track, e)}> Choose a Playlist to add songs to </MenuItem>
             {localUser.playlists.map((playlist) => {
               let id = playlist.id
               return (
