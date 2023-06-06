@@ -83,12 +83,10 @@ function HomeSong({ song, onAddSong, playSong }) {
             disableRestoreFocus
             className='parent_popover'
           >
-            {/* Try to set spotify external URL */}
             <div className='popover' ><MusicNote></MusicNote><Typography> {song.name}</Typography></div>
             <div className='popover' ><Album></Album><Typography> {song.album.name}</Typography></div>
             <div className='popover' ><Face></Face><Typography> {song.artists[0].name}</Typography></div>
             <div className='popover' ><AddCircle></AddCircle><Typography> Click on artwork to add to playlist </Typography></div>
-            <a href={`${song.external_urls.spotify}`} target="_blank">From Spotify</a>
           </Popover>
         </div>
       </div>

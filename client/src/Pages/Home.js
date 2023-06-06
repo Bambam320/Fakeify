@@ -137,13 +137,24 @@ function Home() {
   return (
     <div >
       <Grid container>
-        <Box sx={{ width: '100%', maxWidth: 350 }} >
-          <div className='errordiv' style={{ marginLeft: '10em' }}>
-            {errors.map((error) => {
-              return <p key={error} className='error'>{error}</p>;
-            })}
-          </div>
-        </Box>
+        <Button
+          onClick={() => {
+            setRequestRefresh(!requestRefresh)
+          }}
+          className='sidebarOption'
+          sx={{
+            color: 'grey',
+            textTransform: 'none',
+            height: '30px',
+            marginLeft: '25px',
+            marginRight: '50px',
+            marginTop: '10px',
+            fontSize: '16px',
+          }}
+        >
+          <RefreshIcon sx={{ marginRight: '5px' }} />
+          <h4> Recommend A Playlist </h4>
+        </Button>
         <FormControl variant="outlined" 
           sx={{
             "& .MuiInputLabel-root": { color: 'white' },
@@ -156,7 +167,7 @@ function Home() {
                 color: "orange"
               }
             },
-            width: 'auto',
+            width: '500px',
           }}
         >
           <InputLabel id="playlist-select"> Choose a Playlist to add songs to </InputLabel>
@@ -177,23 +188,13 @@ function Home() {
             })}
           </Select>
         </FormControl >
-        <Button
-          onClick={() => {
-            setRequestRefresh(!requestRefresh)
-          }}
-          className='sidebarOption'
-          sx={{
-            color: 'grey',
-            textTransform: 'none',
-            height: '30px',
-            marginLeft: '50px',
-            marginTop: '10px',
-            fontSize: '16px',
-          }}
-        >
-          <RefreshIcon sx={{ marginRight: '5px' }} />
-          <h4> Recommend A Playlist </h4>
-        </Button>
+        <Box sx={{ width: 'auto' }} >
+          <div className='errordiv' style={{ marginLeft: '10em' }}>
+            {errors.map((error) => {
+              return <p key={error} className='error'>{error}</p>;
+            })}
+          </div>
+        </Box>
       </Grid>
       {loader ?
         <img src="/Infinity.gif" alt="infinity loader" style={{ marginLeft: '250px' }}></img>
