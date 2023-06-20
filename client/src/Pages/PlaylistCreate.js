@@ -2,6 +2,7 @@
 import React, { useState, useContext } from "react";
 import { SpotifyContext } from "../SpotifyContext";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // file imports
 import defaultImage from "../images/add_image.png";
@@ -31,29 +32,23 @@ function PlaylistCreate() {
     // build for each fetch that uses images
     // console.log('create a playlist')
     // const blob = new Blob([defaultImage], {type: 'image/png'});
-    const image = new File([blob], 'add_image.png', {type: 'image/png'});
-    const newPlaylistForm = new FormData()
-    newPlaylistForm.append('cover_blob', defaultImage)
+    // const image = new File([blob], 'add_image.png', {type: 'image/png'});
+    // const newPlaylistForm = new FormData()
+    // newPlaylistForm.append('cover_blob', defaultImage)
     // console.log('playlistcover from state', playlistCover)
     // console.log('default image file', image)
-
-    fetch('/playlists', {
-      method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
-      body: newPlaylistForm,
-    }).then((response) => {
-      if (response.ok) {
-        response.json().then((newPlaylist) => {
-          console.log('create successful', newPlaylist)
-          setCurrentPlaylist(newPlaylist)
-          setLocalUser({ ...localUser, playlists: [...localUser.playlists, newPlaylist] })
-          setTimeout(navigate(`/playlists/${newPlaylist.id}`), 1000)
-        });
-      } else {
-        response.json().then((err) => setErrors(err.errors));
-      }
+    axios.post('/playlists', {
+      type: 'make a generic playlist'
+    })
+    .then((data) => {
+      let newPlaylist = data.response
+      console.log('create successful', newPlaylist)
+      setCurrentPlaylist(newPlaylist)
+      setLocalUser({ ...localUser, playlists: [...localUser.playlists, newPlaylist] })
+      setTimeout(navigate(`/playlists/${newPlaylist.id}`), 1000)
+    })
+    .catch((error) => {
+      setErrors(error.errors)
     });
   };
 
@@ -74,7 +69,7 @@ function PlaylistCreate() {
         />
       <h4 >Create A Playlist</h4>
     </Button>
-    <Button
+    {/* <Button
           variant="contained"
           component="label"
         >
@@ -85,7 +80,7 @@ function PlaylistCreate() {
             onChange={(e) => { setPlaylistCover(e.target.files[0]) }}
             hidden
           />
-        </Button>
+        </Button> */}
     </>
   )
 }
